@@ -3,6 +3,11 @@ services:
     image: mongo:7.0
     container_name: ${MONGODB_CONTAINER_NAME}
     restart: always
+    command: mongod --wiredTigerCacheSizeGB 0.25
+    deploy:
+      resources:
+        limits:
+          memory: 300M
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -21,12 +26,17 @@ services:
       dockerfile: Dockerfile
     container_name: ${BACKEND_CONTAINER_NAME}
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 350M
     # .env ফাইল VPS এর dynamically specified path বা default path থেকে mount করা হচ্ছে
     volumes:
       - ${CLIENT_CONFIG_PATH:-/opt/${CLIENT_NAME}/configs}/backend.env:/app/.env:ro
       - ${PUBLIC_UPLOADS_PATH:-/var/www/uploads}:/app/uploads
     environment:
       PORT: ${BACKEND_PORT:-5092}
+      NODE_OPTIONS: "--max-old-space-size=256"
     # Backend bound to localhost only (reverse proxied via Nginx)
     ports:
       - "127.0.0.1:${BACKEND_PORT:-5092}:${BACKEND_PORT:-5092}"
