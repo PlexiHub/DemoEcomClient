@@ -35,6 +35,9 @@ Every commit message must strictly follow this structure:
   ```
   J:\My Drive\CLIENTS\DEMO
   ```
+- **Zero Local Docs Commits**:
+  - আমরা লোকাল ডকসে আর কোনো কমিট করব না। গিট রিপোজিটরিতে কোনো লোকাল ডকস ফাইল রাখা বা কমিট করা সম্পূর্ণ নিষেধ।
+  - সমস্ত ডকুমেন্টস, গাইডলাইন ও কনফিগারেশন আপডেট হবে **শুধু এবং শুধুমাত্র আমাদের ইনস্ট্রাক্টেড ফোল্ডারে (`J:\My Drive\CLIENTS\DEMO`)**।
 - **Follow Docs for Credentials**: Follow the docs in `J:\My Drive\CLIENTS\DEMO` for any server or specific credentials.
 - **Always Execute as Instructed**: Strictly execute as the user directs. Do not make unauthorized modifications or deviations.
 - **Code Inspection for UI**: Do not always use terminal to skim files. Frontend needs careful UI updates, so thoroughly read through the frontend files using dedicated file viewing tools to understand layouts, components, and styling before making changes.
@@ -43,6 +46,7 @@ Every commit message must strictly follow this structure:
 
 ## 4. Centralized Logging via Central Hub (Zero Local Docs)
 - **NO LOCAL DOCUMENTATION OR BATCH FILES IN `Docs/`**: We no longer write or maintain markdown logs/batch files locally.
+- গিট ট্র্যাকিং ও কমিটে কোনো লোকাল ডকস ঢুকবে না।
 - All actions, changes, requirements, and test audits must be logged directly into the Central Cloudflare D1 Hub using the rich logger CLI:
   ```bash
   node client-kit/log.js "<ID>(<type>): <Summary>" \

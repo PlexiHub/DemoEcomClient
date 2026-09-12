@@ -128,6 +128,25 @@ apiClient.interceptors.response.use(
       }
     }
 
+    const isDemoRestriction =
+      error.response?.data?.code === 'DEMO_RESTRICTION' ||
+      (error.response?.status === 403 &&
+        typeof error.response?.data?.message === 'string' &&
+        error.response?.data?.message.toLowerCase().includes('purchase'));
+
+    if (isDemoRestriction) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('show-demo-purchase-modal', {
+            detail: {
+              feature: error.response?.data?.message || 'You have to purchase this system to use it.',
+            },
+          }),
+        );
+      }
+      return Promise.reject(error);
+    }
+
     if (typeof window !== 'undefined' && !isAuthRequest) {
       handleGlobalError(error);
     }

@@ -1,0 +1,64 @@
+name: "📋 Jira Task / Story (Log ID)"
+description: "Create a standard Jira-style feature, UI, refactor, or chore task"
+title: "[DC__] <type>: <Short summary>"
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Jira-Style Task Tracker (Plexivia Standards)
+        Fill out this issue form. Every task must be tracked using the **Log ID** format (`DC01`, `DC02`, etc.) matching `GEMINI.md`.
+  - type: input
+    id: log_id
+    attributes:
+      label: "Log ID"
+      description: "Sequential tracking ID (e.g. DC01, DC02, DC03)"
+      placeholder: "DC02"
+    validations:
+      required: true
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: "Issue Type"
+      description: "Select the work category"
+      options:
+        - "feat (New feature / capability)"
+        - "ui (UI design / layout / styling)"
+        - "refc (Refactoring / code cleanup)"
+        - "perf (Performance improvements)"
+        - "chor (Chores / dependencies / configuration)"
+        - "docs (Documentation updates)"
+        - "test (Testing / QA scripts)"
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "Priority"
+      options:
+        - "🔴 P0 (Blocker / Critical)"
+        - "🟠 P1 (High)"
+        - "🟡 P2 (Medium)"
+        - "🟢 P3 (Low)"
+    validations:
+      required: true
+  - type: textarea
+    id: requirements
+    attributes:
+      label: "Requirements & Problem Context"
+      description: "What business logic or feature requirement needs to be addressed?"
+      placeholder: "- Requirement details...\n- Problem statement..."
+    validations:
+      required: true
+  - type: textarea
+    id: changes_breakdown
+    attributes:
+      label: "Proposed Logic & File Changes"
+      description: "List the components, files, or endpoints that will be affected"
+      placeholder: "- dashboard/src/components/...\n- backend/src/controllers/..."
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Acceptance Criteria & Test Notes"
+      description: "How will this task be verified and marked as Done?"
+      placeholder: "- [ ] Tested in responsive mobile view\n- [ ] Verified API endpoint returns 200"

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Jira-Style Log Standard Documentation
+    url: https://github.com/Plexivia/DemoEcomClient
+    about: Follow GEMINI.md standards for DCxx Log IDs and commits.

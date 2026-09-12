@@ -1,0 +1,61 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "_id": "673a00000000000000000001",
+      "name": "Bags",
+      "slug": "bags",
+      "did": "CAT-BAGS0001",
+      "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+      "imageUrl": "/upload/categories/bags.webp",
+      "productCount": 5,
+      "parent": null,
+      "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+      "updatedBy": null,
+      "createdAt": "2026-09-13T00:00:00.000Z",
+      "updatedAt": "2026-09-13T00:00:00.000Z"
+    },
+    {
+      "_id": "673a00000000000000000002",
+      "name": "Wallet",
+      "slug": "wallet",
+      "did": "CAT-WALL0002",
+      "description": "Compact and minimalist leather wallets and coin pouches.",
+      "imageUrl": "/upload/categories/wallet.webp",
+      "productCount": 4,
+      "parent": null,
+      "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+      "updatedBy": null,
+      "createdAt": "2026-09-13T00:00:00.000Z",
+      "updatedAt": "2026-09-13T00:00:00.000Z"
+    },
+    {
+      "_id": "673a00000000000000000003",
+      "name": "Keychains",
+      "slug": "keychains",
+      "did": "CAT-KEYC0003",
+      "description": "Tactile plush pendants and durable enamel keychain charms.",
+      "imageUrl": "/upload/categories/keychains.webp",
+      "productCount": 3,
+      "parent": null,
+      "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+      "updatedBy": null,
+      "createdAt": "2026-09-13T00:00:00.000Z",
+      "updatedAt": "2026-09-13T00:00:00.000Z"
+    },
+    {
+      "_id": "673a00000000000000000004",
+      "name": "Tshirts",
+      "slug": "tshirts",
+      "did": "CAT-TSHR0004",
+      "description": "Premium heavyweight and combed cotton graphic t-shirts.",
+      "imageUrl": "/upload/categories/tshirts.webp",
+      "productCount": 3,
+      "parent": null,
+      "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+      "updatedBy": null,
+      "createdAt": "2026-09-13T00:00:00.000Z",
+      "updatedAt": "2026-09-13T00:00:00.000Z"
+    }
+  ]
+}

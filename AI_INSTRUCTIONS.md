@@ -1,13 +1,18 @@
 # AI & Development Guidelines (Demo Client)
 
+## 00. Always put 1 line eng comment before every functions
+## 00.1 J:\My Drive\CLIENTS\DEMO  this teh directory of docs
 ## 1. Primary Rules & Operating Principles
 
-1. **Docs Folder Location**:
-   - The master documentation and credentials directory is located at:
+1. **Docs Folder Location & Zero Local Docs Rule**:
+   - The master documentation, architecture guides, and credentials directory is located exclusively at:
      ```
      J:\My Drive\CLIENTS\DEMO
      ```
-   - Always refer to this directory for server access, SSH keys, deployment credentials, Cloudflare R2 configurations, and environment secrets.
+   - **লোকাল ডকসে আর কোনো কমিট নয় (No Local Docs Commits)**:
+     - গিট রিপোজিটরির ভেতরে কোনো লোকাল ডকুমেন্টেশন বা ডকস ফাইলে কমিট করা সম্পূর্ণ নিষিদ্ধ।
+     - আমরা এখন থেকে ডকুমেন্টেশন, গাইডলাইন, ক্রেডেনশিয়াল বা নোট আপডেট করব **শুধু এবং শুধুমাত্র আমাদের ইনস্ট্রাক্টেড ফোল্ডারে (`J:\My Drive\CLIENTS\DEMO`)**।
+   - Always refer to and update files in this directory for server access, SSH keys, deployment credentials, Cloudflare R2 configurations, and environment secrets.
 
 2. **Credential & Server Management**:
    - Strictly follow the documents inside `J:\My Drive\CLIENTS\DEMO` for any server IPs, passwords, tokens, or environment setup.

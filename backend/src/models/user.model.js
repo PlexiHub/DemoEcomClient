@@ -3,7 +3,7 @@ import { generateDid } from "../utils/generateDid.js";
 
 const { models } = mongoose;
 
-export const USER_ROLES = ["Owner", "Admin", "Manager", "Marketing-Expert", "Marketing Expert"];
+export const USER_ROLES = ["Owner", "Admin", "Manager", "Marketing-Expert", "Marketing Expert", "Demo Client"];
 
 const userSchema = new Schema(
   {

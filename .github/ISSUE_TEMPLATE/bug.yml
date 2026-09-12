@@ -1,0 +1,48 @@
+name: "🐞 Jira Bug (Log ID)"
+description: "Report a bug or regression with Log ID tracking"
+title: "[DC__] fix: <Short bug description>"
+labels: ["bug", "fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Jira-Style Bug Tracker (Plexivia Standards)
+        Report bugs here. When fixed, commit with `DCxx(fix): <description>`.
+  - type: input
+    id: log_id
+    attributes:
+      label: "Log ID"
+      description: "Sequential tracking ID (e.g. DC03)"
+      placeholder: "DC03"
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: "Severity / Priority"
+      options:
+        - "🔴 P0 (Blocker / Crash / Payment down)"
+        - "🟠 P1 (Major feature broken)"
+        - "🟡 P2 (Minor glitch / styling issue)"
+        - "🟢 P3 (Low / cosmetic)"
+    validations:
+      required: true
+  - type: textarea
+    id: bug_desc
+    attributes:
+      label: "Bug Description & Steps to Reproduce"
+      placeholder: "1. Go to...\n2. Click on...\n3. See error..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected vs Actual Behavior"
+      placeholder: "Expected: ...\nActual: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: error_logs
+    attributes:
+      label: "Error Logs / Console Output (if applicable)"
+      placeholder: "Paste any backend or browser console logs here"

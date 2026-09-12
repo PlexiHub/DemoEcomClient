@@ -336,6 +336,7 @@ export function AppSidebar({ ...props }) {
               <SidebarMenuButton
                 isActive={
                   pathname.startsWith("/dashboard/reports") ||
+                  pathname.startsWith("/dashboard/customers") ||
                   pathname.startsWith("/dashboard/members") ||
                   pathname.startsWith("/dashboard/users") ||
                   pathname.startsWith("/dashboard/reviews") ||
@@ -372,11 +373,11 @@ export function AppSidebar({ ...props }) {
                   {isAllowed("members") && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/members")}
-                        render={<Link to="/dashboard/members" />}
+                        isActive={pathname.startsWith("/dashboard/customers") || pathname.startsWith("/dashboard/members")}
+                        render={<Link to="/dashboard/customers" />}
                       >
                         <Users className="h-3.5 w-3.5" />
-                        <span>Members</span>
+                        <span>Customers</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}

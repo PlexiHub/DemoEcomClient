@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { LogIn, Mail, Lock, Eye, EyeOff, Shield, QrCode, ArrowLeft } from 'lucide-react';
+import { LogIn, Mail, Lock, Eye, EyeOff, Shield, QrCode, ArrowLeft, Info } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,6 @@ import plexiviaLogo from '@/assets/plexivia.png';
 const LoginPage = () => {
   const { user, login, verify2fa, isLoading: isAuthLoading } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -105,10 +104,10 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="dark h-screen w-screen max-h-screen bg-background text-foreground flex items-center justify-center p-3 relative overflow-hidden font-sans selection:bg-indigo-500/35 selection:text-foreground">
+    <div className="dark h-screen w-screen max-h-screen bg-background text-foreground flex items-center justify-center p-3 relative overflow-hidden font-sans selection:bg-primary/30 selection:text-primary">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-primary/10 rounded-full blur-[120px] pointer-events-none opacity-70 animate-pulse [animation-duration:8s]" />
-      <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none opacity-40 animate-pulse [animation-duration:12s]" />
-      <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none opacity-45 animate-pulse [animation-duration:10s]" />
+      <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] bg-primary/10 rounded-full blur-[100px] pointer-events-none opacity-40 animate-pulse [animation-duration:12s]" />
+      <div className="absolute bottom-1/3 right-1/4 w-[350px] h-[350px] bg-primary/5 rounded-full blur-[100px] pointer-events-none opacity-45 animate-pulse [animation-duration:10s]" />
 
       <div className="absolute inset-0 bg-[radial-gradient(var(--border)_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none opacity-30" />
 
@@ -130,6 +129,18 @@ const LoginPage = () => {
           </CardHeader>
 
           <CardContent className="p-4 sm:p-5 space-y-3.5">
+            {step === 1 && (
+              <div className="p-3 rounded-xl border border-primary/30 bg-primary/10 text-center space-y-1 mb-1">
+                <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-primary">
+                  <Info className="w-3.5 h-3.5 shrink-0" />
+                  <span>ডেমো স্টোর লগইন নোটিশ</span>
+                </div>
+                <p className="text-[11px] text-foreground/90 leading-relaxed font-medium">
+                  আপনার এক্সিস্টিং অ্যাকাউন্ট থাকলে লগইন করুন। নতুন অ্যাকাউন্ট বা পূর্ণাঙ্গ অ্যাক্সেসের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।
+                </p>
+              </div>
+            )}
+
             {step === 1 ? (
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="space-y-1">
@@ -187,15 +198,15 @@ const LoginPage = () => {
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-2">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
                     size="sm"
-                    className="w-full h-9 flex items-center justify-center font-semibold text-xs bg-foreground hover:bg-foreground/90 text-background transition cursor-pointer shadow-md rounded-lg"
+                    className="w-full h-9 flex items-center justify-center font-semibold text-xs bg-primary hover:bg-primary/90 text-primary-foreground transition cursor-pointer shadow-md rounded-lg"
                   >
                     {isSubmitting ? (
-                      <div className="h-4 w-4 border-2 border-background/30 border-t-background rounded-full animate-spin mr-2" />
+                      <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
                     ) : (
                       <LogIn className="h-3.5 w-3.5 mr-1" />
                     )}

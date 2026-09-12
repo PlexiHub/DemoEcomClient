@@ -24,11 +24,11 @@ const getClientFromHostname = () => {
 
 const envClient = import.meta.env?.VITE_CLIENT?.toLowerCase().trim();
 const detectedClient = getClientFromHostname();
-const activeKey = envClient || detectedClient || activeSyncedConfig?.clientKey || 'decantre';
+const activeKey = envClient || detectedClient || activeSyncedConfig?.clientKey || 'demo';
 
 export const clientConfig = activeKey === activeSyncedConfig?.clientKey
   ? activeSyncedConfig
-  : (clientConfigs[activeKey] || activeSyncedConfig || decantreConfig);
+  : (clientConfigs[activeKey] || activeSyncedConfig || demoConfig);
 
 // Helper to inspect active policy options safely
 export const getPolicy = (policyPath, defaultValue = null) => {

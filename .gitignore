@@ -43,6 +43,12 @@ backups/
 *.dump
 *.tar
 
+# Uploads
+upload/
+**/upload/
+uploads/
+**/uploads/
+
 # Frontend split repository folder
 frontend/
 

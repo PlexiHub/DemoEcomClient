@@ -1,0 +1,1052 @@
+[
+  {
+    "_id": "673a10000000000000000001",
+    "id": "673a10000000000000000001",
+    "name": "Tote Bag",
+    "slug": "tote-bag",
+    "did": "PRD-DEMO-0001",
+    "description": "<p>Stylish and durable tote bag with a modern design. Perfect for everyday use.</p>",
+    "longDescription": "<p>Stylish and durable tote bag with a modern design. Perfect for everyday use.</p><ul><li>100% heavy canvas cotton</li><li>Reinforced shoulder straps</li><li>Internal zippered pocket</li><li>Eco-friendly fabrication</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1250,
+    "offerPrice": null,
+    "sku": "DEMO-BG-001",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "bags",
+      "tote bag",
+      "canvas",
+      "accessories",
+      "lifestyle"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000001",
+        "name": "Bags",
+        "slug": "bags",
+        "did": "CAT-BAGS0001",
+        "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+        "imageUrl": "/upload/categories/bags.webp",
+        "productCount": 5,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Tote Bag | Demo Store",
+      "metaDescription": "Stylish and durable tote bag with a modern design. Perfect for everyday use.",
+      "keywords": [
+        "bags",
+        "tote bag",
+        "canvas",
+        "accessories",
+        "lifestyle"
+      ],
+      "ogImage": "/upload/products/tote-bag.webp"
+    },
+    "imageUrl": "/upload/products/tote-bag.webp",
+    "thumbnailUrl": "/upload/products/tote-bag.webp",
+    "images": [
+      "/upload/products/tote-bag.webp"
+    ],
+    "image_url": "/upload/products/tote-bag.webp",
+    "thumbnail_url": "/upload/products/tote-bag.webp",
+    "stockStatus": "instock",
+    "stockAmount": 50,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000002",
+    "id": "673a10000000000000000002",
+    "name": "Nature Designed Tote Bag",
+    "slug": "nature-designed-tote-bag",
+    "did": "PRD-DEMO-0002",
+    "description": "<p>Botanical foliage print canvas bag designed for mindful daily errands and shopping.</p>",
+    "longDescription": "<p>Botanical foliage print canvas bag designed for mindful daily errands and shopping.</p><ul><li>Organic botanical screen print</li><li>Durable woven handles</li><li>Spacious open compartment</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1250,
+    "offerPrice": null,
+    "sku": "DEMO-BG-002",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "bags",
+      "nature",
+      "tote bag",
+      "organic",
+      "botanical"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000001",
+        "name": "Bags",
+        "slug": "bags",
+        "did": "CAT-BAGS0001",
+        "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+        "imageUrl": "/upload/categories/bags.webp",
+        "productCount": 5,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Nature Designed Tote Bag | Demo Store",
+      "metaDescription": "Botanical foliage print canvas bag designed for mindful daily errands and shopping.",
+      "keywords": [
+        "bags",
+        "nature",
+        "tote bag",
+        "organic",
+        "botanical"
+      ],
+      "ogImage": "/upload/products/nature-designed-tote-bag.webp"
+    },
+    "imageUrl": "/upload/products/nature-designed-tote-bag.webp",
+    "thumbnailUrl": "/upload/products/nature-designed-tote-bag.webp",
+    "images": [
+      "/upload/products/nature-designed-tote-bag.webp"
+    ],
+    "image_url": "/upload/products/nature-designed-tote-bag.webp",
+    "thumbnail_url": "/upload/products/nature-designed-tote-bag.webp",
+    "stockStatus": "instock",
+    "stockAmount": 40,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000003",
+    "id": "673a10000000000000000003",
+    "name": "Ladies Purse",
+    "slug": "ladies-purse",
+    "did": "PRD-DEMO-0003",
+    "description": "<p>Contemporary structured ladies handbag with premium metal accents and shoulder strap.</p>",
+    "longDescription": "<p>Contemporary structured ladies handbag with premium metal accents and shoulder strap.</p><ul><li>Fine textured vegan leather</li><li>Dual interior partitions</li><li>Gold-finish hardware</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1650,
+    "offerPrice": null,
+    "sku": "DEMO-BG-003",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "bags",
+      "purse",
+      "ladies purse",
+      "leather",
+      "fashion"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000001",
+        "name": "Bags",
+        "slug": "bags",
+        "did": "CAT-BAGS0001",
+        "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+        "imageUrl": "/upload/categories/bags.webp",
+        "productCount": 5,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Ladies Purse | Demo Store",
+      "metaDescription": "Contemporary structured ladies handbag with premium metal accents and shoulder strap.",
+      "keywords": [
+        "bags",
+        "purse",
+        "ladies purse",
+        "leather",
+        "fashion"
+      ],
+      "ogImage": "/upload/products/ladies-purse.webp"
+    },
+    "imageUrl": "/upload/products/ladies-purse.webp",
+    "thumbnailUrl": "/upload/products/ladies-purse.webp",
+    "images": [
+      "/upload/products/ladies-purse.webp"
+    ],
+    "image_url": "/upload/products/ladies-purse.webp",
+    "thumbnail_url": "/upload/products/ladies-purse.webp",
+    "stockStatus": "instock",
+    "stockAmount": 35,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000004",
+    "id": "673a10000000000000000004",
+    "name": "Laptop Bag",
+    "slug": "laptop-bag",
+    "did": "PRD-DEMO-0004",
+    "description": "<p>Water-repellent commuter laptop carrier with shock-absorbing foam padding.</p>",
+    "longDescription": "<p>Water-repellent commuter laptop carrier with shock-absorbing foam padding.</p><ul><li>Fits up to 15.6 inch laptops</li><li>Dedicated accessory slots</li><li>Padded ergonomic strap</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 2250,
+    "offerPrice": null,
+    "sku": "DEMO-BG-004",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "bags",
+      "laptop bag",
+      "office",
+      "travel",
+      "commute"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000001",
+        "name": "Bags",
+        "slug": "bags",
+        "did": "CAT-BAGS0001",
+        "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+        "imageUrl": "/upload/categories/bags.webp",
+        "productCount": 5,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Laptop Bag | Demo Store",
+      "metaDescription": "Water-repellent commuter laptop carrier with shock-absorbing foam padding.",
+      "keywords": [
+        "bags",
+        "laptop bag",
+        "office",
+        "travel",
+        "commute"
+      ],
+      "ogImage": "/upload/products/laptop-bag.webp"
+    },
+    "imageUrl": "/upload/products/laptop-bag.webp",
+    "thumbnailUrl": "/upload/products/laptop-bag.webp",
+    "images": [
+      "/upload/products/laptop-bag.webp"
+    ],
+    "image_url": "/upload/products/laptop-bag.webp",
+    "thumbnail_url": "/upload/products/laptop-bag.webp",
+    "stockStatus": "instock",
+    "stockAmount": 25,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000005",
+    "id": "673a10000000000000000005",
+    "name": "Cute Schoolbag",
+    "slug": "cute-schoolbag",
+    "did": "PRD-DEMO-0005",
+    "description": "<p>Comfortable pastel backpack featuring ergonomic straps and organized storage.</p>",
+    "longDescription": "<p>Comfortable pastel backpack featuring ergonomic straps and organized storage.</p><ul><li>Multi-tier zip compartments</li><li>Breathable mesh back panel</li><li>Lightweight water-resistant fabric</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1850,
+    "offerPrice": null,
+    "sku": "DEMO-BG-005",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "bags",
+      "backpack",
+      "schoolbag",
+      "cute",
+      "travel"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000001",
+        "name": "Bags",
+        "slug": "bags",
+        "did": "CAT-BAGS0001",
+        "description": "Stylish and functional backpacks, totes, and purses for everyday use.",
+        "imageUrl": "/upload/categories/bags.webp",
+        "productCount": 5,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Cute Schoolbag | Demo Store",
+      "metaDescription": "Comfortable pastel backpack featuring ergonomic straps and organized storage.",
+      "keywords": [
+        "bags",
+        "backpack",
+        "schoolbag",
+        "cute",
+        "travel"
+      ],
+      "ogImage": "/upload/products/cute-schoolbag.webp"
+    },
+    "imageUrl": "/upload/products/cute-schoolbag.webp",
+    "thumbnailUrl": "/upload/products/cute-schoolbag.webp",
+    "images": [
+      "/upload/products/cute-schoolbag.webp"
+    ],
+    "image_url": "/upload/products/cute-schoolbag.webp",
+    "thumbnail_url": "/upload/products/cute-schoolbag.webp",
+    "stockStatus": "instock",
+    "stockAmount": 30,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000006",
+    "id": "673a10000000000000000006",
+    "name": "Kawaii Mini Purse",
+    "slug": "kawaii-mini-purse",
+    "did": "PRD-DEMO-0006",
+    "description": "<p>Charming compact pouch purse crafted for quick coins, cards, and keys.</p>",
+    "longDescription": "<p>Charming compact pouch purse crafted for quick coins, cards, and keys.</p><ul><li>Compact palm-sized form</li><li>Smooth metallic zipper</li><li>Durable inner lining</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 950,
+    "offerPrice": null,
+    "sku": "DEMO-WL-001",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "wallet",
+      "mini purse",
+      "kawaii",
+      "coins",
+      "compact"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000002",
+        "name": "Wallet",
+        "slug": "wallet",
+        "did": "CAT-WALL0002",
+        "description": "Compact and minimalist leather wallets and coin pouches.",
+        "imageUrl": "/upload/categories/wallet.webp",
+        "productCount": 4,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Kawaii Mini Purse | Demo Store",
+      "metaDescription": "Charming compact pouch purse crafted for quick coins, cards, and keys.",
+      "keywords": [
+        "wallet",
+        "mini purse",
+        "kawaii",
+        "coins",
+        "compact"
+      ],
+      "ogImage": "/upload/products/kawaii-mini-purse.webp"
+    },
+    "imageUrl": "/upload/products/kawaii-mini-purse.webp",
+    "thumbnailUrl": "/upload/products/kawaii-mini-purse.webp",
+    "images": [
+      "/upload/products/kawaii-mini-purse.webp"
+    ],
+    "image_url": "/upload/products/kawaii-mini-purse.webp",
+    "thumbnail_url": "/upload/products/kawaii-mini-purse.webp",
+    "stockStatus": "instock",
+    "stockAmount": 45,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000007",
+    "id": "673a10000000000000000007",
+    "name": "Coin Purse",
+    "slug": "coin-purse",
+    "did": "PRD-DEMO-0007",
+    "description": "<p>Minimalist pocket leather coin purse with clean edges and secure closure.</p>",
+    "longDescription": "<p>Minimalist pocket leather coin purse with clean edges and secure closure.</p><ul><li>Genuine textured finish</li><li>Quick-access snap clasp</li><li>Slim pocket profile</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 750,
+    "offerPrice": null,
+    "sku": "DEMO-WL-002",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "wallet",
+      "coin purse",
+      "leather",
+      "pocket",
+      "minimalist"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000002",
+        "name": "Wallet",
+        "slug": "wallet",
+        "did": "CAT-WALL0002",
+        "description": "Compact and minimalist leather wallets and coin pouches.",
+        "imageUrl": "/upload/categories/wallet.webp",
+        "productCount": 4,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Coin Purse | Demo Store",
+      "metaDescription": "Minimalist pocket leather coin purse with clean edges and secure closure.",
+      "keywords": [
+        "wallet",
+        "coin purse",
+        "leather",
+        "pocket",
+        "minimalist"
+      ],
+      "ogImage": "/upload/products/coin-purse.webp"
+    },
+    "imageUrl": "/upload/products/coin-purse.webp",
+    "thumbnailUrl": "/upload/products/coin-purse.webp",
+    "images": [
+      "/upload/products/coin-purse.webp"
+    ],
+    "image_url": "/upload/products/coin-purse.webp",
+    "thumbnail_url": "/upload/products/coin-purse.webp",
+    "stockStatus": "instock",
+    "stockAmount": 50,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000008",
+    "id": "673a10000000000000000008",
+    "name": "Men Wallet",
+    "slug": "men-wallet",
+    "did": "PRD-DEMO-0008",
+    "description": "<p>Classic dark leather bifold wallet with multi-card slots and bill divider.</p>",
+    "longDescription": "<p>Classic dark leather bifold wallet with multi-card slots and bill divider.</p><ul><li>RFID protection shield</li><li>8 card slots + dual currency fold</li><li>Slim hand-stitched border</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1250,
+    "offerPrice": null,
+    "sku": "DEMO-WL-003",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "wallet",
+      "men wallet",
+      "bifold",
+      "leather",
+      "rfid"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000002",
+        "name": "Wallet",
+        "slug": "wallet",
+        "did": "CAT-WALL0002",
+        "description": "Compact and minimalist leather wallets and coin pouches.",
+        "imageUrl": "/upload/categories/wallet.webp",
+        "productCount": 4,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Men Wallet | Demo Store",
+      "metaDescription": "Classic dark leather bifold wallet with multi-card slots and bill divider.",
+      "keywords": [
+        "wallet",
+        "men wallet",
+        "bifold",
+        "leather",
+        "rfid"
+      ],
+      "ogImage": "/upload/products/men-wallet.webp"
+    },
+    "imageUrl": "/upload/products/men-wallet.webp",
+    "thumbnailUrl": "/upload/products/men-wallet.webp",
+    "images": [
+      "/upload/products/men-wallet.webp"
+    ],
+    "image_url": "/upload/products/men-wallet.webp",
+    "thumbnail_url": "/upload/products/men-wallet.webp",
+    "stockStatus": "instock",
+    "stockAmount": 40,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a10000000000000000009",
+    "id": "673a10000000000000000009",
+    "name": "Leather Long Wallet",
+    "slug": "leather-long-wallet",
+    "did": "PRD-DEMO-0009",
+    "description": "<p>Refined long organizer wallet tailored for checkbooks, cards, and cash.</p>",
+    "longDescription": "<p>Refined long organizer wallet tailored for checkbooks, cards, and cash.</p><ul><li>12 card slots</li><li>Zippered coin sleeve</li><li>Premium matte leather exterior</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1750,
+    "offerPrice": null,
+    "sku": "DEMO-WL-004",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "wallet",
+      "long wallet",
+      "organizer",
+      "leather",
+      "premium"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000002",
+        "name": "Wallet",
+        "slug": "wallet",
+        "did": "CAT-WALL0002",
+        "description": "Compact and minimalist leather wallets and coin pouches.",
+        "imageUrl": "/upload/categories/wallet.webp",
+        "productCount": 4,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Leather Long Wallet | Demo Store",
+      "metaDescription": "Refined long organizer wallet tailored for checkbooks, cards, and cash.",
+      "keywords": [
+        "wallet",
+        "long wallet",
+        "organizer",
+        "leather",
+        "premium"
+      ],
+      "ogImage": "/upload/products/leather-long-wallet.webp"
+    },
+    "imageUrl": "/upload/products/leather-long-wallet.webp",
+    "thumbnailUrl": "/upload/products/leather-long-wallet.webp",
+    "images": [
+      "/upload/products/leather-long-wallet.webp"
+    ],
+    "image_url": "/upload/products/leather-long-wallet.webp",
+    "thumbnail_url": "/upload/products/leather-long-wallet.webp",
+    "stockStatus": "instock",
+    "stockAmount": 20,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000a",
+    "id": "673a1000000000000000000a",
+    "name": "Cute Bunny Keychain",
+    "slug": "cute-bunny-keychain",
+    "did": "PRD-DEMO-0010",
+    "description": "<p>Soft tactile plush bunny charm attached to an alloy swivel clip.</p>",
+    "longDescription": "<p>Soft tactile plush bunny charm attached to an alloy swivel clip.</p><ul><li>Ultra-soft plush finish</li><li>Sturdy metal swivel ring</li><li>Lightweight bag accessory</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 680,
+    "offerPrice": null,
+    "sku": "DEMO-KC-001",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "keychains",
+      "bunny",
+      "plush",
+      "charm",
+      "cute"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000003",
+        "name": "Keychains",
+        "slug": "keychains",
+        "did": "CAT-KEYC0003",
+        "description": "Tactile plush pendants and durable enamel keychain charms.",
+        "imageUrl": "/upload/categories/keychains.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Cute Bunny Keychain | Demo Store",
+      "metaDescription": "Soft tactile plush bunny charm attached to an alloy swivel clip.",
+      "keywords": [
+        "keychains",
+        "bunny",
+        "plush",
+        "charm",
+        "cute"
+      ],
+      "ogImage": "/upload/products/cute-bunny-keychain.webp"
+    },
+    "imageUrl": "/upload/products/cute-bunny-keychain.webp",
+    "thumbnailUrl": "/upload/products/cute-bunny-keychain.webp",
+    "images": [
+      "/upload/products/cute-bunny-keychain.webp"
+    ],
+    "image_url": "/upload/products/cute-bunny-keychain.webp",
+    "thumbnail_url": "/upload/products/cute-bunny-keychain.webp",
+    "stockStatus": "instock",
+    "stockAmount": 60,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000b",
+    "id": "673a1000000000000000000b",
+    "name": "Kuromi Premium Plush",
+    "slug": "kuromi-premium-plush",
+    "did": "PRD-DEMO-0011",
+    "description": "<p>Detailed collector plush pendant with signature aesthetic styling.</p>",
+    "longDescription": "<p>Detailed collector plush pendant with signature aesthetic styling.</p><ul><li>High-density velvet plush</li><li>Precision embroidery</li><li>Collector clasp</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1200,
+    "offerPrice": null,
+    "sku": "DEMO-KC-002",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "keychains",
+      "kuromi",
+      "plush",
+      "collector",
+      "aesthetic"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000003",
+        "name": "Keychains",
+        "slug": "keychains",
+        "did": "CAT-KEYC0003",
+        "description": "Tactile plush pendants and durable enamel keychain charms.",
+        "imageUrl": "/upload/categories/keychains.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Kuromi Premium Plush | Demo Store",
+      "metaDescription": "Detailed collector plush pendant with signature aesthetic styling.",
+      "keywords": [
+        "keychains",
+        "kuromi",
+        "plush",
+        "collector",
+        "aesthetic"
+      ],
+      "ogImage": "/upload/products/kuromi-premium-plush.webp"
+    },
+    "imageUrl": "/upload/products/kuromi-premium-plush.webp",
+    "thumbnailUrl": "/upload/products/kuromi-premium-plush.webp",
+    "images": [
+      "/upload/products/kuromi-premium-plush.webp"
+    ],
+    "image_url": "/upload/products/kuromi-premium-plush.webp",
+    "thumbnail_url": "/upload/products/kuromi-premium-plush.webp",
+    "stockStatus": "instock",
+    "stockAmount": 25,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000c",
+    "id": "673a1000000000000000000c",
+    "name": "Black Cat Keychain Pendant",
+    "slug": "black-cat-keychain-pendant",
+    "did": "PRD-DEMO-0012",
+    "description": "<p>Sleek black feline charm pendant with polished dark enamel finish.</p>",
+    "longDescription": "<p>Sleek black feline charm pendant with polished dark enamel finish.</p><ul><li>Solid zinc alloy base</li><li>Gloss enamel coating</li><li>Anti-rust key loop</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 620,
+    "offerPrice": null,
+    "sku": "DEMO-KC-003",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "keychains",
+      "black cat",
+      "enamel",
+      "pendant",
+      "charm"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000003",
+        "name": "Keychains",
+        "slug": "keychains",
+        "did": "CAT-KEYC0003",
+        "description": "Tactile plush pendants and durable enamel keychain charms.",
+        "imageUrl": "/upload/categories/keychains.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Black Cat Keychain Pendant | Demo Store",
+      "metaDescription": "Sleek black feline charm pendant with polished dark enamel finish.",
+      "keywords": [
+        "keychains",
+        "black cat",
+        "enamel",
+        "pendant",
+        "charm"
+      ],
+      "ogImage": "/upload/products/black-cat-keychain-pendant.webp"
+    },
+    "imageUrl": "/upload/products/black-cat-keychain-pendant.webp",
+    "thumbnailUrl": "/upload/products/black-cat-keychain-pendant.webp",
+    "images": [
+      "/upload/products/black-cat-keychain-pendant.webp"
+    ],
+    "image_url": "/upload/products/black-cat-keychain-pendant.webp",
+    "thumbnail_url": "/upload/products/black-cat-keychain-pendant.webp",
+    "stockStatus": "instock",
+    "stockAmount": 40,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000d",
+    "id": "673a1000000000000000000d",
+    "name": "Hello Kitty Designed",
+    "slug": "hello-kitty-designed",
+    "did": "PRD-DEMO-0013",
+    "description": "<p>Soft combed cotton pastel t-shirt with classic playful character artwork.</p>",
+    "longDescription": "<p>Soft combed cotton pastel t-shirt with classic playful character artwork.</p><ul><li>100% bio-washed combed cotton</li><li>High-definition screen print</li><li>Pre-shrunk regular fit</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1450,
+    "offerPrice": null,
+    "sku": "DEMO-TS-001",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "tshirts",
+      "hello kitty",
+      "cotton",
+      "casual",
+      "graphic tee"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000004",
+        "name": "Tshirts",
+        "slug": "tshirts",
+        "did": "CAT-TSHR0004",
+        "description": "Premium heavyweight and combed cotton graphic t-shirts.",
+        "imageUrl": "/upload/categories/tshirts.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Hello Kitty Designed | Demo Store",
+      "metaDescription": "Soft combed cotton pastel t-shirt with classic playful character artwork.",
+      "keywords": [
+        "tshirts",
+        "hello kitty",
+        "cotton",
+        "casual",
+        "graphic tee"
+      ],
+      "ogImage": "/upload/products/hello-kitty-designed.webp"
+    },
+    "imageUrl": "/upload/products/hello-kitty-designed.webp",
+    "thumbnailUrl": "/upload/products/hello-kitty-designed.webp",
+    "images": [
+      "/upload/products/hello-kitty-designed.webp"
+    ],
+    "image_url": "/upload/products/hello-kitty-designed.webp",
+    "thumbnail_url": "/upload/products/hello-kitty-designed.webp",
+    "stockStatus": "instock",
+    "stockAmount": 35,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000e",
+    "id": "673a1000000000000000000e",
+    "name": "Couple Tshirt Pair",
+    "slug": "couple-tshirt-pair",
+    "did": "PRD-DEMO-0014",
+    "description": "<p>Coordinated set of 2 premium unisex t-shirts crafted for matching comfort.</p>",
+    "longDescription": "<p>Coordinated set of 2 premium unisex t-shirts crafted for matching comfort.</p><ul><li>Set of two matching tees</li><li>Breathable lightweight weave</li><li>Ribbed crew collar</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 2450,
+    "offerPrice": null,
+    "sku": "DEMO-TS-002",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "tshirts",
+      "couple",
+      "matching",
+      "pair",
+      "unisex"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000004",
+        "name": "Tshirts",
+        "slug": "tshirts",
+        "did": "CAT-TSHR0004",
+        "description": "Premium heavyweight and combed cotton graphic t-shirts.",
+        "imageUrl": "/upload/categories/tshirts.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Couple Tshirt Pair | Demo Store",
+      "metaDescription": "Coordinated set of 2 premium unisex t-shirts crafted for matching comfort.",
+      "keywords": [
+        "tshirts",
+        "couple",
+        "matching",
+        "pair",
+        "unisex"
+      ],
+      "ogImage": "/upload/products/couple-tshirt-pair.webp"
+    },
+    "imageUrl": "/upload/products/couple-tshirt-pair.webp",
+    "thumbnailUrl": "/upload/products/couple-tshirt-pair.webp",
+    "images": [
+      "/upload/products/couple-tshirt-pair.webp"
+    ],
+    "image_url": "/upload/products/couple-tshirt-pair.webp",
+    "thumbnail_url": "/upload/products/couple-tshirt-pair.webp",
+    "stockStatus": "instock",
+    "stockAmount": 20,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  },
+  {
+    "_id": "673a1000000000000000000f",
+    "id": "673a1000000000000000000f",
+    "name": "Jojo Soso Drop Shoulder",
+    "slug": "jojo-soso-drop-shoulder",
+    "did": "PRD-DEMO-0015",
+    "description": "<p>Heavyweight oversized drop-shoulder tee with relaxed contemporary drape.</p>",
+    "longDescription": "<p>Heavyweight oversized drop-shoulder tee with relaxed contemporary drape.</p><ul><li>240 GSM heavy cotton</li><li>Relaxed boxy silhouette</li><li>Drop shoulder seams</li></ul>",
+    "chargeTax": false,
+    "taxRate": null,
+    "isActive": true,
+    "type": "simple",
+    "price": 1650,
+    "offerPrice": null,
+    "sku": "DEMO-TS-003",
+    "variants": [],
+    "season": [
+      "All-Season"
+    ],
+    "tags": [
+      "tshirts",
+      "drop shoulder",
+      "oversized",
+      "streetwear",
+      "heavyweight"
+    ],
+    "notes": [],
+    "brand": [],
+    "categories": [
+      {
+        "_id": "673a00000000000000000004",
+        "name": "Tshirts",
+        "slug": "tshirts",
+        "did": "CAT-TSHR0004",
+        "description": "Premium heavyweight and combed cotton graphic t-shirts.",
+        "imageUrl": "/upload/categories/tshirts.webp",
+        "productCount": 3,
+        "parent": null,
+        "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+        "updatedBy": null,
+        "createdAt": "2026-09-13T00:00:00.000Z",
+        "updatedAt": "2026-09-13T00:00:00.000Z"
+      }
+    ],
+    "metaData": {
+      "metaTitle": "Jojo Soso Drop Shoulder | Demo Store",
+      "metaDescription": "Heavyweight oversized drop-shoulder tee with relaxed contemporary drape.",
+      "keywords": [
+        "tshirts",
+        "drop shoulder",
+        "oversized",
+        "streetwear",
+        "heavyweight"
+      ],
+      "ogImage": "/upload/products/jojo-soso-drop-shoulder.webp"
+    },
+    "imageUrl": "/upload/products/jojo-soso-drop-shoulder.webp",
+    "thumbnailUrl": "/upload/products/jojo-soso-drop-shoulder.webp",
+    "images": [
+      "/upload/products/jojo-soso-drop-shoulder.webp"
+    ],
+    "image_url": "/upload/products/jojo-soso-drop-shoulder.webp",
+    "thumbnail_url": "/upload/products/jojo-soso-drop-shoulder.webp",
+    "stockStatus": "instock",
+    "stockAmount": 30,
+    "createdBy": "6a7e1cb910f06c8eb4ea0a66",
+    "updatedBy": null,
+    "createdAt": "2026-09-13T00:00:00.000Z",
+    "updatedAt": "2026-09-13T00:00:00.000Z"
+  }
+]

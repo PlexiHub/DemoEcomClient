@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { listAssets, getAssetById, createAsset, updateAsset, deleteAsset } from "../controllers/AssetsController.js";
+import { listAssets, getAssetById, createAsset, updateAsset, deleteAsset, getLogoInfo } from "../controllers/AssetsController.js";
 import { authenticateToken, authorizeRoles } from "../middlewares/auth.middleware.js";
 
 const assetsRouter = Router();
+
+// Public endpoint for active logo metadata and cache-busting timestamp
+assetsRouter.get("/logo-info", getLogoInfo);
 
 assetsRouter.use(authenticateToken);
 

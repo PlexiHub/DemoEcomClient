@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { clientConfig } from '@/clientConfig';
 import { apiClient, resolveImageUrl } from '@/lib/api-client';
+import plexiviaLogo from '@/assets/plexivia.png';
 // Renders the tenant branding logo with fixed proportional width and dynamic height
 export const BrandLogo = ({
   src,
   className = 'w-[115px] h-auto',
   imgClassName = '',
   alt = 'Brand logo',
-  iconOnly = false,
+  iconOnly: _iconOnly = false,
   centered = false,
 }) => {
-  const { clientKey = 'decantre', brandName = 'Decantre', logoUrl } = clientConfig || {};
+  const { clientKey: _clientKey = 'demo', brandName = 'Plexivia', logoUrl } = clientConfig || {};
 
   const [logoVersion, setLogoVersion] = useState(() => {
     try {
@@ -38,6 +39,15 @@ export const BrandLogo = ({
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
+    apiClient.get('/api/v1/assets/logo-info').then((res) => {
+      if (res?.data?.data?.version) {
+        setLogoVersion(res.data.data.version);
+        try {
+          localStorage.setItem('brand_logo_version', String(res.data.data.version));
+        } catch {}
+      }
+    }).catch(() => {});
+
     const handleLogoUpdated = (e) => {
       const newVersion = e?.detail?.timestamp || Date.now();
       setLogoVersion(newVersion);
@@ -77,22 +87,13 @@ export const BrandLogo = ({
     );
   }
 
-  if (iconOnly) {
-    return (
-      <div className={`flex items-center justify-center font-bold text-primary shrink-0 ${className}`}>
-        <span className="bg-primary/20 px-2 py-0.5 rounded border border-primary/30 uppercase text-xs font-black">
-          {clientKey ? clientKey.slice(0, 2) : 'WL'}
-        </span>
-      </div>
-    );
-  }
-
   return (
-    <div className={`flex items-center gap-2 font-bold tracking-wider text-xl text-primary shrink-0 ${className}`}>
-      <span className="bg-primary/20 px-2 py-0.5 rounded border border-primary/30 uppercase text-xs font-black">
-        {clientKey ? clientKey.slice(0, 2) : 'WL'}
-      </span>
-      <span className="truncate">{brandName}</span>
+    <div className={`relative overflow-hidden flex items-center shrink-0 ${isCentered ? 'justify-center' : 'justify-start'} ${className}`}>
+      <img
+        src={plexiviaLogo}
+        alt="Plexivia"
+        className={`w-full h-full object-contain ${isCentered ? 'object-center mx-auto' : 'object-left'} ${imgClassName}`}
+      />
     </div>
   );
 };

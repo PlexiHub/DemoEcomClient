@@ -5,7 +5,9 @@ import { ClientSidebarProvider } from '@/components/dashboard/client-sidebar-pro
 import { AuthGuard } from '@/components/auth-guard';
 import { ClientThemeProvider } from '@/components/clientThemeProvider';
 import { ClientRouteGuard } from '@/components/clientRouteGuard';
+import { DemoPurchaseModal } from '@/components/DemoPurchaseModal';
 
+// Root layout for dashboard shell with client theme, sidebar, and demo purchase modal
 const DashboardLayout = ({ children }) => {
   return (
     <AuthGuard>
@@ -20,10 +22,11 @@ const DashboardLayout = ({ children }) => {
               </ClientRouteGuard>
             </main>
           </div>
+          <DemoPurchaseModal />
         </ClientSidebarProvider>
       </ClientThemeProvider>
     </AuthGuard>
   );
-}
+};
 
 export default DashboardLayout;

@@ -116,12 +116,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'members',
+        path: 'customers',
         element: (
           <RoleGuard menuKey="members">
             <Members />
           </RoleGuard>
         ),
+      },
+      {
+        path: 'members',
+        element: <Navigate to="/dashboard/customers" replace />,
       },
       {
         path: 'reviews',

@@ -59,6 +59,10 @@ export function getGenericErrorMessage(error, customFallback) {
     return 'Invalid email or password. Please try again.';
   }
 
+  if (lowerMsg.includes('purchase') || error?.response?.data?.code === 'DEMO_RESTRICTION') {
+    return error?.response?.data?.message || 'You have to purchase this system to use it.';
+  }
+
   if (lowerMsg.includes('403') || lowerMsg.includes('forbidden')) {
     return 'You do not have permission to perform this action.';
   }

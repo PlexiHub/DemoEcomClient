@@ -65,6 +65,8 @@ export async function createApp() {
     },
   };
 
+  app.use("/upload", express.static(path.join(process.cwd(), "upload"), staticAssetOptions));
+  app.use("/uploads", express.static(path.join(process.cwd(), "upload"), staticAssetOptions));
   app.use("/uploads", express.static(path.join(process.cwd(), "uploads"), staticAssetOptions));
   app.use("/src/uploads", express.static(path.join(process.cwd(), "uploads"), staticAssetOptions));
 

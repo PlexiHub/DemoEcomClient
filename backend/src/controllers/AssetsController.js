@@ -63,3 +63,39 @@ export const deleteAsset = async (req, res, next) => {
     next(error);
   }
 };
+
+// Returns metadata and real-time modification timestamp for the active brand logo asset
+export const getLogoInfo = async (req, res, next) => {
+  try {
+    const fs = await import("fs");
+    const path = await import("path");
+    const candidates = ["logo.webp", "logo.png", "logo.svg"];
+    const assetsDir = path.join(process.cwd(), "uploads", "assets");
+    let matchedFile = null;
+    let mtimeMs = Date.now();
+
+    for (const name of candidates) {
+      const fullPath = path.join(assetsDir, name);
+      if (fs.existsSync(fullPath)) {
+        const stat = fs.statSync(fullPath);
+        matchedFile = name;
+        mtimeMs = Math.floor(stat.mtimeMs);
+        break;
+      }
+    }
+
+    const relativePath = matchedFile ? `/uploads/assets/${matchedFile}` : "/uploads/assets/logo.webp";
+    return res.json({
+      status: "success",
+      data: {
+        filename: matchedFile || "logo.webp",
+        relativePath,
+        version: mtimeMs,
+        url: `${relativePath}?v=${mtimeMs}`,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
