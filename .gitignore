@@ -49,4 +49,5 @@ frontend/
 .agents
 *.bundle
 .wrangler/
+Docs/
 
