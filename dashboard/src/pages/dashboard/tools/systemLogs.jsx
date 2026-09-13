@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useDemoGuard } from "@/hooks/useDemoGuard";
 import { apiClient } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,17 +11,18 @@ import {
   Search,
   Pause,
   Play,
-  Download,
   Database,
-  RefreshCw,
   Activity,
   ArrowDown,
   ShieldCheck,
+  Lock,
 } from "lucide-react";
 import { toast } from "sonner";
 
-export default function SystemLogs() {
+// Renders real-time server and API execution logs with stream controls and demo guard restrictions
+const SystemLogs = () => {
   const { user } = useAuth();
+  const { isDemoClient } = useDemoGuard();
   const [logs, setLogs] = useState([]);
   const [filter, setFilter] = useState("");
   const [methodFilter, setMethodFilter] = useState("ALL");
@@ -29,7 +31,7 @@ export default function SystemLogs() {
   const [autoScroll, setAutoScroll] = useState(true);
   const logEndRef = useRef(null);
 
-  // Fetch initial logs
+  // Fetches initial batch of server execution logs from developer API
   const fetchLogs = async () => {
     try {
       const response = await apiClient.get("/api/v1/developer/logs");
@@ -62,7 +64,6 @@ export default function SystemLogs() {
             setLogs((prev) => [...prev.slice(-400), parsed]);
           }
         } catch {
-          // fallback plain string
           if (event.data) {
             setLogs((prev) => [...prev.slice(-400), { message: event.data, timestamp: new Date().toISOString() }]);
           }
@@ -70,14 +71,11 @@ export default function SystemLogs() {
       };
 
       eventSource.onerror = () => {
-        // Fallback to polling every 3 seconds if SSE fails
         eventSource?.close();
       };
     } catch {
-      // SSE not available
     }
 
-    // Polling interval fallback
     const interval = setInterval(() => {
       if (!isPaused && (!eventSource || eventSource.readyState === EventSource.CLOSED)) {
         fetchLogs();
@@ -96,7 +94,9 @@ export default function SystemLogs() {
     }
   }, [logs, autoScroll]);
 
+  // Downloads compressed MongoDB backup archive if authorized
   const handleDownloadBackup = async () => {
+    if (isDemoClient) return;
     try {
       setIsDownloading(true);
       const response = await apiClient.get("/api/v1/developer/db-backup", {
@@ -131,6 +131,7 @@ export default function SystemLogs() {
     }
   };
 
+  // Returns colored badge component representing HTTP request method
   const getMethodBadge = (method) => {
     const m = (method || "").toUpperCase();
     switch (m) {
@@ -148,6 +149,7 @@ export default function SystemLogs() {
     }
   };
 
+  // Returns styled text element for HTTP response status code
   const getStatusBadge = (status) => {
     if (!status) return null;
     const s = parseInt(status, 10);
@@ -193,7 +195,6 @@ export default function SystemLogs() {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
@@ -212,8 +213,10 @@ export default function SystemLogs() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsPaused(!isPaused)}
-            className="shadow-2xs text-xs"
+            onClick={() => !isDemoClient && setIsPaused(!isPaused)}
+            disabled={isDemoClient}
+            title={isDemoClient ? "Action disabled for demo accounts" : (isPaused ? "Resume live stream" : "Pause stream")}
+            className="shadow-2xs text-xs disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPaused ? <Play className="h-3.5 w-3.5 mr-1.5 text-emerald-500" /> : <Pause className="h-3.5 w-3.5 mr-1.5 text-amber-500" />}
             {isPaused ? "Resume Live" : "Pause Stream"}
@@ -222,8 +225,10 @@ export default function SystemLogs() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setLogs([])}
-            className="shadow-2xs text-xs text-muted-foreground hover:text-destructive"
+            onClick={() => !isDemoClient && setLogs([])}
+            disabled={isDemoClient}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Clear logs"}
+            className="shadow-2xs text-xs text-muted-foreground hover:text-destructive disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Trash2 className="h-3.5 w-3.5 mr-1.5" />
             Clear
@@ -233,16 +238,27 @@ export default function SystemLogs() {
             variant="secondary"
             size="sm"
             onClick={handleDownloadBackup}
-            disabled={isDownloading}
-            className="shadow-2xs text-xs font-medium"
+            disabled={isDemoClient || isDownloading}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Download database backup"}
+            className="shadow-2xs text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Database className={`h-3.5 w-3.5 mr-1.5 text-primary ${isDownloading ? "animate-spin" : ""}`} />
+            {isDemoClient ? (
+              <Lock className="h-3.5 w-3.5 mr-1.5 text-amber-500" />
+            ) : (
+              <Database className={`h-3.5 w-3.5 mr-1.5 text-primary ${isDownloading ? "animate-spin" : ""}`} />
+            )}
             {isDownloading ? "Downloading..." : "Database Backup"}
           </Button>
         </div>
       </div>
 
-      {/* Filter Toolbar */}
+      {isDemoClient && (
+        <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-lg text-xs">
+          <ShieldCheck className="h-4 w-4 shrink-0" />
+          <span>Demo Account (View Only): Live system and API request streams are visible for inspection. Action buttons and database backups are disabled.</span>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
         <div className="flex flex-1 items-center space-x-2 w-full sm:max-w-md relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -285,9 +301,7 @@ export default function SystemLogs() {
         </div>
       </div>
 
-      {/* Terminal View */}
       <div className="rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-200 shadow-xl overflow-hidden font-mono text-xs">
-        {/* Terminal Title Bar */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-900/90 border-b border-zinc-800 text-[11px] text-zinc-400">
           <div className="flex items-center gap-2">
             <span className="h-3 w-3 rounded-full bg-red-500/80 inline-block" />
@@ -307,7 +321,6 @@ export default function SystemLogs() {
           </div>
         </div>
 
-        {/* Logs Output Box */}
         <div className="p-4 h-[550px] overflow-y-auto space-y-1.5 font-mono select-text">
           {filteredLogs.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
@@ -364,4 +377,6 @@ export default function SystemLogs() {
       </div>
     </div>
   );
-}
+};
+
+export default SystemLogs;

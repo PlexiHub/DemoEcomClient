@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
+import { useDemoGuard } from '@/hooks/useDemoGuard';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,22 +38,24 @@ import {
   Mail,
   AlertCircle,
   RefreshCw,
+  ShieldCheck,
 } from 'lucide-react';
 import { ConfirmDeleteDialog } from '@/components/ui/confirm-delete-dialog';
 import { toast } from 'sonner';
 
+// Renders audit trail of system activities, user events, and log records with role guards
 const ActivityLogsPage = () => {
+  const { isDemoClient } = useDemoGuard();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
-  const [readFilter, setReadFilter] = useState('All'); // 'All' | 'unread' | 'read'
-  const [typeFilter, setTypeFilter] = useState('All'); // 'All' | 'newOrder' | 'created' | 'updated' | 'deleted'
+  const [readFilter, setReadFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [singleDeleteTarget, setSingleDeleteTarget] = useState(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 
-  // Fetch active logs
   const {
     data: logsResponse,
     isLoading,
@@ -81,8 +84,9 @@ const ActivityLogsPage = () => {
   const totalPages = logsResponse?.pagination?.totalPages || 1;
   const totalItems = logsResponse?.pagination?.total || 0;
 
-  // Single Soft Delete
+  // Performs soft delete on single activity log entry if authorized
   const handleDeleteLog = async (log) => {
+    if (isDemoClient) return;
     setIsProcessing(true);
     try {
       await apiClient.delete(`/api/v1/logs/${log.id || log._id}`);
@@ -97,8 +101,9 @@ const ActivityLogsPage = () => {
     }
   };
 
-  // Bulk Soft Delete
+  // Performs bulk soft delete on selected activity log entries if authorized
   const handleBulkDelete = async () => {
+    if (isDemoClient) return;
     setIsProcessing(true);
     try {
       await apiClient.post('/api/v1/logs/bulk-delete', { ids: selectedIds });
@@ -114,8 +119,9 @@ const ActivityLogsPage = () => {
     }
   };
 
-  // Bulk Mark as Read
+  // Marks selected activity logs as read if authorized
   const handleBulkMarkRead = async () => {
+    if (isDemoClient) return;
     setIsProcessing(true);
     try {
       await apiClient.put('/api/v1/logs/mark-read', { ids: selectedIds });
@@ -130,8 +136,9 @@ const ActivityLogsPage = () => {
     }
   };
 
-  // Bulk Mark as Unread
+  // Marks selected activity logs as unread if authorized
   const handleBulkMarkUnread = async () => {
+    if (isDemoClient) return;
     setIsProcessing(true);
     try {
       await apiClient.put('/api/v1/logs/mark-unread', { ids: selectedIds });
@@ -146,8 +153,9 @@ const ActivityLogsPage = () => {
     }
   };
 
-  // Checkbox Selection Helpers
+  // Updates batch selection list with all current page log IDs
   const handleSelectAll = (checked) => {
+    if (isDemoClient) return;
     if (checked) {
       setSelectedIds(logs.map((l) => l.id || l._id));
     } else {
@@ -155,7 +163,9 @@ const ActivityLogsPage = () => {
     }
   };
 
+  // Toggles individual log entry ID in batch selection list
   const handleToggleSelect = (id) => {
+    if (isDemoClient) return;
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -163,7 +173,6 @@ const ActivityLogsPage = () => {
 
   return (
     <div className="flex-1 space-y-5 p-4 md:p-8 pt-6 w-full">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
@@ -188,7 +197,13 @@ const ActivityLogsPage = () => {
         </Button>
       </div>
 
-      {/* Toolbar / Search & Filter */}
+      {isDemoClient && (
+        <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-lg text-xs">
+          <ShieldCheck className="h-4 w-4 shrink-0" />
+          <span>Demo Account (View Only): Activity logs and audit history are visible in read-only mode. Deletion and status updates are disabled.</span>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row items-center gap-3">
         <div className="relative flex-1 w-full max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -246,7 +261,6 @@ const ActivityLogsPage = () => {
         </div>
       </div>
 
-      {/* Bulk Action Bar */}
       {selectedIds.length > 0 && (
         <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-xl px-4 py-2.5 animate-in fade-in">
           <span className="text-xs font-semibold text-primary">
@@ -257,8 +271,9 @@ const ActivityLogsPage = () => {
               size="sm"
               variant="outline"
               onClick={handleBulkMarkRead}
-              disabled={isProcessing}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+              disabled={isDemoClient || isProcessing}
+              title={isDemoClient ? "Action disabled for demo accounts" : "Mark selected as read"}
+              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <MailCheck className="h-3.5 w-3.5 text-primary" />
               Mark as Read
@@ -267,8 +282,9 @@ const ActivityLogsPage = () => {
               size="sm"
               variant="outline"
               onClick={handleBulkMarkUnread}
-              disabled={isProcessing}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+              disabled={isDemoClient || isProcessing}
+              title={isDemoClient ? "Action disabled for demo accounts" : "Mark selected as unread"}
+              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Mail className="h-3.5 w-3.5 text-muted-foreground" />
               Mark as Unread
@@ -276,9 +292,10 @@ const ActivityLogsPage = () => {
             <Button
               size="sm"
               variant="destructive"
-              onClick={() => setBulkDeleteOpen(true)}
-              disabled={isProcessing}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+              onClick={() => !isDemoClient && setBulkDeleteOpen(true)}
+              disabled={isDemoClient || isProcessing}
+              title={isDemoClient ? "Action disabled for demo accounts" : "Delete selected logs"}
+              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Delete Selected
@@ -287,7 +304,6 @@ const ActivityLogsPage = () => {
         </div>
       )}
 
-      {/* Dedicated Activity Logs Table */}
       <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
@@ -295,7 +311,8 @@ const ActivityLogsPage = () => {
               <TableHead className="w-12 text-center">
                 <input
                   type="checkbox"
-                  className="rounded border-input text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                  disabled={isDemoClient}
+                  className="rounded border-input text-primary focus:ring-primary h-4 w-4 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                   checked={logs.length > 0 && selectedIds.length === logs.length}
                   onChange={(e) => handleSelectAll(e.target.checked)}
                 />
@@ -352,7 +369,8 @@ const ActivityLogsPage = () => {
                     <TableCell className="text-center">
                       <input
                         type="checkbox"
-                        className="rounded border-input text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                        disabled={isDemoClient}
+                        className="rounded border-input text-primary focus:ring-primary h-4 w-4 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                         checked={isSelected}
                         onChange={() => handleToggleSelect(id)}
                       />
@@ -360,7 +378,6 @@ const ActivityLogsPage = () => {
 
                     <TableCell>
                       <div className="flex items-center gap-2.5">
-                        {/* Unread indicator dot */}
                         {isUnread ? (
                           <span
                             className="h-2 w-2 rounded-full bg-primary shrink-0 animate-pulse shadow-xs"
@@ -381,7 +398,6 @@ const ActivityLogsPage = () => {
                             {log.description}
                           </span>
 
-                          {/* Event Type Badge & User DID info */}
                           <div className="flex items-center gap-2 pt-0.5">
                             <Badge
                               variant="outline"
@@ -426,9 +442,10 @@ const ActivityLogsPage = () => {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => setSingleDeleteTarget(log)}
-                        title="Delete log entry (soft delete)"
-                        className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 cursor-pointer"
+                        onClick={() => !isDemoClient && setSingleDeleteTarget(log)}
+                        disabled={isDemoClient}
+                        title={isDemoClient ? "Action disabled for demo accounts" : "Delete log entry (soft delete)"}
+                        className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Trash2 className="h-4 w-4" />
                         <span className="sr-only">Delete</span>
@@ -442,7 +459,6 @@ const ActivityLogsPage = () => {
         </Table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="justify-center">
           <PaginationContent>
@@ -475,7 +491,6 @@ const ActivityLogsPage = () => {
         </Pagination>
       )}
 
-      {/* Single Delete Confirm Dialog */}
       <ConfirmDeleteDialog
         open={Boolean(singleDeleteTarget)}
         onOpenChange={(open) => !open && setSingleDeleteTarget(null)}
@@ -486,7 +501,6 @@ const ActivityLogsPage = () => {
         variant="destructive"
       />
 
-      {/* Bulk Delete Confirm Dialog */}
       <ConfirmDeleteDialog
         open={bulkDeleteOpen}
         onOpenChange={setBulkDeleteOpen}
@@ -501,3 +515,4 @@ const ActivityLogsPage = () => {
 };
 
 export default ActivityLogsPage;
+
