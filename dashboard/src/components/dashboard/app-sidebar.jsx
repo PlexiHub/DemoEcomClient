@@ -25,6 +25,7 @@ import {
   ImageDown,
   Share2,
   Settings,
+  Palette,
   LogOut,
   User,
   ChevronRight,
@@ -189,6 +190,15 @@ export function AppSidebar({ ...props }) {
               </SidebarMenuButton>
               {openMenu === "orders" && (
                 <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/site-config")}
+                      render={<Link to="/dashboard/settings/site-config" />}
+                    >
+                      <Palette className="h-3.5 w-3.5" />
+                      <span>Site Config</span>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
                   {isAllowed("orders.new") && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
@@ -580,6 +590,15 @@ export function AppSidebar({ ...props }) {
               </SidebarMenuButton>
               {openMenu === "settings" && (
                 <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/site-config")}
+                      render={<Link to="/dashboard/settings/site-config" />}
+                    >
+                      <Palette className="h-3.5 w-3.5" />
+                      <span>Site Config</span>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
                   <SidebarMenuSubItem>
                     <SidebarMenuSubButton
                       isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/products")}

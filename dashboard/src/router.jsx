@@ -23,6 +23,7 @@ import TikTokPixelPage from './pages/dashboard/settings/tiktokPixel';
 import CMSContentPage from './pages/dashboard/settings/cmsContent';
 import GoogleAnalyticsPage from './pages/dashboard/settings/googleAnalytics';
 import SEOSettingsPage from './pages/dashboard/settings/seoSettings';
+import SiteConfigPage from './pages/dashboard/settings/siteConfig';
 import AllMedia from './pages/dashboard/allMedia';
 
 // Products
@@ -168,7 +169,15 @@ export const router = createBrowserRouter([
       {
         path: 'settings',
         children: [
-          { path: '', element: <Navigate to="products" replace /> },
+          { path: '', element: <Navigate to="site-config" replace /> },
+          {
+            path: 'site-config',
+            element: (
+              <RoleGuard menuKey="settings">
+                <SiteConfigPage />
+              </RoleGuard>
+            ),
+          },
           {
             path: 'products',
             element: (
