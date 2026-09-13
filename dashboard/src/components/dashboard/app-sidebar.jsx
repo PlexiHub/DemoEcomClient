@@ -470,16 +470,16 @@ export const AppSidebar = ({ ...props }) => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 isActive={pathname.startsWith("/dashboard/analytics") || pathname.startsWith("/dashboard/reports")}
-                tooltip="Analytics & Reports"
+                tooltip="Analytics"
                 onClick={() => toggleMenu("analytics-reports")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
-                <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  <span>Analytics & Reports</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <BarChart3 className="h-4 w-4 shrink-0" />
+                  <span className="whitespace-nowrap">Analytics</span>
                 </div>
                 <ChevronRight
-                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
+                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden shrink-0 ${
                     openMenu === "analytics-reports" ? "rotate-90 text-primary" : ""
                   }`}
                 />
@@ -528,12 +528,12 @@ export const AppSidebar = ({ ...props }) => {
                 onClick={() => toggleMenu("tools-media")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
-                <div className="flex items-center gap-2">
-                  <Wrench className="h-4 w-4" />
-                  <span>Tools & Media</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <Wrench className="h-4 w-4 shrink-0" />
+                  <span className="whitespace-nowrap">Tools & Media</span>
                 </div>
                 <ChevronRight
-                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
+                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden shrink-0 ${
                     openMenu === "tools-media" ? "rotate-90 text-primary" : ""
                   }`}
                 />
@@ -593,16 +593,16 @@ export const AppSidebar = ({ ...props }) => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 isActive={pathname.startsWith("/dashboard/settings")}
-                tooltip="Settings & Marketing"
+                tooltip="Settings"
                 onClick={() => toggleMenu("settings")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
-                <div className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  <span>Settings & Marketing</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <Settings className="h-4 w-4 shrink-0" />
+                  <span className="whitespace-nowrap">Settings</span>
                 </div>
                 <ChevronRight
-                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
+                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden shrink-0 ${
                     openMenu === "settings" ? "rotate-90 text-primary" : ""
                   }`}
                 />
