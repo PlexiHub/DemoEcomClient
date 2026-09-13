@@ -27,6 +27,7 @@ import storeUtilsRouter from "./routes/StoreUtilsRoute.js";
 import reportsRouter from "./routes/ReportsRoute.js";
 import sizeChartRouter from "./routes/SizeChartRoute.js";
 import settingsRouter from "./routes/SettingsRoute.js";
+import siteConfigRouter from "./routes/siteConfig.route.js";
 import dashProductRouter from "./dashboard/routes/dashProduct.route.js";
 import dashAssetsRouter from "./dashboard/routes/assets.route.js";
 import express from "express";
@@ -61,10 +62,11 @@ coreRouter.use("/contact", contactRouter);
 coreRouter.use("/webmail", webmailRouter);
 coreRouter.use("/store-utils", storeUtilsRouter);
 coreRouter.use("/settings", settingsRouter);
+coreRouter.use("/settings", siteConfigRouter);
+coreRouter.use("/", siteConfigRouter);
 coreRouter.use("/search", searchRouter);
 coreRouter.use("/logs", logsRouter);
 coreRouter.use("/reports", reportsRouter);
-// Mount AI Product Image Studio routes with increased JSON payload limit for base64 image data
 coreRouter.use("/studio", express.json({ limit: "60mb" }), studioRouter);
 coreRouter.get("/search-products", searchProducts);
 
