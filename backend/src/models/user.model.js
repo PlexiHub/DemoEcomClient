@@ -16,6 +16,7 @@ const userSchema = new Schema(
       unique: true,
       index: true,
     },
+    avatar: { type: String, trim: true, default: "" },
     did: { type: String, default: () => generateDid(), unique: true, index: true },
     passwordHash: { type: String, required: false, trim: true, select: false },
     phone: { type: String, required: false, trim: true, index: true, default: "" },

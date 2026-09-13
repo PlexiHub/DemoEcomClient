@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
   LayoutDashboard,
   ShoppingBag,
@@ -71,6 +71,7 @@ import {
 } from "@/components/ui/sidebar"
 import { BrandLogo } from "@/components/BrandLogo"
 import { useAuth } from "@/lib/auth-context"
+import { resolveImageUrl } from "@/lib/api-client"
 import { clientConfig } from "@/clientConfig"
 import { hasMenuAccess } from "@/lib/rbac"
 
@@ -90,6 +91,7 @@ const TikTokIcon = ({ className = "h-3.5 w-3.5", ...props }) => (
 // Renders primary navigation sidebar matching 9-tier English menu hierarchy
 export const AppSidebar = ({ ...props }) => {
   const location = useLocation()
+  const navigate = useNavigate()
   const pathname = location.pathname
   const { user, logout } = useAuth()
   const { state, setOpen } = useSidebar()
@@ -107,7 +109,6 @@ export const AppSidebar = ({ ...props }) => {
   })
 
   const [logoutConfirmOpen, setLogoutConfirmOpen] = React.useState(false)
-  const [profileModalOpen, setProfileModalOpen] = React.useState(false)
 
   const normalizedRole = String(user?.role || "").toLowerCase().trim()
   const isDemoClient = normalizedRole === "demo client" || normalizedRole.includes("demo")
@@ -783,8 +784,16 @@ export const AppSidebar = ({ ...props }) => {
                   title={user?.name || "User Account"}
                 >
                   <div className="relative shrink-0">
-                    <div className="h-9 w-9 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-sm">
-                      {user?.name?.charAt(0)?.toUpperCase() || "B"}
+                    <div className="h-9 w-9 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-sm overflow-hidden">
+                      {user?.avatar ? (
+                        <img
+                          src={resolveImageUrl(user.avatar)}
+                          alt={user?.name || "Avatar"}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        user?.name?.charAt(0)?.toUpperCase() || "B"
+                      )}
                     </div>
                     <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-sidebar" />
                   </div>
@@ -802,7 +811,7 @@ export const AppSidebar = ({ ...props }) => {
             <DropdownMenuContent side="top" align="start" sideOffset={12} className="w-48 p-1.5 shadow-xl rounded-xl border border-border/80 bg-popover">
               <DropdownMenuItem
                 className="cursor-pointer flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg hover:bg-accent focus:bg-accent text-foreground"
-                onClick={() => setProfileModalOpen(true)}
+                onClick={() => navigate('/dashboard/profile')}
               >
                 <User className="h-4 w-4 text-primary" />
                 <span>Profile</span>
@@ -827,10 +836,18 @@ export const AppSidebar = ({ ...props }) => {
               render={
                 <button
                   type="button"
-                  className="relative h-8 w-8 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-primary/30 transition-all"
+                  className="relative h-8 w-8 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-primary/30 transition-all overflow-hidden"
                   title={user?.name || "User Account"}
                 >
-                  {user?.name?.charAt(0)?.toUpperCase() || "B"}
+                  {user?.avatar ? (
+                    <img
+                      src={resolveImageUrl(user.avatar)}
+                      alt={user?.name || "Avatar"}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    user?.name?.charAt(0)?.toUpperCase() || "B"
+                  )}
                   <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 border-2 border-sidebar" />
                 </button>
               }
@@ -838,7 +855,7 @@ export const AppSidebar = ({ ...props }) => {
             <DropdownMenuContent side="right" align="end" sideOffset={12} className="w-48 p-1.5 shadow-xl rounded-xl border border-border/80 bg-popover">
               <DropdownMenuItem
                 className="cursor-pointer flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg hover:bg-accent focus:bg-accent text-foreground"
-                onClick={() => setProfileModalOpen(true)}
+                onClick={() => navigate('/dashboard/profile')}
               >
                 <User className="h-4 w-4 text-primary" />
                 <span>Profile</span>
@@ -891,57 +908,6 @@ export const AppSidebar = ({ ...props }) => {
               Yes
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={profileModalOpen} onOpenChange={setProfileModalOpen}>
-        <DialogContent className="sm:max-w-[420px] p-6">
-          <DialogHeader className="space-y-3 text-center sm:text-left">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center font-bold text-lg">
-                {user?.name?.charAt(0)?.toUpperCase() || "B"}
-              </div>
-              <div className="text-left">
-                <DialogTitle className="text-base font-bold text-foreground">
-                  {user?.name || "Bithy Akther"}
-                </DialogTitle>
-                <DialogDescription className="text-xs text-muted-foreground">
-                  {user?.email || "user@example.com"}
-                </DialogDescription>
-              </div>
-            </div>
-          </DialogHeader>
-
-          <div className="space-y-2.5 py-3 border-y border-border text-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Role</span>
-              <span className="font-semibold px-2 py-0.5 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 capitalize">
-                {user?.role || "Frontdesk"}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Store Brand</span>
-              <span className="font-semibold text-foreground">{brandName || "Store"}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Status</span>
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-                Active
-              </span>
-            </div>
-          </div>
-
-          <DialogFooter className="pt-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setProfileModalOpen(false)}
-              className="w-full text-xs font-semibold cursor-pointer"
-            >
-              Close
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </Sidebar>

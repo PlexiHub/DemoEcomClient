@@ -6,7 +6,7 @@ import { apiClient, baseURL } from '@/lib/api-client';
 const AuthContext = createContext(undefined);
 
 // Helper to check if a JWT token is expired (with 10-second safety buffer)
-function isJwtExpired(token) {
+const isJwtExpired = (token) => {
   if (!token || typeof token !== 'string') return true;
   try {
     const parts = token.split('.');
@@ -113,7 +113,8 @@ export const AuthProvider = ({ children }) => {
         email: apiUser.email || email,
         name: apiUser.name || email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase()),
         role: apiUser.role || "Employee",
-        avatar: apiUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80',
+        avatar: apiUser.avatar || '',
+        phone: apiUser.phone || '',
       };
 
       localStorage.setItem('accessToken', accessToken);
@@ -139,7 +140,8 @@ export const AuthProvider = ({ children }) => {
         email: apiUser.email || email,
         name: apiUser.name || email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase()),
         role: apiUser.role || "Employee",
-        avatar: apiUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80',
+        avatar: apiUser.avatar || '',
+        phone: apiUser.phone || '',
       };
 
       localStorage.setItem('accessToken', accessToken);
@@ -165,7 +167,8 @@ export const AuthProvider = ({ children }) => {
         email: apiUser.email,
         name: apiUser.name,
         role: apiUser.role,
-        avatar: apiUser.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80',
+        avatar: apiUser.avatar || '',
+        phone: apiUser.phone || '',
       };
 
       localStorage.setItem('accessToken', accessToken);
@@ -197,8 +200,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Updates user profile state and syncs to local storage
+  const updateUser = (updatedFields) => {
+    setUser((prev) => {
+      const updated = { ...(prev || {}), ...updatedFields };
+      localStorage.setItem('user', JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, loginWithGoogle, verify2fa }}>
+    <AuthContext.Provider value={{ user, isLoading, login, logout, loginWithGoogle, verify2fa, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

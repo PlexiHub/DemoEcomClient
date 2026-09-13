@@ -22,6 +22,7 @@ import GoogleAnalyticsPage from './pages/dashboard/settings/googleAnalytics';
 import SEOSettingsPage from './pages/dashboard/settings/seoSettings';
 import SiteConfigPage from './pages/dashboard/settings/siteConfig';
 import AllMedia from './pages/dashboard/allMedia';
+import ProfilePage from './pages/dashboard/profile';
 
 import ProductsList from './pages/dashboard/products/productsList';
 import ProductDetails from './pages/dashboard/products/productDetails';
@@ -162,6 +163,10 @@ export const router = createBrowserRouter([
             <SystemLogs />
           </RoleGuard>
         ),
+      },
+      {
+        path: 'profile',
+        element: <ProfilePage />,
       },
       {
         path: 'admin',

@@ -44,6 +44,8 @@ export const authenticateToken = async (req, res, next) => {
       did: user.did,
       name: user.name,
       email: user.email,
+      phone: user.phone || "",
+      avatar: user.avatar || "",
       role: user.role,
     };
     return next();

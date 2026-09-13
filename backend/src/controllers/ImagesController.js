@@ -44,10 +44,40 @@ export const uploadProductImage = async (req, res, next) => {
         .replace(/^-+|-+$/g, "") || "image";
     const timestamp = Date.now();
 
+    const isAvatar =
+      req.body.type === "avatar" || req.query.type === "avatar";
     const isProduct =
       req.body.type === "product" || req.query.type === "product";
     const isAttribute =
       req.body.type === "attribute" || req.query.type === "attribute";
+
+    if (isAvatar) {
+      const avatarDir = path.join(process.cwd(), "uploads", "assets", "avatars");
+      await fs.promises.mkdir(avatarDir, { recursive: true });
+
+      const filename = `avatar_${timestamp}.webp`;
+      const filePath = path.join(avatarDir, filename);
+
+      await sharp(req.file.buffer)
+        .rotate()
+        .resize({
+          width: 400,
+          height: 400,
+          fit: "cover",
+          position: "center",
+        })
+        .webp({ quality: 90 })
+        .toFile(filePath);
+
+      const imageUrl = `/uploads/assets/avatars/${filename}`;
+
+      return res.status(200).json({
+        status: "success",
+        data: {
+          imageUrl,
+        },
+      });
+    }
 
     if (isAttribute) {
       const attributeDir = path.join(process.cwd(), "uploads", "assets", "attributes");

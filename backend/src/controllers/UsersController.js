@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import nodemailer from "nodemailer";
 import { UserModel } from "../models/user.model.js";
 import { AssetModel } from "../models/asset.model.js";
-import { hashPassword } from "../utils/password.js";
+import { comparePassword, hashPassword } from "../utils/password.js";
 import { env } from "../config/env.js";
 import { renderUserInviteEmail } from "../templates/userInviteEmailTemplate.js";
 import {
@@ -239,3 +239,119 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+// Retrieves personal profile details for authenticated user
+export const getMyProfile = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId || req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ status: "error", message: "Unauthorized" });
+    }
+
+    const user = await UserModel.findById(userId).lean();
+    if (!user) {
+      return res.status(404).json({ status: "error", message: "User not found" });
+    }
+
+    res.json({
+      status: "success",
+      data: {
+        id: user._id ? user._id.toString() : user.id,
+        did: user.did,
+        name: user.name,
+        email: user.email,
+        phone: user.phone || "",
+        avatar: user.avatar || "",
+        role: user.role,
+        isActive: user.isActive,
+        lastLogin: user.lastLogin,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Updates personal profile information and credentials for authenticated user
+export const updateMyProfile = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId || req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ status: "error", message: "Unauthorized" });
+    }
+
+    const { name, phone, avatar, email, currentPassword, newPassword } = req.body ?? {};
+
+    const user = await UserModel.findById(userId).select("+passwordHash");
+    if (!user) {
+      return res.status(404).json({ status: "error", message: "User not found" });
+    }
+
+    if (typeof name === "string" && name.trim()) {
+      user.name = name.trim();
+    }
+
+    if (phone !== undefined) {
+      user.phone = String(phone).trim();
+    }
+
+    if (avatar !== undefined) {
+      user.avatar = String(avatar).trim();
+    }
+
+    if (typeof email === "string" && email.trim().toLowerCase() !== user.email) {
+      const normalizedEmail = email.trim().toLowerCase();
+      const existingUser = await UserModel.findOne({
+        email: normalizedEmail,
+        _id: { $ne: user._id },
+      });
+      if (existingUser) {
+        return res.status(409).json({ status: "error", message: "Email is already registered by another user" });
+      }
+      user.email = normalizedEmail;
+    }
+
+    if (newPassword && newPassword.trim()) {
+      if (!user.passwordHash) {
+        user.passwordHash = await hashPassword(newPassword.trim());
+      } else {
+        if (!currentPassword) {
+          return res.status(400).json({ status: "error", message: "Current password is required to change password" });
+        }
+        const isMatch = await comparePassword(currentPassword, user.passwordHash);
+        if (!isMatch) {
+          return res.status(400).json({ status: "error", message: "Current password does not match" });
+        }
+        if (newPassword.trim().length < 6) {
+          return res.status(400).json({ status: "error", message: "New password must be at least 6 characters long" });
+        }
+        user.passwordHash = await hashPassword(newPassword.trim());
+      }
+    }
+
+    await user.save();
+
+    res.json({
+      status: "success",
+      message: "Profile updated successfully",
+      data: {
+        id: user._id.toString(),
+        did: user.did,
+        name: user.name,
+        email: user.email,
+        phone: user.phone || "",
+        avatar: user.avatar || "",
+        role: user.role,
+        isActive: user.isActive,
+        lastLogin: user.lastLogin,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
