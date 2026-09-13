@@ -14,6 +14,8 @@ import {
   CheckSquare,
   Square,
   CheckCheck,
+  ShieldCheck,
+  Lock,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +32,7 @@ import {
 import { apiClient, baseURL } from '@/lib/api-client';
 import { clientConfig } from '@/clientConfig';
 import { useCategories } from '@/lib/category-cache';
+import { useDemoGuard } from '@/hooks/useDemoGuard';
 import { toast } from 'sonner';
 
 const META_CSV_COLUMNS = [
@@ -119,17 +122,14 @@ const getSavedSettings = () => {
 
 // Main Meta Catalog Feed Generator and CSV Builder component
 const MetaCatalogGenerator = () => {
+  const { isDemoClient } = useDemoGuard();
   const { data: dbCategories = [] } = useCategories();
-
-  // Products & Infinite Scroll State
   const [products, setProducts] = useState([]);
   const [totalProducts, setTotalProducts] = useState(0);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-
-  // Settings State (with LocalStorage restore)
   const [settingsOpen, setSettingsOpen] = useState(false);
   const defaultDomain =
     clientConfig?.brandName?.toLowerCase() === 'engulfic'
@@ -502,8 +502,9 @@ const MetaCatalogGenerator = () => {
     );
   }, [categoryOptions, categorySearchQuery]);
 
-  // Staged Add / Remove
+  // Toggles individual product inclusion in staged catalog feed
   const toggleStageProduct = (product) => {
+    if (isDemoClient) return;
     const id = product.did || product.id;
     setStagedMap((prev) => {
       const next = new Map(prev);
@@ -516,8 +517,9 @@ const MetaCatalogGenerator = () => {
     });
   };
 
-  // Bulk Check / Uncheck in Grid
+  // Toggles product checkbox selection state in grid view
   const toggleCheckProduct = (id) => {
+    if (isDemoClient) return;
     setCheckedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -526,8 +528,9 @@ const MetaCatalogGenerator = () => {
     });
   };
 
-  // Select all visible on current screen
+  // Selects or deselects all currently rendered products in grid
   const selectAllVisible = () => {
+    if (isDemoClient) return;
     if (checkedIds.size === products.length && products.length > 0) {
       setCheckedIds(new Set());
     } else {
@@ -535,8 +538,9 @@ const MetaCatalogGenerator = () => {
     }
   };
 
-  // Bulk Add Checked to Staged Catalog
+  // Bulk adds all checked products into staged catalog feed
   const addCheckedToCatalog = () => {
+    if (isDemoClient) return;
     if (checkedIds.size === 0) {
       toast.info('Please select at least 1 item checkbox first.');
       return;
@@ -555,8 +559,9 @@ const MetaCatalogGenerator = () => {
     toast.success(`Added ${addedCount} product(s) to catalog feed.`);
   };
 
-  // Add all currently loaded to Catalog
+  // Adds all currently loaded inventory products into staged feed
   const addAllLoadedToCatalog = () => {
+    if (isDemoClient) return;
     const newMap = new Map(stagedMap);
     products.forEach((p) => {
       const id = p.did || p.id;
@@ -566,8 +571,9 @@ const MetaCatalogGenerator = () => {
     toast.success(`Added all ${products.length} loaded product(s) to catalog.`);
   };
 
-  // Remove single item from feed
+  // Removes a single product from staged catalog feed
   const removeStagedItem = (id) => {
+    if (isDemoClient) return;
     setStagedMap((prev) => {
       const next = new Map(prev);
       next.delete(id);
@@ -575,13 +581,14 @@ const MetaCatalogGenerator = () => {
     });
   };
 
-  // Clear all staged
+  // Clears all products from staged catalog feed
   const clearAllStaged = () => {
+    if (isDemoClient) return;
     setStagedMap(new Map());
     toast.info('Cleared catalog feed.');
   };
 
-  // Toggle category multi-select
+  // Toggles category multi-select filter selection
   const toggleCategorySelection = (cat) => {
     setSelectedCategories((prev) => {
       const exists = prev.some((c) => c.name === cat.name || c.id === cat.id);
@@ -724,6 +731,7 @@ const MetaCatalogGenerator = () => {
 
   // Triggers browser download for Meta catalog CSV file
   const handleDownloadCsv = () => {
+    if (isDemoClient) return;
     if (catalogRows.length === 0) {
       toast.error('No products added to catalog feed.');
       return;
@@ -745,6 +753,7 @@ const MetaCatalogGenerator = () => {
 
   // Copies generated CSV text directly to clipboard
   const handleCopyCsv = () => {
+    if (isDemoClient) return;
     if (catalogRows.length === 0) {
       toast.error('No products in catalog feed.');
       return;
@@ -756,7 +765,6 @@ const MetaCatalogGenerator = () => {
 
   return (
     <div className="flex-1 space-y-5 p-4 md:p-8 pt-6 w-full">
-      {/* Header Bar */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2.5">
@@ -774,10 +782,16 @@ const MetaCatalogGenerator = () => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setSettingsOpen(true)}
-            className="shadow-2xs text-xs"
+            onClick={() => !isDemoClient && setSettingsOpen(true)}
+            disabled={isDemoClient}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Feed Settings"}
+            className="shadow-2xs text-xs disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Settings2 className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+            {isDemoClient ? (
+              <Lock className="h-3.5 w-3.5 mr-1.5 text-amber-500" />
+            ) : (
+              <Settings2 className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
+            )}
             Feed Settings
           </Button>
 
@@ -785,8 +799,9 @@ const MetaCatalogGenerator = () => {
             variant="outline"
             size="sm"
             onClick={handleCopyCsv}
-            disabled={catalogRows.length === 0}
-            className="shadow-2xs text-xs"
+            disabled={isDemoClient || catalogRows.length === 0}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Copy CSV"}
+            className="shadow-2xs text-xs disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Copy className="h-3.5 w-3.5 mr-1.5" />
             Copy CSV
@@ -795,16 +810,27 @@ const MetaCatalogGenerator = () => {
           <Button
             size="sm"
             onClick={handleDownloadCsv}
-            disabled={catalogRows.length === 0}
-            className="shadow-sm text-xs font-semibold"
+            disabled={isDemoClient || catalogRows.length === 0}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Download Meta CSV"}
+            className="shadow-sm text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Download className="h-4 w-4 mr-1.5" />
+            {isDemoClient ? (
+              <Lock className="h-4 w-4 mr-1.5 text-amber-500" />
+            ) : (
+              <Download className="h-4 w-4 mr-1.5" />
+            )}
             Download Meta CSV ({catalogRows.length})
           </Button>
         </div>
       </div>
 
-      {/* Main Tabs Navigation */}
+      {isDemoClient && (
+        <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-lg text-xs">
+          <ShieldCheck className="h-4 w-4 shrink-0" />
+          <span>Demo Account (View Only): Products inventory, Meta catalog feed items, and CSV preview are visible for inspection. Feed curation, editing, and CSV downloads are disabled.</span>
+        </div>
+      )}
+
       <div className="flex items-center justify-between border-b pb-2">
         <div className="flex items-center gap-2">
           <Button
@@ -846,14 +872,15 @@ const MetaCatalogGenerator = () => {
             variant="outline"
             size="sm"
             onClick={clearAllStaged}
-            className="text-xs h-8 text-destructive hover:bg-destructive/10"
+            disabled={isDemoClient}
+            title={isDemoClient ? "Action disabled for demo accounts" : "Clear all selected"}
+            className="text-xs h-8 text-destructive hover:bg-destructive/10 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Trash2 className="h-3.5 w-3.5 mr-1" /> Clear All Selected
           </Button>
         )}
       </div>
 
-      {/* TAB 1: BROWSE INVENTORY (5-COLUMN PRODUCT CARDS WITH INFINITE SCROLL) */}
       {activeTab === 'browse' && (
         <div className="space-y-4">
           {/* Filter Toolbar */}
@@ -977,14 +1004,14 @@ const MetaCatalogGenerator = () => {
                 ))}
               </div>
 
-              {/* Select All Visible Toggle */}
               {products.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={selectAllVisible}
-                  className="h-9 text-xs"
-                  title="Toggle select all loaded items"
+                  disabled={isDemoClient}
+                  className="h-9 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={isDemoClient ? "Action disabled for demo accounts" : "Toggle select all loaded items"}
                 >
                   <CheckCheck className="h-3.5 w-3.5 mr-1" />
                   {checkedIds.size === products.length ? 'Deselect All' : 'Select All'}
@@ -995,7 +1022,9 @@ const MetaCatalogGenerator = () => {
                 <Button
                   size="sm"
                   onClick={addCheckedToCatalog}
-                  className="h-9 text-xs font-semibold shadow-sm"
+                  disabled={isDemoClient}
+                  title={isDemoClient ? "Action disabled for demo accounts" : "Add selected to feed"}
+                  className="h-9 text-xs font-semibold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus className="h-3.5 w-3.5 mr-1" /> Add Selected ({checkedIds.size})
                 </Button>
@@ -1004,8 +1033,9 @@ const MetaCatalogGenerator = () => {
                   variant="secondary"
                   size="sm"
                   onClick={addAllLoadedToCatalog}
-                  disabled={products.length === 0}
-                  className="h-9 text-xs font-medium shadow-2xs"
+                  disabled={isDemoClient || products.length === 0}
+                  title={isDemoClient ? "Action disabled for demo accounts" : "Add all loaded products to feed"}
+                  className="h-9 text-xs font-medium shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus className="h-3.5 w-3.5 mr-1 text-primary" /> Add All ({products.length})
                 </Button>
@@ -1013,7 +1043,6 @@ const MetaCatalogGenerator = () => {
             </div>
           </div>
 
-          {/* Active Category Badges */}
           {selectedCategories.length > 0 && (
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-xs text-muted-foreground mr-1">Filtered by:</span>
@@ -1040,7 +1069,6 @@ const MetaCatalogGenerator = () => {
             </div>
           )}
 
-          {/* 5-Column Product Cards Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
             {products.map((p) => {
               const idVal = p.did || p.id;
@@ -1056,13 +1084,13 @@ const MetaCatalogGenerator = () => {
                       : 'border-border hover:border-primary/40'
                   }`}
                 >
-                  {/* Card Header: Checkbox & Staged Indicator */}
                   <div className="flex items-center justify-between mb-2">
                     <button
                       type="button"
-                      onClick={() => toggleCheckProduct(idVal)}
-                      className="text-muted-foreground hover:text-foreground p-0.5 cursor-pointer"
-                      title="Select for bulk add"
+                      onClick={() => !isDemoClient && toggleCheckProduct(idVal)}
+                      disabled={isDemoClient}
+                      className="text-muted-foreground hover:text-foreground p-0.5 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
+                      title={isDemoClient ? "Action disabled for demo accounts" : "Select for bulk add"}
                     >
                       {isChecked ? (
                         <CheckSquare className="h-4 w-4 text-primary" />
@@ -1078,7 +1106,6 @@ const MetaCatalogGenerator = () => {
                     )}
                   </div>
 
-                  {/* 200x200 Square Thumbnail */}
                   <div className="w-full aspect-square rounded-lg bg-muted/40 overflow-hidden mb-2.5 border flex items-center justify-center relative">
                     {p.imageUrl ? (
                       <img
@@ -1095,15 +1122,12 @@ const MetaCatalogGenerator = () => {
                     )}
                   </div>
 
-                  {/* Product Details */}
                   <div className="space-y-1 flex-1 flex flex-col justify-between">
                     <div>
-                      {/* Category Tag */}
                       <span className="text-[10px] font-semibold text-primary uppercase tracking-wider block truncate">
                         {p.primaryCategory}
                       </span>
 
-                      {/* Product Name */}
                       <h4
                         className="text-xs font-semibold text-foreground line-clamp-2 mt-0.5 leading-tight"
                         title={p.name}
@@ -1112,7 +1136,6 @@ const MetaCatalogGenerator = () => {
                       </h4>
                     </div>
 
-                    {/* Price & Variants */}
                     <div className="pt-2 border-t mt-2">
                       <div className="flex items-baseline justify-between">
                         <span className="font-mono text-xs font-bold text-foreground">
@@ -1129,12 +1152,13 @@ const MetaCatalogGenerator = () => {
                     </div>
                   </div>
 
-                  {/* Bottom Add / Remove Button */}
                   <div className="pt-2.5 mt-2">
                     <button
                       type="button"
-                      onClick={() => toggleStageProduct(p)}
-                      className={`w-full py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                      onClick={() => !isDemoClient && toggleStageProduct(p)}
+                      disabled={isDemoClient}
+                      title={isDemoClient ? "Action disabled for demo accounts" : (isStaged ? "Remove from feed" : "Add to feed")}
+                      className={`w-full py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                         isStaged
                           ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-destructive/15 hover:text-destructive border border-emerald-500/30'
                           : 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-2xs'
@@ -1189,7 +1213,6 @@ const MetaCatalogGenerator = () => {
         </div>
       )}
 
-      {/* TAB 2: STAGED FEED PRODUCTS */}
       {activeTab === 'staged' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -1199,8 +1222,9 @@ const MetaCatalogGenerator = () => {
             <Button
               size="sm"
               onClick={handleDownloadCsv}
-              disabled={stagedMap.size === 0}
-              className="h-8 text-xs font-semibold"
+              disabled={isDemoClient || stagedMap.size === 0}
+              title={isDemoClient ? "Action disabled for demo accounts" : "Download Meta CSV"}
+              className="h-8 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="h-3.5 w-3.5 mr-1.5" /> Download Meta CSV
             </Button>
@@ -1240,9 +1264,10 @@ const MetaCatalogGenerator = () => {
                             <Button
                               size="sm"
                               variant="ghost"
-                              onClick={() => removeStagedItem(idVal)}
-                              className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive cursor-pointer"
-                              title="Remove from feed"
+                              onClick={() => !isDemoClient && removeStagedItem(idVal)}
+                              disabled={isDemoClient}
+                              title={isDemoClient ? "Action disabled for demo accounts" : "Remove from feed"}
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </Button>
@@ -1303,7 +1328,6 @@ const MetaCatalogGenerator = () => {
         </div>
       )}
 
-      {/* TAB 3: META CSV RAW PREVIEW */}
       {activeTab === 'preview' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -1313,8 +1337,9 @@ const MetaCatalogGenerator = () => {
             <Button
               size="sm"
               onClick={handleDownloadCsv}
-              disabled={catalogRows.length === 0}
-              className="h-8 text-xs font-semibold"
+              disabled={isDemoClient || catalogRows.length === 0}
+              title={isDemoClient ? "Action disabled for demo accounts" : "Download Full CSV"}
+              className="h-8 text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="h-3.5 w-3.5 mr-1.5" /> Download Full CSV ({catalogRows.length} Rows)
             </Button>
@@ -1382,8 +1407,7 @@ const MetaCatalogGenerator = () => {
         </div>
       )}
 
-      {/* FEED CONFIGURATION SETTINGS MODAL */}
-      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+      <Dialog open={settingsOpen && !isDemoClient} onOpenChange={setSettingsOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
