@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { TenantModel } from "../models/tenant.model.js";
 import { UserModel } from "../models/user.model.js";
 import { hashPassword } from "../utils/password.js";
+import { generateDid } from "../utils/generateDid.js";
 import { env } from "../config/env.js";
 import { logger } from "../config/logger.js";
 import { provisionTenantSandbox } from "../services/sandboxProvisioner.js";
@@ -73,6 +74,25 @@ export const registerDemoClient = async (req, res, next) => {
       status: "active",
       expiresAt,
     });
+
+    await UserModel.findOneAndUpdate(
+      { email: normalizedEmail },
+      {
+        $set: {
+          name: name.trim(),
+          email: normalizedEmail,
+          phone: phone ? phone.trim() : "",
+          passwordHash,
+          role: "Demo Client",
+          isActive: true,
+          twoFactorEnabled: false,
+        },
+        $setOnInsert: {
+          did: generateDid(),
+        },
+      },
+      { upsert: true, new: true, setDefaultsOnInsert: true },
+    );
 
     const tokenPayload = {
       userId: tenantRecord.id,

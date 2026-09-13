@@ -1,23 +1,27 @@
 import crypto from "node:crypto";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import { UserModel } from "../models/user.model.js";
+import { TenantModel } from "../models/tenant.model.js";
 import { env } from "../config/env.js";
 import { logger } from "../config/logger.js";
 import { comparePassword, hashPassword } from "../utils/password.js";
 
-export const createAccessToken = (user) => {
+// Issues signed JWT access token for authenticated session
+export const createAccessToken = (user, extraPayload = {}) => {
   return jwt.sign(
-    { userId: user.id },
+    { userId: user.id, ...extraPayload },
     env.ACCESS_TOKEN_SECRET,
     { expiresIn: env.ACCESS_TOKEN_EXPIRES_IN },
   );
 };
 
+// Generates cryptographically secure random refresh token string
 export const createRefreshToken = () => {
   return crypto.randomBytes(48).toString("hex");
 };
 
-// POST /auth/login - Validates credentials and logs in directly or prompts 2FA if enabled
+// POST /auth/login - Validates credentials and logs in directly with 2FA disabled for all users
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body ?? {};
@@ -27,7 +31,30 @@ export const login = async (req, res, next) => {
       return res.status(400).json({ status: "error", message: "Email and password are required" });
     }
 
-    const user = await UserModel.findOne({ email: normalizedEmail }).select("+passwordHash");
+    let user = await UserModel.findOne({ email: normalizedEmail }).select("+passwordHash");
+
+    if (!user) {
+      const activeTenant = await TenantModel.findOne({ email: normalizedEmail, status: "active" });
+      if (activeTenant) {
+        const tenantDb = mongoose.connection.useDb(activeTenant.dbName);
+        const tenantUser = await tenantDb.collection("users").findOne({ email: normalizedEmail });
+        if (tenantUser && tenantUser.passwordHash) {
+          const isTenantPwValid = await comparePassword(password, tenantUser.passwordHash);
+          if (isTenantPwValid) {
+            user = await UserModel.create({
+              name: activeTenant.ownerName || tenantUser.name,
+              email: normalizedEmail,
+              phone: activeTenant.phone || tenantUser.phone || "",
+              passwordHash: tenantUser.passwordHash,
+              role: "Demo Client",
+              isActive: true,
+              twoFactorEnabled: false,
+            });
+          }
+        }
+      }
+    }
+
     if (!user || !user.passwordHash) {
       return res.status(401).json({ status: "error", message: "Invalid credentials" });
     }
@@ -41,17 +68,16 @@ export const login = async (req, res, next) => {
       return res.status(401).json({ status: "error", message: "Invalid credentials" });
     }
 
-    // If user has explicitly enabled 2FA, require 2FA OTP verification
-    if (user.twoFactorEnabled) {
-      return res.json({
-        status: "success",
-        requires2fa: true,
-        email: user.email,
-      });
+    let extraTokenPayload = {};
+    const tenantRecord = await TenantModel.findOne({ email: normalizedEmail, status: "active" });
+    if (tenantRecord) {
+      extraTokenPayload = {
+        tenantId: tenantRecord.tenantId,
+        storeName: tenantRecord.storeName,
+      };
     }
 
-    // Direct Login without 2FA
-    const accessToken = createAccessToken(user);
+    const accessToken = createAccessToken(user, extraTokenPayload);
     const refreshToken = createRefreshToken();
     const refreshTokenExpiresAt = new Date(Date.now() + env.REFRESH_TOKEN_EXPIRES_MS);
 
@@ -71,6 +97,8 @@ export const login = async (req, res, next) => {
           name: user.name,
           email: user.email,
           role: user.role,
+          tenantId: tenantRecord?.tenantId || null,
+          storeName: tenantRecord?.storeName || null,
           lastLogin: user.lastLogin,
         },
         accessToken,

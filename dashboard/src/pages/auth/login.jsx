@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { handleGlobalError } from '@/lib/error-handler';
+import { apiClient } from '@/lib/api-client';
 import { toast } from 'sonner';
 import { BrandLogo } from '@/components/BrandLogo';
 import plexiviaLogo from '@/assets/plexivia.png';
