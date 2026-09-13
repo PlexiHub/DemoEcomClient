@@ -2,7 +2,6 @@ import React from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { hasMenuAccess } from '@/lib/rbac';
 import NotFound from '@/components/NotFound';
-
 import { clientConfig } from '@/clientConfig';
 
 // Guards dashboard routes by validating role permission and tenant feature capability
@@ -28,7 +27,7 @@ const RoleGuard = ({ menuKey, children }) => {
   if (menuKey === 'season' && features?.season === false) {
     return <NotFound />;
   }
-  if (menuKey === 'tools.messages' && features?.webmail === false) {
+  if ((menuKey === 'tools.messages' || menuKey === 'webmail') && features?.webmail === false) {
     return <NotFound />;
   }
   if ((menuKey === 'orders.instore' || menuKey === 'orders.new') && features?.inStoreOrder === false) {

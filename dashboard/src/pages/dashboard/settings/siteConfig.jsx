@@ -28,13 +28,14 @@ const COLOR_PRESETS = [
     name: 'Plexivia Cyber Cyan (Default)',
     primaryColor: '#58C1C3',
     secondaryColor: '#97CC6F',
-    accentColor: '#284A52',
+    accentColor: '#97CC6F',
     darkBgColor: '#0C1618',
     surfaceColor: '#122225',
     cardColor: '#15272B',
     borderColor: '#1E373D',
     textColor: '#F5F7F7',
     mutedColor: '#94AFB5',
+    errorColor: '#EF4444',
   },
   {
     name: 'Emerald Luxe',
@@ -104,13 +105,14 @@ const SiteConfigPage = () => {
   const [themeColors, setThemeColors] = useState({
     primaryColor: '#58C1C3',
     secondaryColor: '#97CC6F',
-    accentColor: '#284A52',
+    accentColor: '#97CC6F',
     darkBgColor: '#0C1618',
     surfaceColor: '#122225',
     cardColor: '#15272B',
     borderColor: '#1E373D',
     textColor: '#F5F7F7',
     mutedColor: '#94AFB5',
+    errorColor: '#EF4444',
   });
 
   const [branding, setBranding] = useState({
@@ -200,6 +202,7 @@ const SiteConfigPage = () => {
       borderColor: preset.borderColor,
       textColor: preset.textColor,
       mutedColor: preset.mutedColor,
+      errorColor: preset.errorColor || '#EF4444',
     });
     toast.info(`Theme palette updated to ${preset.name}. Click Save to apply.`);
   };
@@ -542,6 +545,25 @@ const SiteConfigPage = () => {
                       <Input
                         value={themeColors.borderColor}
                         onChange={(e) => setThemeColors({ ...themeColors, borderColor: e.target.value })}
+                        className="font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5">
+                      Error & Alert (Bright Red)
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={themeColors.errorColor || '#EF4444'}
+                        onChange={(e) => setThemeColors({ ...themeColors, errorColor: e.target.value })}
+                        className="w-10 h-10 rounded cursor-pointer border border-border bg-transparent p-0.5"
+                      />
+                      <Input
+                        value={themeColors.errorColor || '#EF4444'}
+                        onChange={(e) => setThemeColors({ ...themeColors, errorColor: e.target.value })}
                         className="font-mono text-sm"
                       />
                     </div>

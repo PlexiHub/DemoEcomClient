@@ -36,7 +36,7 @@ import {
   LifeBuoy,
   Ruler,
   Store,
-  Search,
+  Tag,
 } from "lucide-react"
 
 import {
@@ -87,36 +87,81 @@ const TikTokIcon = ({ className = "h-3.5 w-3.5", ...props }) => (
   </svg>
 );
 
-export function AppSidebar({ ...props }) {
+// Renders primary navigation sidebar matching 9-tier English menu hierarchy
+export const AppSidebar = ({ ...props }) => {
   const location = useLocation()
   const pathname = location.pathname
   const { user, logout } = useAuth()
   const { state, setOpen } = useSidebar()
   const { brandName, features } = clientConfig
 
-  // Single-open accordion state: only one parent submenu open at a time
-  const [openMenu, setOpenMenu] = React.useState(null)
+  const [openMenu, setOpenMenu] = React.useState(() => {
+    if (pathname.startsWith("/dashboard/orders")) return "orders"
+    if (pathname.startsWith("/dashboard/products")) return "products"
+    if (pathname.startsWith("/dashboard/customers") || pathname.startsWith("/dashboard/members")) return "customers"
+    if (pathname.startsWith("/dashboard/analytics") || pathname.startsWith("/dashboard/reports")) return "analytics-reports"
+    if (pathname.startsWith("/dashboard/media") || pathname.startsWith("/dashboard/tools/bulk-image-resize") || pathname.startsWith("/dashboard/tools/meta-catalog") || pathname === "/dashboard/logs") return "tools-media"
+    if (pathname.startsWith("/dashboard/settings")) return "settings"
+    if (pathname.startsWith("/dashboard/users") || pathname.startsWith("/dashboard/activity-logs") || pathname.startsWith("/dashboard/billing") || pathname.startsWith("/dashboard/tools/support") || pathname.startsWith("/dashboard/trash")) return "admin"
+    return null
+  })
+
   const [logoutConfirmOpen, setLogoutConfirmOpen] = React.useState(false)
   const [profileModalOpen, setProfileModalOpen] = React.useState(false)
 
+  const normalizedRole = String(user?.role || "").toLowerCase().trim()
+  const isDemoClient = normalizedRole === "demo client" || normalizedRole.includes("demo")
+  const userRole = user?.role || "Marketing Expert"
+
+  // Toggles open state for accordion menus
   const toggleMenu = (menuKey) => {
     setOpenMenu((prev) => (prev === menuKey ? null : menuKey))
   }
 
+  // Handles logout confirmation action
   const handleConfirmLogout = () => {
     setLogoutConfirmOpen(false)
     logout()
   }
 
-  const userRole = user?.role || "Marketing Expert"
+  // Intercepts click on demo restricted navigation links to display alert dialog
+  const handleRestrictedClick = () => {
+    if (isDemoClient && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("show-demo-purchase-modal", {
+          detail: {
+            title: "This is a Demo Account!!",
+            message: 'You have to be a system/business "Owner" to view and manage this page',
+            buttonText: "Contact Us",
+          },
+        }),
+      )
+    }
+  }
 
   // Evaluates menu visibility based on tenant feature flags and role access
   const isAllowed = (menuKey) => {
     if (menuKey === "products.brands" && features?.brand === false) return false
     if (menuKey === "season" && features?.season === false) return false
+    if (menuKey === "webmail" && features?.webmail === false) return false
     if (menuKey === "tools.messages" && features?.webmail === false) return false
     if (menuKey === "products.size-charts" && !features?.sizeChart) return false
     if ((menuKey === "orders.instore" || menuKey === "orders.new") && features?.inStoreOrder === false) return false
+
+    if (isDemoClient) {
+      if (
+        menuKey === "analytics" ||
+        menuKey === "settings.meta-pixel" ||
+        menuKey === "settings.tiktok-pixel" ||
+        menuKey === "settings.google-analytics" ||
+        menuKey === "users" ||
+        menuKey === "admin" ||
+        menuKey === "analytics-reports" ||
+        menuKey === "settings"
+      ) {
+        return true
+      }
+    }
 
     return hasMenuAccess(userRole, menuKey)
   }
@@ -134,8 +179,9 @@ export function AppSidebar({ ...props }) {
                 </span>
               </div>
               <button
+                type="button"
                 onClick={() => setOpen(false)}
-                className="h-7 w-7 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all flex items-center justify-center shrink-0"
+                className="h-7 w-7 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all flex items-center justify-center shrink-0 cursor-pointer"
                 title="Close Sidebar"
               >
                 <X className="h-3.5 w-3.5" />
@@ -143,8 +189,9 @@ export function AppSidebar({ ...props }) {
             </>
           ) : (
             <button
+              type="button"
               onClick={() => setOpen(true)}
-              className="h-7 w-7 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all flex items-center justify-center shrink-0"
+              className="h-7 w-7 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 transition-all flex items-center justify-center shrink-0 cursor-pointer"
               title="Open Sidebar"
             >
               <Menu className="h-3.5 w-3.5" />
@@ -155,7 +202,6 @@ export function AppSidebar({ ...props }) {
 
       <SidebarContent className="px-2 py-3 group-data-[collapsible=icon]:px-1 group-data-[collapsible=icon]:py-4">
         <SidebarMenu className="group-data-[collapsible=icon]:gap-4">
-          {/* Overview */}
           {isAllowed("overview") && (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -169,7 +215,19 @@ export function AppSidebar({ ...props }) {
             </SidebarMenuItem>
           )}
 
-          {/* Orders */}
+          {isAllowed("webmail") && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathname === "/dashboard/tools/messages" || pathname === "/dashboard/webmail"}
+                tooltip="Webmail"
+                render={<Link to="/dashboard/tools/messages" />}
+              >
+                <Mail className="h-4 w-4" />
+                <span>Webmail</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
+
           {isAllowed("orders") && (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -190,15 +248,6 @@ export function AppSidebar({ ...props }) {
               </SidebarMenuButton>
               {openMenu === "orders" && (
                 <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/site-config")}
-                      render={<Link to="/dashboard/settings/site-config" />}
-                    >
-                      <Palette className="h-3.5 w-3.5" />
-                      <span>Site Config</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
                   {isAllowed("orders.new") && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
@@ -213,7 +262,7 @@ export function AppSidebar({ ...props }) {
                   {isAllowed("orders.list") && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
-                        isActive={pathname === "/dashboard/orders"}
+                        isActive={pathname === "/dashboard/orders" || pathname === "/dashboard/orders/list"}
                         render={<Link to="/dashboard/orders" />}
                       >
                         <ListOrdered className="h-3.5 w-3.5" />
@@ -237,7 +286,6 @@ export function AppSidebar({ ...props }) {
             </SidebarMenuItem>
           )}
 
-          {/* Products Management */}
           {isAllowed("products") && (
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -277,6 +325,39 @@ export function AppSidebar({ ...props }) {
                       >
                         <ListOrdered className="h-3.5 w-3.5" />
                         <span>Product List</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("products.onsale") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/products/on-sale"}
+                        render={<Link to="/dashboard/products/on-sale" />}
+                      >
+                        <Tag className="h-3.5 w-3.5" />
+                        <span>On Sale</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("products.miniature") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/products/miniature"}
+                        render={<Link to="/dashboard/products/miniature" />}
+                      >
+                        <Sparkles className="h-3.5 w-3.5" />
+                        <span>Miniature</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("products.showcases") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/products/showcases" || pathname === "/dashboard/settings/products"}
+                        render={<Link to="/dashboard/products/showcases" />}
+                      >
+                        <Sliders className="h-3.5 w-3.5" />
+                        <span>Showcases</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -335,40 +416,88 @@ export function AppSidebar({ ...props }) {
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
+                  {isAllowed("products.reviews") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/products/reviews" || pathname === "/dashboard/reviews"}
+                        render={<Link to="/dashboard/products/reviews" />}
+                      >
+                        <Star className="h-3.5 w-3.5" />
+                        <span>Reviews</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
                 </SidebarMenuSub>
               )}
             </SidebarMenuItem>
           )}
 
-          {/* Admin Menu */}
-          {(isAllowed("admin") || isAllowed("members") || isAllowed("reports") || isAllowed("users") || isAllowed("reviews") || isAllowed("trash") || isAllowed("billing") || isAllowed("billing.billings") || isAllowed("billing.payments")) && (
+          {(isAllowed("customers") || isAllowed("members")) && (
             <SidebarMenuItem>
               <SidebarMenuButton
-                isActive={
-                  pathname.startsWith("/dashboard/reports") ||
-                  pathname.startsWith("/dashboard/customers") ||
-                  pathname.startsWith("/dashboard/members") ||
-                  pathname.startsWith("/dashboard/users") ||
-                  pathname.startsWith("/dashboard/reviews") ||
-                  pathname.startsWith("/dashboard/trash") ||
-                  pathname.startsWith("/dashboard/billing")
-                }
-                tooltip="Admin"
-                onClick={() => toggleMenu("admin")}
+                isActive={pathname.startsWith("/dashboard/customers") || pathname.startsWith("/dashboard/members")}
+                tooltip="Customers"
+                onClick={() => toggleMenu("customers")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4" />
-                  <span>Admin</span>
+                  <Users className="h-4 w-4" />
+                  <span>Customers</span>
                 </div>
                 <ChevronRight
                   className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
-                    openMenu === "admin" ? "rotate-90 text-primary" : ""
+                    openMenu === "customers" ? "rotate-90 text-primary" : ""
                   }`}
                 />
               </SidebarMenuButton>
-              {openMenu === "admin" && (
+              {openMenu === "customers" && (
                 <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton
+                      isActive={pathname.startsWith("/dashboard/customers") || pathname.startsWith("/dashboard/members")}
+                      render={<Link to="/dashboard/customers" />}
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      <span>Customer List</span>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              )}
+            </SidebarMenuItem>
+          )}
+
+          {(isAllowed("analytics") || isAllowed("reports") || isAllowed("analytics-reports")) && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathname.startsWith("/dashboard/analytics") || pathname.startsWith("/dashboard/reports")}
+                tooltip="Analytics & Reports"
+                onClick={() => toggleMenu("analytics-reports")}
+                className="cursor-pointer flex items-center justify-between w-full"
+              >
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />
+                  <span>Analytics & Reports</span>
+                </div>
+                <ChevronRight
+                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
+                    openMenu === "analytics-reports" ? "rotate-90 text-primary" : ""
+                  }`}
+                />
+              </SidebarMenuButton>
+              {openMenu === "analytics-reports" && (
+                <SidebarMenuSub>
+                  {isAllowed("analytics") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/analytics")}
+                        onClick={handleRestrictedClick}
+                        render={<Link to="/dashboard/analytics" />}
+                      >
+                        <LineChart className="h-3.5 w-3.5" />
+                        <span>Analytics</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
                   {isAllowed("reports") && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
@@ -380,147 +509,38 @@ export function AppSidebar({ ...props }) {
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
-                  {isAllowed("members") && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/customers") || pathname.startsWith("/dashboard/members")}
-                        render={<Link to="/dashboard/customers" />}
-                      >
-                        <Users className="h-3.5 w-3.5" />
-                        <span>Customers</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {isAllowed("users") && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/users")}
-                        render={<Link to="/dashboard/users" />}
-                      >
-                        <ShieldAlert className="h-3.5 w-3.5" />
-                        <span>System Users</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {(isAllowed("billing.billings") || isAllowed("billing") || isAllowed("admin")) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname === "/dashboard/billing/billings"}
-                        render={<Link to="/dashboard/billing/billings" />}
-                      >
-                        <Receipt className="h-3.5 w-3.5" />
-                        <span>Bills & Invoices</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {(isAllowed("billing.payments") || isAllowed("billing") || isAllowed("admin")) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname === "/dashboard/billing/payments"}
-                        render={<Link to="/dashboard/billing/payments" />}
-                      >
-                        <CreditCard className="h-3.5 w-3.5" />
-                        <span>Payments</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {isAllowed("reviews") && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/reviews")}
-                        render={<Link to="/dashboard/reviews" />}
-                      >
-                        <Star className="h-3.5 w-3.5" />
-                        <span>Reviews</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/trash")}
-                      render={<Link to="/dashboard/trash" />}
-                    >
-                      <Trash2 className="h-3.5 w-3.5 text-destructive" />
-                      <span className="text-destructive font-medium">Trash</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
                 </SidebarMenuSub>
               )}
             </SidebarMenuItem>
           )}
 
-          {/* Tools */}
-          {(isAllowed("tools") || isAllowed("analytics") || isAllowed("activity-logs") || isAllowed("logs")) && (
+          {(isAllowed("tools") || isAllowed("tools-media") || isAllowed("tools.assets") || isAllowed("tools.media")) && (
             <SidebarMenuItem>
               <SidebarMenuButton
                 isActive={
-                  pathname.startsWith("/dashboard/tools") ||
+                  pathname === "/dashboard/media" ||
                   pathname.startsWith("/dashboard/media") ||
-                  pathname.startsWith("/dashboard/analytics") ||
-                  pathname.startsWith("/dashboard/activity-logs") ||
-                  pathname.startsWith("/dashboard/logs")
+                  pathname.startsWith("/dashboard/tools/bulk-image-resize") ||
+                  pathname.startsWith("/dashboard/tools/meta-catalog") ||
+                  pathname === "/dashboard/logs"
                 }
-                tooltip="Tools"
-                onClick={() => toggleMenu("tools")}
+                tooltip="Tools & Media"
+                onClick={() => toggleMenu("tools-media")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
                 <div className="flex items-center gap-2">
                   <Wrench className="h-4 w-4" />
-                  <span>Tools</span>
+                  <span>Tools & Media</span>
                 </div>
                 <ChevronRight
                   className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
-                    openMenu === "tools" ? "rotate-90 text-primary" : ""
+                    openMenu === "tools-media" ? "rotate-90 text-primary" : ""
                   }`}
                 />
               </SidebarMenuButton>
-              {openMenu === "tools" && (
+              {openMenu === "tools-media" && (
                 <SidebarMenuSub>
-                  {(isAllowed("analytics") || isAllowed("tools.analytics")) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/analytics") || pathname.startsWith("/dashboard/tools/analytics")}
-                        render={<Link to="/dashboard/analytics" />}
-                      >
-                        <LineChart className="h-3.5 w-3.5" />
-                        <span>Analytics</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {(isAllowed("activity-logs") || isAllowed("tools.activity-logs") || isAllowed("admin")) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/activity-logs") || pathname.startsWith("/dashboard/tools/activity-logs")}
-                        render={<Link to="/dashboard/activity-logs" />}
-                      >
-                        <Activity className="h-3.5 w-3.5" />
-                        <span>Activity Logs</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {(isAllowed("logs") || isAllowed("tools.logs")) && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname.startsWith("/dashboard/logs") || pathname.startsWith("/dashboard/tools/logs")}
-                        render={<Link to="/dashboard/logs" />}
-                      >
-                        <Terminal className="h-3.5 w-3.5" />
-                        <span>System Logs</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {isAllowed("tools.messages") && (
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton
-                        isActive={pathname === "/dashboard/tools/messages" || pathname.startsWith("/dashboard/tools/messages")}
-                        render={<Link to="/dashboard/tools/messages" />}
-                      >
-                        <Mail className="h-3.5 w-3.5" />
-                        <span>Messages</span>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )}
-                  {(isAllowed("tools.assets") || isAllowed("tools.media") || isAllowed("tools")) && (
+                  {(isAllowed("tools.media") || isAllowed("tools") || isAllowed("tools.assets")) && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname === "/dashboard/media" || pathname.startsWith("/dashboard/media")}
@@ -553,14 +573,14 @@ export function AppSidebar({ ...props }) {
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
-                  {isAllowed("tools.support") && (
+                  {(isAllowed("logs") || isAllowed("tools.logs")) && (
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
-                        isActive={pathname === "/dashboard/tools/support" || pathname.startsWith("/dashboard/tools/support")}
-                        render={<Link to="/dashboard/tools/support" />}
+                        isActive={pathname === "/dashboard/logs" || pathname === "/dashboard/tools/logs"}
+                        render={<Link to="/dashboard/logs" />}
                       >
-                        <LifeBuoy className="h-3.5 w-3.5" />
-                        <span>Support</span>
+                        <Terminal className="h-3.5 w-3.5" />
+                        <span>System Logs</span>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -569,18 +589,17 @@ export function AppSidebar({ ...props }) {
             </SidebarMenuItem>
           )}
 
-          {/* Settings Menu */}
           {isAllowed("settings") && (
             <SidebarMenuItem>
               <SidebarMenuButton
                 isActive={pathname.startsWith("/dashboard/settings")}
-                tooltip="Settings"
+                tooltip="Settings & Marketing"
                 onClick={() => toggleMenu("settings")}
                 className="cursor-pointer flex items-center justify-between w-full"
               >
                 <div className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />
-                  <span>Settings</span>
+                  <span>Settings & Marketing</span>
                 </div>
                 <ChevronRight
                   className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
@@ -590,74 +609,162 @@ export function AppSidebar({ ...props }) {
               </SidebarMenuButton>
               {openMenu === "settings" && (
                 <SidebarMenuSub>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/site-config")}
-                      render={<Link to="/dashboard/settings/site-config" />}
-                    >
-                      <Palette className="h-3.5 w-3.5" />
-                      <span>Site Config</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/products")}
-                      render={<Link to="/dashboard/settings/products" />}
-                    >
-                      <Sparkles className="h-3.5 w-3.5" />
-                      <span>Products - Featured, On Sale</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+                  {isAllowed("settings.cms") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/settings/cms")}
+                        render={<Link to="/dashboard/settings/cms-content" />}
+                      >
+                        <ImageIcon className="h-3.5 w-3.5" />
+                        <span>CMS Content</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("settings.general") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/site-config") || pathname.startsWith("/dashboard/settings/seo")}
+                        render={<Link to="/dashboard/settings/site-config" />}
+                      >
+                        <Palette className="h-3.5 w-3.5" />
+                        <span>General & SEO</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("settings.meta-pixel") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/settings/meta-pixel")}
+                        onClick={handleRestrictedClick}
+                        render={<Link to="/dashboard/settings/meta-pixel" />}
+                      >
+                        <Share2 className="h-3.5 w-3.5" />
+                        <span>Meta Pixel</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("settings.tiktok-pixel") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/settings/tiktok-pixel")}
+                        onClick={handleRestrictedClick}
+                        render={<Link to="/dashboard/settings/tiktok-pixel" />}
+                      >
+                        <TikTokIcon className="h-3.5 w-3.5 shrink-0" />
+                        <span>TikTok Pixel</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {isAllowed("settings.google-analytics") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/settings/google-analytics")}
+                        onClick={handleRestrictedClick}
+                        render={<Link to="/dashboard/settings/google-analytics" />}
+                      >
+                        <BarChart3 className="h-3.5 w-3.5" />
+                        <span>Google Analytics</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                </SidebarMenuSub>
+              )}
+            </SidebarMenuItem>
+          )}
 
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/settings/meta-pixel")}
-                      render={<Link to="/dashboard/settings/meta-pixel" />}
-                    >
-                      <Share2 className="h-3.5 w-3.5" />
-                      <span>Meta Pixel</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/settings/tiktok-pixel")}
-                      render={<Link to="/dashboard/settings/tiktok-pixel" />}
-                    >
-                      <TikTokIcon className="h-3.5 w-3.5 shrink-0" />
-                      <span>TikTok Pixel</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/settings/cms")}
-                      render={<Link to="/dashboard/settings/cms-content" />}
-                    >
-                      <ImageIcon className="h-3.5 w-3.5" />
-                      <span>CMS Content</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/settings/google-analytics")}
-                      render={<Link to="/dashboard/settings/google-analytics" />}
-                    >
-                      <BarChart3 className="h-3.5 w-3.5" />
-                      <span>Google Analytics</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-
-                  <SidebarMenuSubItem>
-                    <SidebarMenuSubButton
-                      isActive={pathname.startsWith("/dashboard/settings/seo")}
-                      render={<Link to="/dashboard/settings/seo" />}
-                    >
-                      <Search className="h-3.5 w-3.5" />
-                      <span>SEO</span>
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
+          {(isAllowed("admin") || isAllowed("users") || isAllowed("activity-logs") || isAllowed("billing") || isAllowed("trash") || isAllowed("tools.support")) && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={
+                  pathname.startsWith("/dashboard/users") ||
+                  pathname.startsWith("/dashboard/activity-logs") ||
+                  pathname.startsWith("/dashboard/billing") ||
+                  pathname.startsWith("/dashboard/tools/support") ||
+                  pathname.startsWith("/dashboard/trash")
+                }
+                tooltip="Admin"
+                onClick={() => toggleMenu("admin")}
+                className="cursor-pointer flex items-center justify-between w-full"
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Admin</span>
+                </div>
+                <ChevronRight
+                  className={`h-3.5 w-3.5 text-muted-foreground/70 transition-transform duration-200 group-data-[collapsible=icon]:hidden ${
+                    openMenu === "admin" ? "rotate-90 text-primary" : ""
+                  }`}
+                />
+              </SidebarMenuButton>
+              {openMenu === "admin" && (
+                <SidebarMenuSub>
+                  {isAllowed("users") && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/users")}
+                        onClick={handleRestrictedClick}
+                        render={<Link to="/dashboard/users" />}
+                      >
+                        <ShieldAlert className="h-3.5 w-3.5" />
+                        <span>System Users</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {(isAllowed("activity-logs") || isAllowed("admin")) && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/activity-logs")}
+                        render={<Link to="/dashboard/activity-logs" />}
+                      >
+                        <Activity className="h-3.5 w-3.5" />
+                        <span>Activity Logs</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {(isAllowed("billing.billings") || isAllowed("billing") || isAllowed("admin")) && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/billing/billings"}
+                        render={<Link to="/dashboard/billing/billings" />}
+                      >
+                        <Receipt className="h-3.5 w-3.5" />
+                        <span>Bills & Invoices</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {(isAllowed("billing.payments") || isAllowed("billing") || isAllowed("admin")) && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/billing/payments"}
+                        render={<Link to="/dashboard/billing/payments" />}
+                      >
+                        <CreditCard className="h-3.5 w-3.5" />
+                        <span>Payments</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {(isAllowed("tools.support") || isAllowed("admin")) && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname === "/dashboard/tools/support"}
+                        render={<Link to="/dashboard/tools/support" />}
+                      >
+                        <LifeBuoy className="h-3.5 w-3.5" />
+                        <span>Support Desk</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
+                  {(isAllowed("trash") || isAllowed("admin")) && (
+                    <SidebarMenuSubItem>
+                      <SidebarMenuSubButton
+                        isActive={pathname.startsWith("/dashboard/trash")}
+                        render={<Link to="/dashboard/trash" />}
+                      >
+                        <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                        <span className="text-destructive font-medium">Trash</span>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )}
                 </SidebarMenuSub>
               )}
             </SidebarMenuItem>
@@ -752,7 +859,6 @@ export function AppSidebar({ ...props }) {
       </SidebarFooter>
       <SidebarRail />
 
-      {/* Logout Confirmation Alert Dialog */}
       <Dialog open={logoutConfirmOpen} onOpenChange={setLogoutConfirmOpen}>
         <DialogContent className="sm:max-w-[420px] p-6 text-center">
           <DialogHeader className="space-y-2">
@@ -841,3 +947,5 @@ export function AppSidebar({ ...props }) {
     </Sidebar>
   )
 }
+
+export default AppSidebar

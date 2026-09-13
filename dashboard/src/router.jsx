@@ -1,14 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-// Layout
 import DashboardLayout from './layouts/dashboardLayout';
 
-// Auth & Onboarding
 import Login from './pages/auth/login';
 import RegisterPage from './pages/auth/register';
 import InvitePage from './pages/invite';
 
-// Dashboard
 import Overview from './pages/dashboard/overview';
 import Analytics from './pages/dashboard/analytics';
 import Users from './pages/dashboard/users';
@@ -26,11 +23,11 @@ import SEOSettingsPage from './pages/dashboard/settings/seoSettings';
 import SiteConfigPage from './pages/dashboard/settings/siteConfig';
 import AllMedia from './pages/dashboard/allMedia';
 
-// Products
 import ProductsList from './pages/dashboard/products/productsList';
 import ProductDetails from './pages/dashboard/products/productDetails';
 import AddNewProduct from './pages/dashboard/products/addNewProduct';
-// import Stock from './pages/dashboard/products/stock';
+import OnSalePage from './pages/dashboard/products/onSalePage';
+import MiniaturePage from './pages/dashboard/products/miniaturePage';
 import Coupons from './pages/dashboard/products/coupons';
 import SizeCharts from './pages/dashboard/products/sizeCharts';
 import Categories from './pages/dashboard/products/categories';
@@ -38,30 +35,26 @@ import Brands from './pages/dashboard/products/brands';
 import Attributes from './pages/dashboard/products/attributes';
 import EditAttribute from './pages/dashboard/products/editAttribute';
 
-// Orders
 import OrdersList from './pages/dashboard/orders/ordersList';
 import OrderDetails from './pages/dashboard/orders/orderDetails';
 import NewOrder from './pages/dashboard/orders/newOrder';
 import InStoreOrders from './pages/dashboard/orders/inStoreOrders';
 
-// Billing
 import BillingOverview from './pages/dashboard/billing/billingOverview';
 import Payments from './pages/dashboard/billing/payments';
 import Billings from './pages/dashboard/billing/billings';
 
-// Tools
 import MessagesManager from './pages/dashboard/tools/messagesManager';
 import BulkImageResize from './pages/dashboard/tools/bulkImageResize';
 import MetaCatalog from './pages/dashboard/tools/metaCatalog';
 import SystemLogs from './pages/dashboard/tools/systemLogs';
 import SupportDesk from './pages/dashboard/tools/supportDesk';
 
-// AI Studio
 import Studio from './pages/dashboard/studio/index';
 import BatchImagesStudio from './pages/dashboard/studio/batchImages';
 
-// RBAC & Guard
 import RoleGuard from './components/RoleGuard';
+import DemoRestrictedGuard from './components/DemoRestrictedGuard';
 import NotFound from './components/NotFound';
 import { RouteErrorElement } from './components/ErrorBoundary';
 
@@ -99,10 +92,16 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'webmail',
+        element: <Navigate to="/dashboard/tools/messages" replace />,
+      },
+      {
         path: 'users',
         element: (
           <RoleGuard menuKey="users">
-            <Users />
+            <DemoRestrictedGuard pageTitle="System Users">
+              <Users />
+            </DemoRestrictedGuard>
           </RoleGuard>
         ),
       },
@@ -118,7 +117,9 @@ export const router = createBrowserRouter([
         path: 'analytics',
         element: (
           <RoleGuard menuKey="analytics">
-            <Analytics />
+            <DemoRestrictedGuard pageTitle="Analytics">
+              <Analytics />
+            </DemoRestrictedGuard>
           </RoleGuard>
         ),
       },
@@ -136,11 +137,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'reviews',
-        element: (
-          <RoleGuard menuKey="reviews">
-            <Reviews />
-          </RoleGuard>
-        ),
+        element: <Navigate to="/dashboard/products/reviews" replace />,
       },
       {
         path: 'trash',
@@ -167,9 +164,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'admin',
+        element: <Navigate to="/dashboard/users" replace />,
+      },
+      {
         path: 'settings',
         children: [
           { path: '', element: <Navigate to="site-config" replace /> },
+          { path: 'general', element: <Navigate to="/dashboard/settings/site-config" replace /> },
           {
             path: 'site-config',
             element: (
@@ -180,32 +182,32 @@ export const router = createBrowserRouter([
           },
           {
             path: 'products',
-            element: (
-              <RoleGuard menuKey="settings">
-                <ProductShowcasesPage />
-              </RoleGuard>
-            ),
+            element: <Navigate to="/dashboard/products/showcases" replace />,
           },
           {
             path: 'meta-pixel',
             element: (
-              <RoleGuard menuKey="settings">
-                <MetaPixelPage />
+              <RoleGuard menuKey="settings.meta-pixel">
+                <DemoRestrictedGuard pageTitle="Meta Pixel">
+                  <MetaPixelPage />
+                </DemoRestrictedGuard>
               </RoleGuard>
             ),
           },
           {
             path: 'tiktok-pixel',
             element: (
-              <RoleGuard menuKey="settings">
-                <TikTokPixelPage />
+              <RoleGuard menuKey="settings.tiktok-pixel">
+                <DemoRestrictedGuard pageTitle="TikTok Pixel">
+                  <TikTokPixelPage />
+                </DemoRestrictedGuard>
               </RoleGuard>
             ),
           },
           {
             path: 'cms-content',
             element: (
-              <RoleGuard menuKey="settings">
+              <RoleGuard menuKey="settings.cms">
                 <CMSContentPage />
               </RoleGuard>
             ),
@@ -214,8 +216,10 @@ export const router = createBrowserRouter([
           {
             path: 'google-analytics',
             element: (
-              <RoleGuard menuKey="settings">
-                <GoogleAnalyticsPage />
+              <RoleGuard menuKey="settings.google-analytics">
+                <DemoRestrictedGuard pageTitle="Google Analytics">
+                  <GoogleAnalyticsPage />
+                </DemoRestrictedGuard>
               </RoleGuard>
             ),
           },
@@ -315,14 +319,30 @@ export const router = createBrowserRouter([
               </RoleGuard>
             ),
           },
-          /* {
-            path: 'stock',
+          {
+            path: 'on-sale',
             element: (
-              <RoleGuard menuKey="products.list">
-                <Stock />
+              <RoleGuard menuKey="products.onsale">
+                <OnSalePage />
               </RoleGuard>
             ),
-          }, */
+          },
+          {
+            path: 'miniature',
+            element: (
+              <RoleGuard menuKey="products.miniature">
+                <MiniaturePage />
+              </RoleGuard>
+            ),
+          },
+          {
+            path: 'showcases',
+            element: (
+              <RoleGuard menuKey="products.showcases">
+                <ProductShowcasesPage />
+              </RoleGuard>
+            ),
+          },
           {
             path: 'coupons',
             element: (
@@ -339,7 +359,14 @@ export const router = createBrowserRouter([
               </RoleGuard>
             ),
           },
-          { path: 'reviews', element: <Navigate to="/dashboard/reviews" replace /> },
+          {
+            path: 'reviews',
+            element: (
+              <RoleGuard menuKey="products.reviews">
+                <Reviews />
+              </RoleGuard>
+            ),
+          },
           {
             path: 'categories',
             element: (

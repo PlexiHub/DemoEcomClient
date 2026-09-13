@@ -21,13 +21,14 @@ const siteConfigSchema = new Schema(
     themeColors: {
       primaryColor: { type: String, default: "#58C1C3", trim: true },
       secondaryColor: { type: String, default: "#97CC6F", trim: true },
-      accentColor: { type: String, default: "#284A52", trim: true },
+      accentColor: { type: String, default: "#97CC6F", trim: true },
       darkBgColor: { type: String, default: "#0C1618", trim: true },
       surfaceColor: { type: String, default: "#122225", trim: true },
       cardColor: { type: String, default: "#15272B", trim: true },
       borderColor: { type: String, default: "#1E373D", trim: true },
       textColor: { type: String, default: "#F5F7F7", trim: true },
       mutedColor: { type: String, default: "#94AFB5", trim: true },
+      errorColor: { type: String, default: "#EF4444", trim: true },
     },
     branding: {
       logoUrl: { type: String, default: "", trim: true },

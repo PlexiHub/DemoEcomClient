@@ -7,14 +7,15 @@ export const hasMenuAccess = (role, menuKey) => {
   const normalizedRole = String(role).trim();
   const lowerRole = normalizedRole.toLowerCase();
 
-  if (menuKey === 'settings' || menuKey.startsWith('settings.') || menuKey.startsWith('settings/')) {
-    return lowerRole === 'owner' || lowerRole === 'admin';
+  if (lowerRole === 'owner' || lowerRole === 'admin') {
+    return true;
   }
 
   const roleConfig =
     coreConfig?.userRoles?.[normalizedRole] ||
     coreConfig?.userRoles?.[normalizedRole.replace(/\s+/g, '-')] ||
-    coreConfig?.userRoles?.[normalizedRole.replace(/-/g, ' ')];
+    coreConfig?.userRoles?.[normalizedRole.replace(/-/g, ' ')] ||
+    (lowerRole.includes('demo') ? coreConfig?.userRoles?.['Demo Client'] : null);
 
   if (!roleConfig || !Array.isArray(roleConfig.allowedMenus)) {
     return false;
@@ -26,14 +27,30 @@ export const hasMenuAccess = (role, menuKey) => {
     return true;
   }
 
+  if (allowedMenus.includes(menuKey)) {
+    return true;
+  }
+
   if (menuKey.includes('.')) {
     const parentKey = menuKey.split('.')[0];
-    if (!allowedMenus.includes(parentKey)) {
-      return false;
+    if (allowedMenus.includes(parentKey) && allowedMenus.includes(menuKey)) {
+      return true;
     }
   }
 
-  return allowedMenus.includes(menuKey);
+  if (menuKey === 'tools.messages' && allowedMenus.includes('webmail')) {
+    return true;
+  }
+
+  if (menuKey === 'members' && (allowedMenus.includes('customers') || allowedMenus.includes('customers.list'))) {
+    return true;
+  }
+
+  if (menuKey === 'reviews' && allowedMenus.includes('products.reviews')) {
+    return true;
+  }
+
+  return false;
 };
 
 // Gets the default landing route URL for a given role upon login
@@ -58,4 +75,3 @@ export const getDefaultRedirect = (role) => {
 
   return '/dashboard';
 };
-
