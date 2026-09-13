@@ -2,7 +2,7 @@ import { CreditCard, FileText, ArrowRight, CheckCircle2, Clock, XCircle } from '
 
 const BillingPage = () => {
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Billing & Payments</h1>
         <p className="text-sm text-muted-foreground mt-1">Manage your bills, invoices, and payment transactions</p>

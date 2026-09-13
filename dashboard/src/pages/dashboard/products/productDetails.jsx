@@ -673,7 +673,7 @@ const EditProductPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-8 min-h-[300px]">
+      <div className="flex-1 flex items-center justify-center p-8 min-h-[300px] w-full">
         <div className="text-sm font-semibold text-muted-foreground animate-pulse">
           Loading product details...
         </div>

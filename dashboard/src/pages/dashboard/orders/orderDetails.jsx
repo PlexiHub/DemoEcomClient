@@ -465,7 +465,7 @@ const OrderDetailsPage = () => {
 
   if (orderLoading) {
     return (
-      <div className="flex-1 p-8 space-y-4">
+      <div className="flex-1 p-8 space-y-4 w-full">
         <div className="h-10 w-1/3 bg-muted animate-pulse rounded-lg" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 h-96 bg-muted animate-pulse rounded-xl" />
@@ -477,7 +477,7 @@ const OrderDetailsPage = () => {
 
   if (orderError || !order) {
     return (
-      <div className="flex-1 p-8 text-center space-y-4">
+      <div className="flex-1 p-8 text-center space-y-4 w-full">
         <h2 className="text-2xl font-bold text-destructive">Order Not Found</h2>
         <p className="text-muted-foreground">The order you are looking for does not exist or failed to load.</p>
         <Button onClick={() => navigate("/dashboard/orders")}>
@@ -492,7 +492,7 @@ const OrderDetailsPage = () => {
   const effectivePending = calculatePendingAmount(effectiveTotal, effectivePaid);
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b pb-6">
         <div className="flex items-center gap-3">
           <Button

@@ -162,7 +162,7 @@ const ActivityLogsPage = () => {
   };
 
   return (
-    <div className="flex-1 space-y-5 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-5 p-4 md:p-8 pt-6 w-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
         <div className="flex items-center gap-3">

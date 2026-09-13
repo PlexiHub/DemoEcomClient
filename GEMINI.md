@@ -81,3 +81,11 @@ const calculateDiscount = (items) => {
 - **`temp` branch commits and `git push` are fine without confirmation.**
 - **Merging `temp` into `Live` and pushing to GitHub is fine without confirmation.**
 - **Only the actual VPS build/deploy step requires explicit user command.**
+
+---
+
+## 7. Container & Full-Width Layout Rules
+- **Full Width Standard**: Every dashboard page root container must take the full width of the viewport (`w-full`) and use the unified standard wrapper:
+  `className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full"` (or `space-y-4` / `space-y-5`).
+- **No Restrictive Root Widths**: Never constrain root page wrappers with fixed container max-widths (such as `max-w-5xl`, `max-w-6xl`, or `max-w-7xl mx-auto`).
+- **Layout Shell Consistency**: The layout shell (`dashboardLayout.jsx`) and all child views must enforce `w-full min-w-0` so every page renders with the exact same consistent full-width layout.

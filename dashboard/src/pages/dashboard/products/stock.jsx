@@ -68,7 +68,7 @@ const StockManagementPage = () => {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Stock Management</h2>
         <p className="text-muted-foreground text-sm mt-1">Monitor inventory levels across all products and variations</p>

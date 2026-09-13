@@ -755,7 +755,7 @@ const MetaCatalogGenerator = () => {
   };
 
   return (
-    <div className="flex-1 space-y-5 p-4 md:p-8 pt-6">
+    <div className="flex-1 space-y-5 p-4 md:p-8 pt-6 w-full">
       {/* Header Bar */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
