@@ -68,6 +68,17 @@ const PRESETS = [
     desc: 'Wide HD hero banners and sliders.',
   },
   {
+    id: 'free-size',
+    name: 'Free Size (No Defined Ratio)',
+    width: null,
+    height: null,
+    format: 'image/webp',
+    ext: 'webp',
+    quality: 0.9,
+    fit: 'free',
+    desc: 'Original proportions. No fixed ratio, stretch, or crop distortion.',
+  },
+  {
     id: 'custom',
     name: 'Custom Dimensions',
     width: 800,
@@ -80,7 +91,8 @@ const PRESETS = [
   },
 ];
 
-export default function BulkImageResize() {
+// Bulk image resizing utility supporting custom presets, free size, and batch compression
+const BulkImageResize = () => {
   const [files, setFiles] = useState([]);
   const [selectedPreset, setSelectedPreset] = useState('product-main');
   const [targetWidth, setTargetWidth] = useState(1200);
@@ -99,6 +111,7 @@ export default function BulkImageResize() {
 
   const fileInputRef = useRef(null);
 
+  // Formats byte count into human-readable unit
   const formatFileSize = (bytes) => {
     if (!bytes || bytes === 0) return '0 B';
     const k = 1024;
@@ -107,35 +120,67 @@ export default function BulkImageResize() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
+  // Handles preset selection and adjusts target dimensions
   const handlePresetSelect = (presetId) => {
     setSelectedPreset(presetId);
     const preset = PRESETS.find((p) => p.id === presetId);
-    if (preset && preset.id !== 'custom') {
-      setTargetWidth(preset.width);
-      setTargetHeight(preset.height);
-      setFormat(preset.format);
-      setQuality(Math.round(preset.quality * 100));
-      setFitMode(preset.fit);
-      setAspectRatioValue(preset.width / preset.height);
+    if (preset) {
+      if (preset.id === 'free-size') {
+        setTargetWidth('');
+        setTargetHeight('');
+        setFormat(preset.format);
+        setQuality(Math.round(preset.quality * 100));
+        setFitMode('free');
+        setKeepAspectRatio(false);
+        setAspectRatioValue(null);
+      } else if (preset.id !== 'custom') {
+        setTargetWidth(preset.width);
+        setTargetHeight(preset.height);
+        setFormat(preset.format);
+        setQuality(Math.round(preset.quality * 100));
+        setFitMode(preset.fit);
+        setKeepAspectRatio(true);
+        setAspectRatioValue(preset.width / preset.height);
+      }
     }
   };
 
+  // Updates width with aspect ratio preservation when enabled
   const handleWidthChange = (val) => {
+    if (val === '') {
+      setTargetWidth('');
+      if (selectedPreset !== 'free-size') {
+        setSelectedPreset('custom');
+      }
+      return;
+    }
     const num = Math.max(1, parseInt(val, 10) || 1);
     setTargetWidth(num);
     if (keepAspectRatio && aspectRatioValue) {
       setTargetHeight(Math.round(num / aspectRatioValue));
     }
-    setSelectedPreset('custom');
+    if (selectedPreset !== 'free-size') {
+      setSelectedPreset('custom');
+    }
   };
 
+  // Updates height with aspect ratio preservation when enabled
   const handleHeightChange = (val) => {
+    if (val === '') {
+      setTargetHeight('');
+      if (selectedPreset !== 'free-size') {
+        setSelectedPreset('custom');
+      }
+      return;
+    }
     const num = Math.max(1, parseInt(val, 10) || 1);
     setTargetHeight(num);
     if (keepAspectRatio && aspectRatioValue) {
       setTargetWidth(Math.round(num * aspectRatioValue));
     }
-    setSelectedPreset('custom');
+    if (selectedPreset !== 'free-size') {
+      setSelectedPreset('custom');
+    }
   };
 
   const handleFilesAdded = useCallback((fileList) => {
@@ -211,7 +256,7 @@ export default function BulkImageResize() {
     setProgress(0);
   };
 
-  // Canvas-based client-side image resizing
+  // Resizes single image on canvas adhering to selected fit mode and free size rules
   const resizeSingleImage = (item) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -220,34 +265,79 @@ export default function BulkImageResize() {
         const srcW = img.naturalWidth || img.width;
         const srcH = img.naturalHeight || img.height;
 
-        let drawW = targetWidth;
-        let drawH = targetHeight;
-        let canvasW = targetWidth;
-        let canvasH = targetHeight;
+        const numTargetW = targetWidth ? parseInt(targetWidth, 10) : 0;
+        const numTargetH = targetHeight ? parseInt(targetHeight, 10) : 0;
+
+        let drawW = numTargetW || srcW;
+        let drawH = numTargetH || srcH;
+        let canvasW = numTargetW || srcW;
+        let canvasH = numTargetH || srcH;
         let offsetX = 0;
         let offsetY = 0;
 
-        if (fitMode === 'scale-max') {
-          // Scale down while maintaining aspect ratio, bounds capped at targetWidth/targetHeight
-          const ratio = Math.min(targetWidth / srcW, targetHeight / srcH, 1);
+        const isFree = fitMode === 'free' || selectedPreset === 'free-size';
+
+        if (isFree) {
+          if (numTargetW > 0 && numTargetH > 0) {
+            canvasW = numTargetW;
+            canvasH = numTargetH;
+            drawW = numTargetW;
+            drawH = numTargetH;
+          } else if (numTargetW > 0 && numTargetH <= 0) {
+            const ratio = numTargetW / srcW;
+            canvasW = numTargetW;
+            canvasH = Math.round(srcH * ratio);
+            drawW = canvasW;
+            drawH = canvasH;
+          } else if (numTargetH > 0 && numTargetW <= 0) {
+            const ratio = numTargetH / srcH;
+            canvasH = numTargetH;
+            canvasW = Math.round(srcW * ratio);
+            drawW = canvasW;
+            drawH = canvasH;
+          } else {
+            canvasW = srcW;
+            canvasH = srcH;
+            drawW = srcW;
+            drawH = srcH;
+          }
+          offsetX = 0;
+          offsetY = 0;
+        } else if (fitMode === 'scale-max') {
+          const boundW = numTargetW || srcW;
+          const boundH = numTargetH || srcH;
+          const ratio = Math.min(boundW / srcW, boundH / srcH, 1);
           canvasW = Math.round(srcW * ratio);
           canvasH = Math.round(srcH * ratio);
           drawW = canvasW;
           drawH = canvasH;
         } else if (fitMode === 'cover') {
-          // Crop to fill exact dimensions
-          const ratio = Math.max(targetWidth / srcW, targetHeight / srcH);
+          const boundW = numTargetW || srcW;
+          const boundH = numTargetH || srcH;
+          const ratio = Math.max(boundW / srcW, boundH / srcH);
           drawW = Math.round(srcW * ratio);
           drawH = Math.round(srcH * ratio);
-          offsetX = Math.round((targetWidth - drawW) / 2);
-          offsetY = Math.round((targetHeight - drawH) / 2);
+          canvasW = boundW;
+          canvasH = boundH;
+          offsetX = Math.round((boundW - drawW) / 2);
+          offsetY = Math.round((boundH - drawH) / 2);
         } else if (fitMode === 'contain') {
-          // Fit inside target box with padding
-          const ratio = Math.min(targetWidth / srcW, targetHeight / srcH);
+          const boundW = numTargetW || srcW;
+          const boundH = numTargetH || srcH;
+          const ratio = Math.min(boundW / srcW, boundH / srcH);
           drawW = Math.round(srcW * ratio);
           drawH = Math.round(srcH * ratio);
-          offsetX = Math.round((targetWidth - drawW) / 2);
-          offsetY = Math.round((targetHeight - drawH) / 2);
+          canvasW = boundW;
+          canvasH = boundH;
+          offsetX = Math.round((boundW - drawW) / 2);
+          offsetY = Math.round((boundH - drawH) / 2);
+        } else if (fitMode === 'exact') {
+          canvasW = numTargetW || srcW;
+          canvasH = numTargetH || srcH;
+          drawW = canvasW;
+          drawH = canvasH;
+          offsetX = 0;
+          offsetY = 0;
         }
 
         const canvas = document.createElement('canvas');
@@ -457,7 +547,7 @@ export default function BulkImageResize() {
                   key={preset.id}
                   type="button"
                   onClick={() => handlePresetSelect(preset.id)}
-                  className={`text-left p-3.5 rounded-lg border transition-all ${
+                  className={`text-left p-3.5 rounded-lg border transition-all cursor-pointer ${
                     selectedPreset === preset.id
                       ? 'border-primary bg-primary/5 shadow-xs ring-1 ring-primary/20'
                       : 'border-border hover:border-primary/40 bg-card'
@@ -465,11 +555,15 @@ export default function BulkImageResize() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-xs text-foreground">{preset.name}</span>
-                    {preset.id !== 'custom' && (
+                    {preset.id === 'free-size' ? (
+                      <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                        FREE
+                      </span>
+                    ) : preset.id !== 'custom' ? (
                       <span className="text-[11px] font-mono text-primary font-semibold">
                         {preset.ext.toUpperCase()}
                       </span>
-                    )}
+                    ) : null}
                   </div>
                   <p className="text-[11px] text-muted-foreground mt-1 line-clamp-1">
                     {preset.desc}
@@ -481,11 +575,17 @@ export default function BulkImageResize() {
             {/* Custom Dimension Inputs */}
             <div className="pt-2 border-t grid grid-cols-2 sm:grid-cols-4 gap-3 items-end">
               <div>
-                <label className="text-xs font-medium text-foreground block mb-1">
-                  Width (px)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-medium text-foreground">
+                    Width (px)
+                  </label>
+                  {selectedPreset === 'free-size' && (
+                    <span className="text-[10px] text-muted-foreground">Auto</span>
+                  )}
+                </div>
                 <Input
                   type="number"
+                  placeholder={selectedPreset === 'free-size' ? 'Auto (Original)' : '1200'}
                   value={targetWidth}
                   onChange={(e) => handleWidthChange(e.target.value)}
                   className="h-8 text-xs font-mono"
@@ -494,11 +594,27 @@ export default function BulkImageResize() {
               </div>
 
               <div>
-                <label className="text-xs font-medium text-foreground block mb-1">
-                  Height (px)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-medium text-foreground">
+                    Height (px)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setKeepAspectRatio(!keepAspectRatio)}
+                    className="text-[10px] text-muted-foreground hover:text-primary flex items-center gap-1 cursor-pointer"
+                    title={keepAspectRatio ? 'Aspect ratio locked' : 'Free ratio unlocked'}
+                  >
+                    {keepAspectRatio ? (
+                      <Lock className="h-2.5 w-2.5 text-primary" />
+                    ) : (
+                      <Unlock className="h-2.5 w-2.5 text-muted-foreground" />
+                    )}
+                    <span>{keepAspectRatio ? 'Locked' : 'Free'}</span>
+                  </button>
+                </div>
                 <Input
                   type="number"
+                  placeholder={selectedPreset === 'free-size' ? 'Auto (Original)' : '1200'}
                   value={targetHeight}
                   onChange={(e) => handleHeightChange(e.target.value)}
                   className="h-8 text-xs font-mono"
@@ -546,6 +662,7 @@ export default function BulkImageResize() {
                   onChange={(e) => setFitMode(e.target.value)}
                   className="h-8 w-full rounded-md border border-input bg-background px-2 text-xs focus:ring-1 focus:ring-primary outline-hidden"
                 >
+                  <option value="free">Free Size (Maintain Original Ratio)</option>
                   <option value="scale-max">Scale Max (Maintain Ratio)</option>
                   <option value="cover">Cover (Crop to fill)</option>
                   <option value="contain">Contain (Fit inside box)</option>
@@ -766,4 +883,6 @@ export default function BulkImageResize() {
       )}
     </div>
   );
-}
+};
+
+export default BulkImageResize;
