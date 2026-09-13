@@ -12,9 +12,9 @@ export const useDemoGuard = () => {
       window.dispatchEvent(
         new CustomEvent('show-demo-purchase-modal', {
           detail: {
-            title: customTitle || 'This is a Demo Account!!',
-            message: customMessage || 'You have to be a system/business "Owner" to view and manage this page',
-            buttonText: 'Contact Us',
+            title: customTitle || 'Purchase Required!',
+            message: customMessage || 'এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।',
+            buttonText: 'Contact Admin',
           },
         }),
       );

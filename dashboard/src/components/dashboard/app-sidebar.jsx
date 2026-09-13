@@ -37,6 +37,7 @@ import {
   Ruler,
   Store,
   Tag,
+  Lock,
 } from "lucide-react"
 
 import {
@@ -125,18 +126,25 @@ export const AppSidebar = ({ ...props }) => {
     logout()
   }
 
-  // Intercepts click on demo restricted navigation links to display alert dialog
-  const handleRestrictedClick = () => {
-    if (isDemoClient && typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("show-demo-purchase-modal", {
-          detail: {
-            title: "This is a Demo Account!!",
-            message: 'You have to be a system/business "Owner" to view and manage this page',
-            buttonText: "Contact Us",
-          },
-        }),
-      )
+  // Intercepts click on demo restricted navigation links to display purchase alert dialog
+  const handleRestrictedClick = (e, featureName = "Analytics") => {
+    if (isDemoClient) {
+      if (e && typeof e.preventDefault === "function") {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("show-demo-purchase-modal", {
+            detail: {
+              title: "Purchase Required!",
+              message: "এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।",
+              buttonText: "Contact Admin",
+              whatsappText: `Hello Plexivia team, I want to purchase and activate the ${featureName} feature for my store.`,
+            },
+          }),
+        )
+      }
     }
   }
 
@@ -491,11 +499,18 @@ export const AppSidebar = ({ ...props }) => {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname.startsWith("/dashboard/analytics")}
-                        onClick={handleRestrictedClick}
-                        render={<Link to="/dashboard/analytics" />}
+                        onClick={(e) => handleRestrictedClick(e, "Analytics")}
+                        render={
+                          isDemoClient ? (
+                            <button type="button" />
+                          ) : (
+                            <Link to="/dashboard/analytics" />
+                          )
+                        }
                       >
                         <LineChart className="h-3.5 w-3.5" />
                         <span>Analytics</span>
+                        {isDemoClient && <Lock className="h-3 w-3 ml-auto text-amber-500/80" />}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -636,11 +651,18 @@ export const AppSidebar = ({ ...props }) => {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname.startsWith("/dashboard/settings/meta-pixel")}
-                        onClick={handleRestrictedClick}
-                        render={<Link to="/dashboard/settings/meta-pixel" />}
+                        onClick={(e) => handleRestrictedClick(e, "Meta Pixel")}
+                        render={
+                          isDemoClient ? (
+                            <button type="button" />
+                          ) : (
+                            <Link to="/dashboard/settings/meta-pixel" />
+                          )
+                        }
                       >
                         <Share2 className="h-3.5 w-3.5" />
                         <span>Meta Pixel</span>
+                        {isDemoClient && <Lock className="h-3 w-3 ml-auto text-amber-500/80" />}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -648,11 +670,18 @@ export const AppSidebar = ({ ...props }) => {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname.startsWith("/dashboard/settings/tiktok-pixel")}
-                        onClick={handleRestrictedClick}
-                        render={<Link to="/dashboard/settings/tiktok-pixel" />}
+                        onClick={(e) => handleRestrictedClick(e, "TikTok Pixel")}
+                        render={
+                          isDemoClient ? (
+                            <button type="button" />
+                          ) : (
+                            <Link to="/dashboard/settings/tiktok-pixel" />
+                          )
+                        }
                       >
                         <TikTokIcon className="h-3.5 w-3.5 shrink-0" />
                         <span>TikTok Pixel</span>
+                        {isDemoClient && <Lock className="h-3 w-3 ml-auto text-amber-500/80" />}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -660,11 +689,18 @@ export const AppSidebar = ({ ...props }) => {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname.startsWith("/dashboard/settings/google-analytics")}
-                        onClick={handleRestrictedClick}
-                        render={<Link to="/dashboard/settings/google-analytics" />}
+                        onClick={(e) => handleRestrictedClick(e, "Google Analytics")}
+                        render={
+                          isDemoClient ? (
+                            <button type="button" />
+                          ) : (
+                            <Link to="/dashboard/settings/google-analytics" />
+                          )
+                        }
                       >
                         <BarChart3 className="h-3.5 w-3.5" />
                         <span>Google Analytics</span>
+                        {isDemoClient && <Lock className="h-3 w-3 ml-auto text-amber-500/80" />}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}
@@ -703,11 +739,18 @@ export const AppSidebar = ({ ...props }) => {
                     <SidebarMenuSubItem>
                       <SidebarMenuSubButton
                         isActive={pathname.startsWith("/dashboard/users")}
-                        onClick={handleRestrictedClick}
-                        render={<Link to="/dashboard/users" />}
+                        onClick={(e) => handleRestrictedClick(e, "System Users")}
+                        render={
+                          isDemoClient ? (
+                            <button type="button" />
+                          ) : (
+                            <Link to="/dashboard/users" />
+                          )
+                        }
                       >
                         <ShieldAlert className="h-3.5 w-3.5" />
                         <span>System Users</span>
+                        {isDemoClient && <Lock className="h-3 w-3 ml-auto text-amber-500/80" />}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )}

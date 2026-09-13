@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle, MessageCircle, ArrowLeft, ExternalLink } from 'lucide-react';
+import { Lock, MessageCircle, ArrowLeft, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 
@@ -15,19 +15,20 @@ export const DemoRestrictedGuard = ({ children, pageTitle = 'This Page' }) => {
       window.dispatchEvent(
         new CustomEvent('show-demo-purchase-modal', {
           detail: {
-            title: 'This is a Demo Account!!',
-            message: 'You have to be a system/business "Owner" to view and manage this page',
-            buttonText: 'Contact Us',
+            title: 'Purchase Required!',
+            message: 'এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।',
+            buttonText: 'Contact Admin',
+            whatsappText: `Hello Plexivia team, I want to purchase and activate the ${pageTitle} feature for my store.`,
           },
         }),
       );
     }
-  }, [isDemoClient]);
+  }, [isDemoClient, pageTitle]);
 
   // Opens WhatsApp link for immediate inquiries
   const handleContactClick = () => {
     const defaultText = encodeURIComponent(
-      'Hello Plexivia team, I am using the Demo Account and would like to upgrade to system Owner.',
+      `Hello Plexivia team, I want to purchase and activate the ${pageTitle} feature for my store.`,
     );
     window.open(`https://wa.me/8801823110885?text=${defaultText}`, '_blank', 'noopener,noreferrer');
   };
@@ -37,20 +38,20 @@ export const DemoRestrictedGuard = ({ children, pageTitle = 'This Page' }) => {
       <div className="flex-1 flex items-center justify-center p-6 md:p-12 min-h-[70vh]">
         <div className="max-w-md w-full bg-card border border-border/80 shadow-xl rounded-2xl p-8 text-center space-y-5">
           <div className="mx-auto h-16 w-16 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-inner">
-            <AlertCircle className="h-8 w-8" />
+            <Lock className="h-8 w-8 text-amber-500" />
           </div>
 
           <div className="space-y-2">
             <h2 className="text-xl font-bold tracking-tight text-foreground">
-              This is a Demo Account!!
+              Purchase Required!
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              You have to be a system/business "Owner" to view and manage this page.
+              এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।
             </p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-muted/40 border border-border/70 text-xs text-muted-foreground">
-            Administrative access, analytics insights, and tracking pixels are reserved for verified system owners.
+            This feature requires a premium package purchase. Please contact the system administrator to activate.
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-2">
@@ -74,7 +75,7 @@ export const DemoRestrictedGuard = ({ children, pageTitle = 'This Page' }) => {
               className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow cursor-pointer"
             >
               <MessageCircle className="h-4 w-4" />
-              <span>Contact Us</span>
+              <span>Contact Admin</span>
               <ExternalLink className="h-3 w-3 opacity-80" />
             </Button>
           </div>

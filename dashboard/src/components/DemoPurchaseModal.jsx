@@ -8,24 +8,27 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MessageCircle, ExternalLink } from 'lucide-react';
+import { Lock, MessageCircle, ExternalLink } from 'lucide-react';
 
 // Renders alert dialog for demo account restrictions with WhatsApp contact action
 export const DemoPurchaseModal = () => {
   const [open, setOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('This is a Demo Account!!');
-  const [modalMessage, setModalMessage] = useState('You have to be a system/business "Owner" to view and manage this page');
-  const [btnText, setBtnText] = useState('Contact Us');
+  const [modalTitle, setModalTitle] = useState('Purchase Required!');
+  const [modalMessage, setModalMessage] = useState('এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।');
+  const [btnText, setBtnText] = useState('Contact Admin');
+  const [whatsappText, setWhatsappText] = useState('Hello Plexivia team, I want to purchase and activate the Analytics feature for my store.');
 
   useEffect(() => {
     const handleTrigger = (e) => {
       const detail = e?.detail || {};
-      const title = detail.title || 'This is a Demo Account!!';
-      const msg = detail.message || detail.feature || 'You have to be a system/business "Owner" to view and manage this page';
-      const contactLabel = detail.buttonText || 'Contact Us';
+      const title = detail.title || 'Purchase Required!';
+      const msg = detail.message || detail.feature || 'এই ফিচারটি দেখতে ও ব্যবহার করতে প্যাকেজ পারচেজ করা লাগবে। বিস্তারিত জানতে এডমিনের সাথে যোগাযোগ করুন।';
+      const contactLabel = detail.buttonText || 'Contact Admin';
+      const text = detail.whatsappText || 'Hello Plexivia team, I want to purchase and activate the Analytics feature for my store.';
       setModalTitle(title);
       setModalMessage(msg);
       setBtnText(contactLabel);
+      setWhatsappText(text);
       setOpen(true);
     };
 
@@ -37,9 +40,7 @@ export const DemoPurchaseModal = () => {
 
   // Opens WhatsApp chat link with the contact phone number
   const handleContactClick = () => {
-    const defaultText = encodeURIComponent(
-      'Hello Plexivia team, I am using the Demo Account and would like to upgrade to system Owner.',
-    );
+    const defaultText = encodeURIComponent(whatsappText);
     window.open(`https://wa.me/8801823110885?text=${defaultText}`, '_blank', 'noopener,noreferrer');
   };
 
@@ -48,7 +49,7 @@ export const DemoPurchaseModal = () => {
       <DialogContent className="sm:max-w-[460px] border-border bg-card text-card-foreground shadow-2xl rounded-2xl p-6">
         <DialogHeader className="flex flex-col items-center text-center space-y-3">
           <div className="h-14 w-14 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 shadow-inner">
-            <AlertCircle className="h-7 w-7" />
+            <Lock className="h-7 w-7 text-amber-500" />
           </div>
           <DialogTitle className="text-xl font-bold tracking-tight text-foreground flex items-center gap-1.5">
             {modalTitle}
