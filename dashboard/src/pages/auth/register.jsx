@@ -210,21 +210,21 @@ const RegisterPage = () => {
                 <label className="block text-[11px] font-semibold text-muted-foreground">
                   Select Storefront Template
                 </label>
-                <div className="grid grid-cols-2 gap-2 pt-0.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-0.5">
                   <button
                     type="button"
-                    onClick={() => setSelectedTheme('luxury-1')}
+                    onClick={() => setSelectedTheme('engulfic')}
                     className={`p-2 rounded-lg border text-left flex flex-col gap-1 transition cursor-pointer ${
-                      selectedTheme === 'luxury-1'
+                      selectedTheme === 'engulfic'
                         ? 'border-primary bg-primary/10 text-foreground'
                         : 'border-border bg-background/40 text-muted-foreground hover:bg-background/70'
                     }`}
                   >
                     <span className="text-xs font-semibold flex items-center gap-1">
-                      <Palette className="h-3 w-3 text-primary" />
-                      Luxury Dark
+                      <Palette className="h-3 w-3 text-orange-500" />
+                      Streetwear
                     </span>
-                    <span className="text-[10px] text-muted-foreground">Decantre Gold Edition</span>
+                    <span className="text-[10px] text-muted-foreground">Engulfic Urban Edition</span>
                   </button>
 
                   <button
@@ -241,6 +241,22 @@ const RegisterPage = () => {
                       Tech Cyan
                     </span>
                     <span className="text-[10px] text-muted-foreground">Plexivia Cyber Edition</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTheme('luxury-1')}
+                    className={`p-2 rounded-lg border text-left flex flex-col gap-1 transition cursor-pointer ${
+                      selectedTheme === 'luxury-1'
+                        ? 'border-primary bg-primary/10 text-foreground'
+                        : 'border-border bg-background/40 text-muted-foreground hover:bg-background/70'
+                    }`}
+                  >
+                    <span className="text-xs font-semibold flex items-center gap-1">
+                      <Palette className="h-3 w-3 text-amber-500" />
+                      Luxury Dark
+                    </span>
+                    <span className="text-[10px] text-muted-foreground">Decantre Gold Edition</span>
                   </button>
                 </div>
               </div>
