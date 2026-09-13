@@ -493,22 +493,22 @@ const OrderDetailsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b pb-6">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 border-b pb-6">
+        <div className="flex items-start md:items-center gap-3">
           <Button
             variant="outline"
             size="icon"
             onClick={() => navigate("/dashboard/orders")}
-            className="h-9 w-9 border-border/80"
+            className="h-9 w-9 border-border/80 shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-wrap">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
                 Order {order.orderNumber}
               </h2>
-              <div className="flex items-center gap-1.5 flex-wrap">
+              <div className="flex items-center gap-1.5 flex-wrap mt-1 sm:mt-0">
                 {getFulfillmentBadge(order.status || order.orderStatus || "")}
                 {getPaymentBadge(order.paymentStatus || (effectivePending === 0 && effectiveTotal > 0 ? "Paid" : effectivePaid > 0 ? "Partial" : "Pending"))}
                 {order.couponCode && (
@@ -526,13 +526,13 @@ const OrderDetailsPage = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full md:w-auto mt-2 md:mt-0">
           {isEditMode ? (
             <>
-              <Button variant="outline" className="gap-1.5" onClick={() => setIsEditMode(false)}>
-                <Eye className="h-4 w-4" /> View Details
+              <Button variant="outline" className="gap-1.5 flex-1 md:flex-none" onClick={() => setIsEditMode(false)}>
+                <Eye className="h-4 w-4" /> <span className="hidden sm:inline">View Details</span><span className="sm:hidden">View</span>
               </Button>
-              <Button className="gap-1.5 shadow-sm" onClick={handleSave} disabled={isSubmitting}>
+              <Button className="gap-1.5 shadow-sm flex-1 md:flex-none" onClick={handleSave} disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <div className="h-4 w-4 mr-1 rounded-full border-2 border-white border-t-transparent animate-spin" />
@@ -540,18 +540,18 @@ const OrderDetailsPage = () => {
                   </>
                 ) : (
                   <>
-                    <Check className="h-4 w-4" /> Save Changes
+                    <Check className="h-4 w-4" /> <span className="hidden sm:inline">Save Changes</span><span className="sm:hidden">Save</span>
                   </>
                 )}
               </Button>
             </>
           ) : (
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button variant="outline" className="gap-1.5 shadow-sm bg-background cursor-pointer" onClick={handleOpenInvoice}>
-                <FileText className="h-4 w-4 text-muted-foreground" /> Print Invoice
+            <div className="flex items-center gap-2 flex-wrap w-full">
+              <Button variant="outline" className="gap-1.5 shadow-sm bg-background cursor-pointer flex-1 md:flex-none" onClick={handleOpenInvoice}>
+                <FileText className="h-4 w-4 text-muted-foreground" /> <span className="hidden sm:inline">Print Invoice</span><span className="sm:hidden">Invoice</span>
               </Button>
-              <Button className="gap-1.5 shadow-sm cursor-pointer" onClick={() => setIsEditMode(true)}>
-                <Edit className="h-4 w-4" /> Edit Order
+              <Button className="gap-1.5 shadow-sm cursor-pointer flex-1 md:flex-none" onClick={() => setIsEditMode(true)}>
+                <Edit className="h-4 w-4" /> <span className="hidden sm:inline">Edit Order</span><span className="sm:hidden">Edit</span>
               </Button>
             </div>
           )}
@@ -863,8 +863,8 @@ const OrderDetailsPage = () => {
           <div className="lg:col-span-2 space-y-4 animate-in fade-in duration-300">
             <div className="bg-card border border-border/80 rounded-xl p-5 shadow-sm space-y-3">
               <h3 className="font-semibold text-base flex items-center gap-2 border-b pb-2">Customer Details</h3>
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="text-xs text-muted-foreground mb-0.5 block">Customer Name</label>
                   <Input placeholder="Customer Name" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
                 </div>
@@ -890,7 +890,7 @@ const OrderDetailsPage = () => {
                   <label className="text-xs text-muted-foreground mb-0.5 block">Email</label>
                   <Input placeholder="email@example.com" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-1 sm:col-span-2">
                   <label className="text-xs text-muted-foreground mb-0.5 block">Address</label>
                   <Input placeholder="Street address details" value={customerAddress} onChange={(e) => setCustomerAddress(e.target.value)} />
                 </div>

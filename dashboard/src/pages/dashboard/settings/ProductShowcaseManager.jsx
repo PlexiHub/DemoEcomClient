@@ -341,15 +341,15 @@ export const ProductShowcaseManager = ({ showcaseKey, title, icon: TagIcon, icon
           )}
 
           {/* Staged Products Table */}
-          <div className="rounded-lg border overflow-hidden">
+          <div className="rounded-lg border overflow-x-auto">
             <Table>
               <TableHeader className="bg-muted/50">
                 <TableRow>
                   <TableHead className="w-[80px]">Image</TableHead>
                   <TableHead>Product Name</TableHead>
-                  <TableHead>SKU</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock Status</TableHead>
+                  <TableHead className="hidden sm:table-cell">SKU</TableHead>
+                  <TableHead className="hidden sm:table-cell">Price</TableHead>
+                  <TableHead className="hidden md:table-cell">Stock Status</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -359,9 +359,9 @@ export const ProductShowcaseManager = ({ showcaseKey, title, icon: TagIcon, icon
                     <TableRow key={i}>
                       <TableCell><Skeleton className="h-9 w-9 rounded" /></TableCell>
                       <TableCell><Skeleton className="h-4 w-40" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+                      <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
+                      <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-16" /></TableCell>
+                      <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
                       <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
                     </TableRow>
                   ))
@@ -404,13 +404,13 @@ export const ProductShowcaseManager = ({ showcaseKey, title, icon: TagIcon, icon
                         <TableCell className="font-semibold text-xs text-foreground">
                           {product.name}
                         </TableCell>
-                        <TableCell className="text-xs text-muted-foreground font-mono">
+                        <TableCell className="text-xs text-muted-foreground font-mono hidden sm:table-cell">
                           {product.sku || '—'}
                         </TableCell>
-                        <TableCell className="text-xs font-semibold font-mono">
+                        <TableCell className="text-xs font-semibold font-mono hidden sm:table-cell">
                           ৳{product.price.toLocaleString()}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           <Badge
                             variant="outline"
                             className={`text-[10px] ${

@@ -280,7 +280,7 @@ const ProfilePage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
             <User className="h-7 w-7 text-[#58C1C3]" />

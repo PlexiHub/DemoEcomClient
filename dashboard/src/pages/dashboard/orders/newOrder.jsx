@@ -523,21 +523,21 @@ const NewInStoreOrderPage = () => {
   };
 
   return (
-    <div className="flex-1 space-y-0 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
         <Button
           variant="outline"
           size="icon"
           onClick={() => window.history.back()}
-          className="h-9 w-9"
+          className="h-9 w-9 shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
             New In-Store Order
           </h2>
-          <p className="text-muted-foreground text-sm mt-0.5">
+          <p className="text-muted-foreground text-xs sm:text-sm mt-0.5">
             Walk-in counter sale — order ID prefixed with{" "}
             <span className="font-mono font-semibold text-primary">S</span>
           </p>

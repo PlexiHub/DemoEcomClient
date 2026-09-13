@@ -207,7 +207,7 @@ export function AddProductDialog() {
           </Button>
         }
       />
-      <DialogContent className="sm:max-w-[560px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[95vw] sm:max-w-[560px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Product</DialogTitle>
           <DialogDescription>
@@ -292,7 +292,7 @@ export function AddProductDialog() {
           {/* Simple Product Fields */}
           {productType === 'simple' && (
             <>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold">Price (৳)</label>
                   <Input
@@ -315,7 +315,7 @@ export function AddProductDialog() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold">Stock Quantity</label>
                   <Input
@@ -418,7 +418,7 @@ export function AddProductDialog() {
           )}
 
           {/* Category & Brand */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold">Category</label>
               <Select

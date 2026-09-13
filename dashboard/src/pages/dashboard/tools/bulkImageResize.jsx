@@ -476,7 +476,7 @@ const BulkImageResize = () => {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Header */}
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-3xl font-bold tracking-tight">Bulk Image Resize</h2>
@@ -489,7 +489,7 @@ const BulkImageResize = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {files.length > 0 && (
             <>
               <Button

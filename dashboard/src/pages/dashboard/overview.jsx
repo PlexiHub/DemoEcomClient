@@ -31,14 +31,14 @@ const DashboardPage = () => {
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <span className="text-sm text-muted-foreground">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h2>
+        <span className="text-xs sm:text-sm text-muted-foreground">
           Last 30 Days ({dateRangeLabel})
         </span>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard
           title="Total Sales"
           value={isLoading ? <Skeleton className="h-8 w-24" /> : `৳${(stats?.sales ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}

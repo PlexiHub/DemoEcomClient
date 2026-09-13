@@ -303,7 +303,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto" showCloseButton={!isSubmitting}>
+      <DialogContent className="w-[95vw] max-w-2xl max-h-[85vh] overflow-y-auto" showCloseButton={!isSubmitting}>
         <DialogHeader>
           <DialogTitle>{isEdit ? 'Edit Coupon' : 'Create New Coupon'}</DialogTitle>
           <DialogDescription>
@@ -314,7 +314,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Coupon Code */}
             <div className="space-y-1">
               <div className="flex items-center justify-between">
@@ -368,7 +368,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Discount Value */}
             <div className="space-y-1">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -401,7 +401,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Valid From */}
             <div className="space-y-1">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -429,9 +429,9 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 border-t border-b border-border/60 py-4 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-b border-border/60 py-4 sm:items-center">
             {/* Active Status */}
-            <div className="flex items-center justify-between pr-4 border-r">
+            <div className="flex items-center justify-between sm:pr-4 sm:border-r border-border/60">
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block">
                   Active Status
@@ -444,8 +444,8 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
             </div>
 
             {/* Usage Limit */}
-            <div className="flex items-center justify-between pl-4">
-              <div className="flex-1 space-y-1 mr-4">
+            <div className="flex items-center justify-between sm:pl-4">
+              <div className="flex-1 space-y-1 sm:mr-4 w-full">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Usage Limit
@@ -469,7 +469,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
                   value={usageLimit}
                   onChange={(e) => setUsageLimit(e.target.value)}
                   disabled={isUnlimited || isSubmitting}
-                  className="h-8 text-xs"
+                  className="h-8 text-xs w-full"
                 />
               </div>
             </div>
@@ -490,7 +490,7 @@ export function CouponDialog({ open, onOpenChange, couponToEdit }) {
                 <span className="animate-pulse">Loading restriction options...</span>
               </div>
             ) : (
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {/* Category Restrictions */}
                 <div className="space-y-2 border rounded-lg p-3 bg-muted/10">
                   <span className="text-xs font-bold block uppercase tracking-wider text-muted-foreground border-b pb-1">

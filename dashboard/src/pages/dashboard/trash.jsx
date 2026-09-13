@@ -331,7 +331,7 @@ const TrashPage = () => {
 
         {/* Product Filters */}
         {trashType === 'products' && (
-          <div className="flex items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
+          <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
             <Select
               value={categoryFilter}
               onValueChange={(val) => {
@@ -340,7 +340,7 @@ const TrashPage = () => {
                 setSelectedIds([]);
               }}
             >
-              <SelectTrigger className="w-[140px] h-9 text-xs">
+              <SelectTrigger className="w-full sm:w-[140px] h-9 text-xs">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -361,7 +361,7 @@ const TrashPage = () => {
                 setSelectedIds([]);
               }}
             >
-              <SelectTrigger className="w-[140px] h-9 text-xs">
+              <SelectTrigger className="w-full sm:w-[140px] h-9 text-xs">
                 <SelectValue placeholder="Brand" />
               </SelectTrigger>
               <SelectContent>
@@ -378,7 +378,7 @@ const TrashPage = () => {
 
         {/* Order Filters */}
         {trashType === 'orders' && (
-          <div className="flex items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
+          <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
             <Select
               value={orderStatusFilter}
               onValueChange={(val) => {
@@ -387,7 +387,7 @@ const TrashPage = () => {
                 setSelectedIds([]);
               }}
             >
-              <SelectTrigger className="w-[140px] h-9 text-xs">
+              <SelectTrigger className="w-full sm:w-[140px] h-9 text-xs">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -404,11 +404,11 @@ const TrashPage = () => {
 
       {/* Bulk Action Bar */}
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-xl px-4 py-2.5 animate-in fade-in">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-primary/10 border border-primary/20 rounded-xl px-4 py-2.5 animate-in fade-in">
           <span className="text-xs font-semibold text-primary">
             {selectedIds.length} item{selectedIds.length > 1 ? 's' : ''} selected
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <Button
               size="sm"
               variant="outline"
@@ -435,7 +435,7 @@ const TrashPage = () => {
 
       {/* 1. PRODUCTS TABLE VIEW */}
       {trashType === 'products' && (
-        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-border bg-card shadow-sm overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">
@@ -587,7 +587,7 @@ const TrashPage = () => {
 
       {/* 2. ORDERS TABLE VIEW */}
       {trashType === 'orders' && (
-        <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <div className="rounded-xl border border-border bg-card shadow-sm overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/30">

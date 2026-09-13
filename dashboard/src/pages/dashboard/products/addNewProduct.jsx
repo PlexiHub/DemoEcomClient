@@ -625,7 +625,7 @@ const AddNewProduct = () => {
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Header Actions */}
-        <div className="flex items-center justify-between border-b pb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4">
           <div className="flex items-center gap-3">
             <Link
               to="/dashboard/products"
@@ -634,12 +634,12 @@ const AddNewProduct = () => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Link>
-            <h2 className="text-xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
               {draftSourceName ? 'Duplicate Product' : 'Add New Product'}
             </h2>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
             <Button
               variant="ghost"
               type="button"
@@ -647,7 +647,7 @@ const AddNewProduct = () => {
                 clearDuplicateDraft();
                 navigate("/dashboard/products");
               }}
-              className="text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer"
+              className="text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive cursor-pointer flex-1 sm:flex-none"
             >
               Discard
             </Button>
@@ -658,14 +658,14 @@ const AddNewProduct = () => {
                 setIsActive(false);
                 toast.success("Draft status set (Inactive). Click Publish to save.");
               }}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold flex-1 sm:flex-none"
             >
               Save Draft
             </Button>
             <Button
               type="submit"
               disabled={isCreating || isUploading}
-              className="text-xs font-semibold"
+              className="text-xs font-semibold flex-1 sm:flex-none"
             >
               {isCreating ? "Publishing..." : "Publish"}
             </Button>

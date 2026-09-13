@@ -146,24 +146,24 @@ const BrandsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4">
         <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">Brands</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Brands</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Manage your product brands settings.
           </p>
         </div>
-        <Button onClick={openAddDialog}>
+        <Button onClick={openAddDialog} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" /> Add Brand
         </Button>
       </div>
 
-      <div className="relative max-w-sm">
+      <div className="relative w-full sm:max-w-sm">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
           placeholder="Search brands..."
-          className="pl-8"
+          className="pl-8 w-full"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -175,24 +175,25 @@ const BrandsPage = () => {
         <div className="text-center py-12 text-muted-foreground">No brands found.</div>
       ) : (
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          <Table>
+          <div className="overflow-x-auto">
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Parent</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-xs sm:text-sm">Name</TableHead>
+                <TableHead className="text-xs sm:text-sm">Slug</TableHead>
+                <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Parent</TableHead>
+                <TableHead className="text-xs sm:text-sm">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedBrands.map((brand) => (
                 <TableRow key={brand.did}>
-                  <TableCell className="font-medium flex items-center gap-2">
-                    <Tag className="h-4 w-4 text-muted-foreground" />
-                    {brand.name}
+                  <TableCell className="font-medium flex items-center gap-2 text-xs sm:text-sm">
+                    <Tag className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <span className="truncate">{brand.name}</span>
                   </TableCell>
                   <TableCell className="font-mono text-xs">{brand.slug}</TableCell>
-                  <TableCell className="font-mono text-xs">{brand.parent ? getBrandName(brand.parent) ?? brand.parent : ''}</TableCell>
+                  <TableCell className="font-mono text-xs hidden sm:table-cell">{brand.parent ? getBrandName(brand.parent) ?? brand.parent : ''}</TableCell>
                   <TableCell className="space-x-1">
                     <Button
                       variant="ghost"
@@ -215,11 +216,12 @@ const BrandsPage = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-border bg-card">
-              <span className="text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-card">
+              <span className="text-xs sm:text-sm text-muted-foreground">
                 {((currentPage - 1) * PAGE_SIZE) + 1}–{Math.min(currentPage * PAGE_SIZE, filteredBrands.length)} of {filteredBrands.length} brands
               </span>
               <div className="flex items-center gap-1">
@@ -232,7 +234,7 @@ const BrandsPage = () => {
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <span className="text-sm font-medium px-2">{currentPage} / {totalPages}</span>
+                <span className="text-xs sm:text-sm font-medium px-2">{currentPage} / {totalPages}</span>
                 <Button
                   variant="ghost"
                   size="sm"

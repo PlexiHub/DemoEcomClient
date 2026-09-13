@@ -88,63 +88,65 @@ const CouponsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Coupons & Promotions</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Coupons & Promotions</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Manage discount codes, product restrictions, and usage limits.
           </p>
         </div>
-        <Button onClick={handleOpenAddDialog} className="shadow transition-all hover:scale-[1.02] cursor-pointer">
+        <Button onClick={handleOpenAddDialog} className="shadow transition-all hover:scale-[1.02] cursor-pointer w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           Add Coupon
         </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <div className="relative flex-1 w-full max-w-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search coupon codes..."
-            className="pl-8"
+            className="pl-8 w-full"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <div className="flex gap-2 w-full sm:w-auto items-center">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-stretch sm:items-center">
           {selectedIds.length > 0 && (
             <Button
               variant="destructive"
               size="sm"
               onClick={() => setBulkDeleteOpen(true)}
-              className="flex items-center gap-1 mr-2 text-xs"
+              className="flex items-center gap-1 sm:mr-2 text-xs flex-1 sm:flex-none justify-center"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              Delete Selected ({selectedIds.length})
+              Delete ({selectedIds.length})
             </Button>
           )}
-          <Select value={statusFilter} onValueChange={handleStatusFilter}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All Statuses</SelectItem>
-              <SelectItem value="Active">Active Only</SelectItem>
-              <SelectItem value="Inactive">Inactive Only</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <Select value={statusFilter} onValueChange={handleStatusFilter}>
+              <SelectTrigger className="flex-1 sm:flex-none w-full sm:w-[150px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Statuses</SelectItem>
+                <SelectItem value="Active">Active Only</SelectItem>
+                <SelectItem value="Inactive">Inactive Only</SelectItem>
+              </SelectContent>
+            </Select>
 
-          <Select value={typeFilter} onValueChange={handleTypeFilter}>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All Types</SelectItem>
-              <SelectItem value="Percentage">Percentage</SelectItem>
-              <SelectItem value="Fixed">Fixed Amount</SelectItem>
-            </SelectContent>
-          </Select>
+            <Select value={typeFilter} onValueChange={handleTypeFilter}>
+              <SelectTrigger className="flex-1 sm:flex-none w-full sm:w-[150px]">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Types</SelectItem>
+                <SelectItem value="Percentage">Percentage</SelectItem>
+                <SelectItem value="Fixed">Fixed Amount</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

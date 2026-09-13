@@ -377,7 +377,7 @@ const TikTokPixelPage = () => {
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end sm:justify-between gap-3 pt-2">
           <Button
             type="button"
             variant="outline"

@@ -144,7 +144,8 @@ export function CouponsTable({
 
   return (
     <div className="rounded-md border overflow-hidden">
-      <Table>
+      <div className="overflow-x-auto">
+      <Table className="min-w-[800px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px] px-4">
@@ -164,14 +165,14 @@ export function CouponsTable({
                 }}
               />
             </TableHead>
-            <TableHead className="w-[180px]">Coupon Code</TableHead>
-            <TableHead className="w-[140px]">Discount</TableHead>
-            <TableHead className="w-[130px]">Min Purchase</TableHead>
-            <TableHead className="w-[130px]">Usage (Used/Max)</TableHead>
-            <TableHead className="min-w-[180px]">Restrictions</TableHead>
-            <TableHead className="w-[180px]">Validity</TableHead>
-            <TableHead className="w-[90px]">Status</TableHead>
-            <TableHead className="w-[90px] text-right">Actions</TableHead>
+            <TableHead className="w-[180px] text-xs sm:text-sm">Coupon Code</TableHead>
+            <TableHead className="w-[140px] text-xs sm:text-sm">Discount</TableHead>
+            <TableHead className="w-[130px] text-xs sm:text-sm hidden sm:table-cell">Min Purchase</TableHead>
+            <TableHead className="w-[130px] text-xs sm:text-sm hidden md:table-cell">Usage (Used/Max)</TableHead>
+            <TableHead className="min-w-[180px] text-xs sm:text-sm hidden lg:table-cell">Restrictions</TableHead>
+            <TableHead className="w-[180px] text-xs sm:text-sm">Validity</TableHead>
+            <TableHead className="w-[90px] text-xs sm:text-sm">Status</TableHead>
+            <TableHead className="w-[90px] text-right text-xs sm:text-sm">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -183,9 +184,9 @@ export function CouponsTable({
                 </TableCell>
                 <TableCell><Skeleton className="h-5 w-24" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-28" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-10" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
@@ -220,10 +221,10 @@ export function CouponsTable({
                       }}
                     />
                   </TableCell>
-                  <TableCell className="font-semibold">
+                  <TableCell className="font-semibold text-xs sm:text-sm">
                     <div className="flex items-center gap-1.5 group/code">
                       <Ticket className="h-3.5 w-3.5 text-primary shrink-0" />
-                      <span className="font-mono text-sm tracking-wide bg-primary/5 px-2 py-0.5 rounded border border-primary/10">
+                      <span className="font-mono tracking-wide bg-primary/5 px-2 py-0.5 rounded border border-primary/10 truncate">
                         {coupon.code}
                       </span>
                       <button
@@ -241,22 +242,22 @@ export function CouponsTable({
                     </div>
                   </TableCell>
 
-                  <TableCell>
+                  <TableCell className="text-xs sm:text-sm">
                     <div className="flex items-center gap-1">
                       {coupon.discountType === 'percentage' ? (
                         <Percent className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                       ) : (
                         <Tag className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                       )}
-                      <span className="font-medium">{formatDiscount(coupon.discountType, coupon.discountValue)}</span>
+                      <span className="font-medium whitespace-nowrap">{formatDiscount(coupon.discountType, coupon.discountValue)}</span>
                     </div>
                   </TableCell>
 
-                  <TableCell className="font-medium text-muted-foreground">
+                  <TableCell className="font-medium text-muted-foreground text-xs sm:text-sm hidden sm:table-cell">
                     ৳{(coupon.minOrderAmount ?? 0).toFixed(0)}
                   </TableCell>
 
-                  <TableCell className="font-mono text-xs">
+                  <TableCell className="font-mono text-xs hidden md:table-cell">
                     <span className="font-semibold text-foreground">{coupon.usedCount ?? 0}</span>
                     <span className="text-muted-foreground"> / </span>
                     <span className="text-muted-foreground">
@@ -266,7 +267,7 @@ export function CouponsTable({
                     </span>
                   </TableCell>
 
-                  <TableCell className="max-w-[240px]">
+                  <TableCell className="max-w-[240px] hidden lg:table-cell">
                     {restrictions.length > 0 ? (
                       <div className="flex flex-col gap-1">
                         {restrictions.map((r, idx) => (
@@ -305,7 +306,7 @@ export function CouponsTable({
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger render={
-                        <Button variant="ghost" className="h-8 w-8 p-0" title="Actions menu">
+                        <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer" title="Actions menu">
                           <span className="sr-only">Open menu</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -337,6 +338,7 @@ export function CouponsTable({
           )}
         </TableBody>
       </Table>
+      </div>
 
       <ConfirmDeleteDialog
         open={!!deleteTarget}

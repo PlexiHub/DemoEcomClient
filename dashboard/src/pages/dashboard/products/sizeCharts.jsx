@@ -406,47 +406,47 @@ const SizeChartsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-5">
         <div className="flex items-center gap-3.5">
-          <div className="h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-xs">
+          <div className="h-11 w-11 rounded-xl bg-primary/10 flex shrink-0 items-center justify-center text-primary border border-primary/20 shadow-xs">
             <Ruler className="h-6 w-6" />
           </div>
           <div>
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
                 Category Size Charts
               </h2>
               <Badge variant="outline" className="font-semibold text-xs bg-primary/5 text-primary border-primary/20">
                 Parent Categories
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
               Define measurement metrics, dimensions, and size variations for each parent category.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-semibold">
+        <div className="flex items-center gap-2 text-xs font-semibold w-full sm:w-auto flex-wrap">
           <div className="px-3 py-1.5 rounded-lg bg-muted/60 border flex items-center gap-2">
-            <Layers className="h-4 w-4 text-muted-foreground" />
+            <Layers className="h-4 w-4 text-muted-foreground shrink-0" />
             <span>Total Categories:</span>
             <span className="text-foreground font-bold">{parentCategories.length}</span>
           </div>
           <div className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4" />
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
             <span>Configured:</span>
             <span className="font-bold">{configuredCount}</span>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div className="relative w-full sm:max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search parent category name or slug..."
-            className="pl-9 h-10 bg-card border-border/80"
+            className="pl-9 h-10 w-full bg-card border-border/80"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

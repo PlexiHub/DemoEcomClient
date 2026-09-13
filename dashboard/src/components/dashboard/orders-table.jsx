@@ -198,7 +198,8 @@ export const OrdersTable = ({
 
   return (
     <div className="rounded-md border overflow-hidden">
-      <Table>
+      <div className="overflow-x-auto">
+      <Table className="min-w-[800px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[36px] pl-3 pr-0"></TableHead>
@@ -219,13 +220,13 @@ export const OrdersTable = ({
                 }}
               />
             </TableHead>
-            <TableHead className="w-[150px]">Order ID</TableHead>
-            <TableHead className="w-[180px]">Customer Name</TableHead>
-            <TableHead className="w-[110px]">Date</TableHead>
-            <TableHead className="w-[120px]">Total Amount</TableHead>
-            <TableHead className="w-[100px]">Payment</TableHead>
-            <TableHead className="w-[120px]">Status</TableHead>
-            <TableHead className="w-[60px] text-right">Actions</TableHead>
+            <TableHead className="w-[150px] text-xs sm:text-sm">Order ID</TableHead>
+            <TableHead className="w-[180px] text-xs sm:text-sm">Customer Name</TableHead>
+            <TableHead className="w-[110px] hidden sm:table-cell text-xs sm:text-sm">Date</TableHead>
+            <TableHead className="w-[120px] text-xs sm:text-sm">Total Amount</TableHead>
+            <TableHead className="w-[100px] hidden md:table-cell text-xs sm:text-sm">Payment</TableHead>
+            <TableHead className="w-[120px] text-xs sm:text-sm">Status</TableHead>
+            <TableHead className="w-[60px] text-right text-xs sm:text-sm">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -240,9 +241,9 @@ export const OrdersTable = ({
                 </TableCell>
                 <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-24" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                <TableCell className="hidden md:table-cell"><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
                 <TableCell><Skeleton className="h-5 w-20 rounded-full" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
               </TableRow>
@@ -295,7 +296,7 @@ export const OrdersTable = ({
                       />
                     </TableCell>
                     <TableCell
-                      className="max-w-[150px]"
+                      className="max-w-[150px] text-xs sm:text-sm"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Link
@@ -306,13 +307,13 @@ export const OrdersTable = ({
                         {order.orderNumber}
                       </Link>
                     </TableCell>
-                    <TableCell className="max-w-[180px]">
+                    <TableCell className="max-w-[180px] text-xs sm:text-sm">
                       <span className="truncate block" title={order.customerName}>{order.customerName}</span>
                     </TableCell>
-                    <TableCell className="w-[110px] text-muted-foreground whitespace-nowrap">
+                    <TableCell className="w-[110px] hidden sm:table-cell text-muted-foreground whitespace-nowrap text-xs sm:text-sm">
                       {new Date(order.date).toLocaleDateString()}
                     </TableCell>
-                    <TableCell className="w-[120px] font-medium whitespace-nowrap">
+                    <TableCell className="w-[120px] font-medium whitespace-nowrap text-xs sm:text-sm">
                       <span>৳{order.totalAmount.toFixed(2)}</span>
                       {order.couponCode && (
                         <span className="flex items-center gap-0.5 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-bold mt-0.5">
@@ -321,7 +322,7 @@ export const OrdersTable = ({
                         </span>
                       )}
                     </TableCell>
-                    <TableCell className="w-[100px]">{getPaymentBadge(order.paymentStatus)}</TableCell>
+                    <TableCell className="w-[100px] hidden md:table-cell">{getPaymentBadge(order.paymentStatus)}</TableCell>
                     <TableCell className="w-[120px]">{getFulfillmentBadge(order.orderStatus)}</TableCell>
                     <TableCell
                       className="text-right w-[60px]"
@@ -376,6 +377,7 @@ export const OrdersTable = ({
           )}
         </TableBody>
       </Table>
+      </div>
 
       <Dialog open={!!statusTarget} onOpenChange={(open) => !open && setStatusTarget(null)}>
         <DialogContent className="sm:max-w-[420px] bg-card text-card-foreground">

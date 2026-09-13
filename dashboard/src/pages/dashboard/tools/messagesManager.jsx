@@ -384,7 +384,7 @@ const MessagesManager = () => {
       {/* Main Webmail 3-Pane / Split-Pane Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-[640px] rounded-xl border border-border bg-card overflow-hidden shadow-xs">
         {/* Left Navigation: Folders Sidebar */}
-        <div className="lg:col-span-3 xl:col-span-2 border-r border-border bg-muted/20 p-3 flex flex-col justify-between">
+        <div className={`lg:col-span-3 xl:col-span-2 border-r border-border bg-muted/20 p-3 justify-between flex-col ${selectedMessageId ? 'hidden lg:flex' : 'flex'}`}>
           <div className="space-y-1">
             <Button
               onClick={() => setIsComposeOpen(true)}

@@ -177,7 +177,7 @@ export const SupportDesk = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
           <Button
             variant="outline"
             size="sm"
@@ -256,7 +256,7 @@ export const SupportDesk = () => {
       </div>
 
       <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <h2 className="text-base font-bold text-foreground flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-primary" />
@@ -267,7 +267,7 @@ export const SupportDesk = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-muted/40 p-1 rounded-lg border border-border/60">
+          <div className="flex flex-wrap items-center gap-1.5 bg-muted/40 p-1 rounded-lg border border-border/60 w-full sm:w-auto">
             {["all", "open", "in_progress", "resolved"].map((st) => (
               <button
                 key={st}
@@ -305,7 +305,7 @@ export const SupportDesk = () => {
                 key={ticket.id}
                 className="bg-muted/20 hover:bg-muted/40 border border-border/70 rounded-xl p-4 transition text-xs space-y-2.5"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono font-bold text-muted-foreground">#{ticket.id}</span>
                     <h3 className="font-bold text-foreground text-sm">{ticket.title}</h3>

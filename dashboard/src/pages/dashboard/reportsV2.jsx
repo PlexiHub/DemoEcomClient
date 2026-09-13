@@ -370,7 +370,7 @@ const ReportsV2Page = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-5">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b pb-5">
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -385,7 +385,7 @@ const ReportsV2Page = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           <Select value={range} onValueChange={handleRangeChange}>
             <SelectTrigger className="w-[155px] h-9 text-xs">
               <Calendar className="w-3.5 h-3.5 mr-1.5 text-muted-foreground" />
@@ -745,7 +745,7 @@ const ReportsV2Page = () => {
 
                 <Card className="border shadow-xs overflow-hidden">
                   <CardHeader className="pb-3 border-b bg-muted/20">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                       <div>
                         <CardTitle className="text-sm font-semibold">Timeline Breakdown</CardTitle>
                         <CardDescription className="text-xs">
@@ -758,17 +758,18 @@ const ReportsV2Page = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="p-0">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-muted/40 text-xs">
-                          <TableHead className="font-semibold">Date</TableHead>
-                          <TableHead className="font-semibold text-center">Orders Count</TableHead>
-                          <TableHead className="font-semibold text-right">Gross Sales</TableHead>
-                          <TableHead className="font-semibold text-right">Discounts</TableHead>
-                          <TableHead className="font-semibold text-right">Net Sales</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody className="text-xs">
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-muted/40 text-xs">
+                            <TableHead className="font-semibold min-w-[100px]">Date</TableHead>
+                            <TableHead className="font-semibold text-center min-w-[100px]">Orders Count</TableHead>
+                            <TableHead className="font-semibold text-right min-w-[100px]">Gross Sales</TableHead>
+                            <TableHead className="font-semibold text-right min-w-[100px] hidden sm:table-cell">Discounts</TableHead>
+                            <TableHead className="font-semibold text-right min-w-[100px]">Net Sales</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody className="text-xs">
                         {timeline.data?.map((row) => (
                           <TableRow key={row._id} className="hover:bg-muted/30 transition-colors">
                             <TableCell className="font-medium text-foreground">
@@ -782,7 +783,7 @@ const ReportsV2Page = () => {
                             <TableCell className="text-right text-muted-foreground">
                               {formatCurrency(row.grossSales)}
                             </TableCell>
-                            <TableCell className="text-right text-rose-500 font-medium">
+                            <TableCell className="text-right text-rose-500 font-medium hidden sm:table-cell">
                               -{formatCurrency(row.discount)}
                             </TableCell>
                             <TableCell className="text-right font-bold text-emerald-600 dark:text-emerald-400">
@@ -803,6 +804,7 @@ const ReportsV2Page = () => {
                         )}
                       </TableBody>
                     </Table>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>

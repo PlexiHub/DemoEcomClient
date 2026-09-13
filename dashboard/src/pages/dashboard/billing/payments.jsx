@@ -198,12 +198,12 @@ const PaymentsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Payments</h1>
           <p className="text-sm text-muted-foreground mt-1">Track all payment transactions</p>
         </div>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="w-full sm:w-auto">
           <Download className="h-4 w-4 mr-2" />
           Export
         </Button>
@@ -211,36 +211,36 @@ const PaymentsPage = () => {
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
         <div className="bg-card border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
             <CheckCircle2 className="h-5 w-5 text-emerald-500" />
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Collected</p>
-            <p className="text-xl font-bold">৳{totalCollected.toLocaleString()}</p>
+            <p className="text-xl font-bold truncate">৳{totalCollected.toLocaleString()}</p>
           </div>
         </div>
         <div className="bg-card border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="h-10 w-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
             <Clock className="h-5 w-5 text-amber-500" />
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Pending</p>
-            <p className="text-xl font-bold">৳{totalPending.toLocaleString()}</p>
+            <p className="text-xl font-bold truncate">৳{totalPending.toLocaleString()}</p>
           </div>
         </div>
         <div className="bg-card border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
             <XCircle className="h-5 w-5 text-red-500" />
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Failed</p>
-            <p className="text-xl font-bold">৳{totalFailed.toLocaleString()}</p>
+            <p className="text-xl font-bold truncate">৳{totalFailed.toLocaleString()}</p>
           </div>
         </div>
       </div>
 
       <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
-        <div className="flex flex-col sm:flex-row gap-3 p-4 border-b bg-muted/30 items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-3 p-4 border-b bg-muted/30 items-stretch sm:items-center justify-between">
           <div className="relative flex-1 w-full max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -250,7 +250,7 @@ const PaymentsPage = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto sm:justify-end">
             {selectedIds.length === 0 ? (
               <>
                 <Select value={methodFilter} onValueChange={handleMethodFilter}>
@@ -338,26 +338,26 @@ const PaymentsPage = () => {
                     }}
                   />
                 </TableHead>
-                <TableHead>Invoice</TableHead>
+                <TableHead className="hidden sm:table-cell">Invoice</TableHead>
                 <TableHead>Customer</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead className="hidden sm:table-cell">Method</TableHead>
+                <TableHead className="hidden md:table-cell">Date</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="w-[60px] text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="text-sm">
               {isLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
                     <TableCell className="w-[50px] px-4">
                       <span className="h-4 w-4 block bg-muted animate-pulse rounded" />
                     </TableCell>
-                    <TableCell><span className="h-4 w-24 block bg-muted animate-pulse rounded" /></TableCell>
+                    <TableCell className="hidden sm:table-cell"><span className="h-4 w-24 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-4 w-32 block bg-muted animate-pulse rounded" /></TableCell>
-                    <TableCell><span className="h-5 w-16 block bg-muted animate-pulse rounded-full" /></TableCell>
-                    <TableCell><span className="h-4 w-24 block bg-muted animate-pulse rounded" /></TableCell>
+                    <TableCell className="hidden sm:table-cell"><span className="h-5 w-16 block bg-muted animate-pulse rounded-full" /></TableCell>
+                    <TableCell className="hidden md:table-cell"><span className="h-4 w-24 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-4 w-16 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-5 w-20 block bg-muted animate-pulse rounded-full" /></TableCell>
                     <TableCell className="text-right"><span className="h-8 w-8 ml-auto block bg-muted animate-pulse rounded-md" /></TableCell>
@@ -386,10 +386,10 @@ const PaymentsPage = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell className="text-muted-foreground font-mono text-xs">{p.invoiceId}</TableCell>
-                    <TableCell>{p.customerName}</TableCell>
-                    <TableCell>{getMethodBadge(p.method)}</TableCell>
-                    <TableCell className="whitespace-nowrap">{p.date}</TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs hidden sm:table-cell">{p.invoiceId}</TableCell>
+                    <TableCell className="truncate max-w-[150px]">{p.customerName}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{getMethodBadge(p.method)}</TableCell>
+                    <TableCell className="whitespace-nowrap hidden md:table-cell">{p.date}</TableCell>
                     <TableCell className="font-medium whitespace-nowrap">৳{p.amount.toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(p.status)}</TableCell>
                     <TableCell className="text-right w-[60px]">

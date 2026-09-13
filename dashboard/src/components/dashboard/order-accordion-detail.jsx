@@ -144,33 +144,36 @@ export const OrderAccordionDetail = ({ order }) => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1.5 cursor-pointer bg-background"
+            className="h-8 text-xs gap-1.5 cursor-pointer bg-background flex-1 sm:flex-none"
             onClick={handleOpenInvoice}
           >
             <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-            Print Invoice
+            <span className="hidden sm:inline">Print Invoice</span>
+            <span className="sm:hidden">Invoice</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs gap-1.5 cursor-pointer bg-background"
+            className="h-8 text-xs gap-1.5 cursor-pointer bg-background flex-1 sm:flex-none"
             onClick={handleEditOrder}
           >
             <Edit3 className="h-3.5 w-3.5 text-muted-foreground" />
-            Edit Order
+            <span className="hidden sm:inline">Edit Order</span>
+            <span className="sm:hidden">Edit</span>
           </Button>
           <Button
             variant="secondary"
             size="sm"
-            className="h-8 text-xs gap-1.5 cursor-pointer"
+            className="h-8 text-xs gap-1.5 cursor-pointer flex-1 sm:flex-none"
             onClick={handleViewFullPage}
           >
             <ExternalLink className="h-3.5 w-3.5" />
-            Full Details
+            <span className="hidden sm:inline">Full Details</span>
+            <span className="sm:hidden">Details</span>
           </Button>
         </div>
       </div>

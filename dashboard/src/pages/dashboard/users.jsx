@@ -113,12 +113,12 @@ const UsersPage = () => {
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">System Users</h2>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">System Users</h2>
         <Dialog open={isInviteOpen} onOpenChange={setIsInviteOpen}>
           <DialogTrigger
             render={
-              <Button>
+              <Button className="w-full sm:w-auto">
                 <UserPlus className="mr-2 h-4 w-4" />
                 Invite New User
               </Button>
@@ -199,19 +199,19 @@ const UsersPage = () => {
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           {selectedIds.length > 0 && (
             <Button
               variant="destructive"
               onClick={() => setBulkDeleteOpen(true)}
-              className="flex items-center gap-1.5"
+              className="flex items-center gap-1.5 w-full sm:w-auto"
             >
               <Trash2 className="h-4 w-4" />
               Revoke Selected ({selectedIds.length})
             </Button>
           )}
           <Select value={roleFilter} onValueChange={handleRoleFilter}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Role" />
             </SelectTrigger>
             <SelectContent>

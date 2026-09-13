@@ -113,35 +113,36 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Products & Inventory</h2>
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Products & Inventory</h2>
         <a
           href="/dashboard/products/new"
-          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 w-full sm:w-auto"
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add New Product
+          <span className="hidden sm:inline">Add New Product</span>
+          <span className="sm:hidden">Add Product</span>
         </a>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <div className="relative flex-1 w-full max-w-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search products..."
-            className="pl-8"
+            className="pl-8 w-full"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto sm:ml-auto">
           {selectedIds.length === 0 && (
             <>
-              <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-md border text-xs font-medium shrink-0">
-                <span className="text-[11px] text-muted-foreground px-1.5 font-semibold">Stock:</span>
+              <div className="flex items-center gap-1 bg-muted/60 p-1 rounded-md border text-xs font-medium shrink-0 overflow-x-auto hide-scrollbar w-full sm:w-auto">
+                <span className="text-[11px] text-muted-foreground px-1.5 font-semibold shrink-0">Stock:</span>
                 {[
                   { value: 'all', label: 'All', width: 'w-[52px]' },
                   { value: 'instock', label: 'In Stock', width: 'w-[84px]' },
@@ -149,7 +150,7 @@ const ProductsPage = () => {
                 ].map((item) => (
                   <label
                     key={item.value}
-                    className={`flex items-center justify-center gap-1.5 px-2 py-1 rounded cursor-pointer transition-all select-none whitespace-nowrap ${item.width} ${
+                    className={`flex items-center justify-center gap-1.5 px-2 py-1 rounded cursor-pointer transition-all select-none whitespace-nowrap flex-1 sm:flex-none ${item.width} ${
                       stockStatusFilter === item.value
                         ? 'bg-background text-foreground shadow-sm font-semibold'
                         : 'text-muted-foreground hover:text-foreground font-normal'
@@ -168,35 +169,37 @@ const ProductsPage = () => {
                 ))}
               </div>
 
-              <Select value={categoryFilter} onValueChange={handleCategory}>
-                <SelectTrigger className="w-[160px] h-9 cursor-pointer text-xs">
-                  <span>{categoryFilter === 'All' ? 'Category: All' : `Category: ${categoryFilter}`}</span>
-                </SelectTrigger>
-                <SelectContent className="bg-popover border shadow-md" side="bottom">
-                  <SelectItem value="All">Category: All</SelectItem>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.did} value={cat.name}>{cat.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2 items-center w-full sm:w-auto">
+                <Select value={categoryFilter} onValueChange={handleCategory}>
+                  <SelectTrigger className="flex-1 sm:flex-none w-full sm:w-[160px] h-9 cursor-pointer text-xs">
+                    <span>{categoryFilter === 'All' ? 'Category: All' : `Category: ${categoryFilter}`}</span>
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border shadow-md" side="bottom">
+                    <SelectItem value="All">Category: All</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.did} value={cat.name}>{cat.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <Select value={brandFilter} onValueChange={handleBrand}>
-                <SelectTrigger className="w-[160px] h-9 cursor-pointer text-xs">
-                  <span>{brandFilter === 'All' ? 'Brand: All' : `Brand: ${brandFilter}`}</span>
-                </SelectTrigger>
-                <SelectContent className="bg-popover border shadow-md" side="bottom">
-                  <SelectItem value="All">Brand: All</SelectItem>
-                  {brands.map((brand) => (
-                    <SelectItem key={brand.did} value={brand.name}>{brand.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <Select value={brandFilter} onValueChange={handleBrand}>
+                  <SelectTrigger className="flex-1 sm:flex-none w-full sm:w-[160px] h-9 cursor-pointer text-xs">
+                    <span>{brandFilter === 'All' ? 'Brand: All' : `Brand: ${brandFilter}`}</span>
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border shadow-md" side="bottom">
+                    <SelectItem value="All">Brand: All</SelectItem>
+                    {brands.map((brand) => (
+                      <SelectItem key={brand.did} value={brand.name}>{brand.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </>
           )}
 
           {selectedIds.length > 0 && (
-            <div className="flex gap-2 items-center">
-              <span className="text-xs text-muted-foreground whitespace-nowrap">{selectedIds.length} selected:</span>
+            <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center w-full sm:w-auto">
+              <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">{selectedIds.length} selected:</span>
               <Select
                 value=""
                 onValueChange={(val) => {
@@ -206,7 +209,7 @@ const ProductsPage = () => {
                 }}
                 disabled={isBulkStockUpdating}
               >
-                <SelectTrigger className="w-[145px] h-9 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium cursor-pointer text-xs">
+                <SelectTrigger className="flex-1 sm:flex-none sm:w-[145px] h-9 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium cursor-pointer text-xs">
                   <div className="flex items-center gap-1.5 truncate">
                     <PackageX className="h-4 w-4 flex-shrink-0" />
                     <span>Change Stock</span>

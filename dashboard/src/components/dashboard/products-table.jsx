@@ -192,7 +192,8 @@ export function ProductsTable({
 
   return (
     <div className="rounded-md border overflow-hidden">
-      <Table>
+      <div className="overflow-x-auto">
+      <Table className="min-w-[800px]">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px] px-4">
@@ -212,13 +213,13 @@ export function ProductsTable({
                 }}
               />
             </TableHead>
-            <TableHead className="w-[280px] min-w-[180px]">Product</TableHead>
-            <TableHead className="w-[120px]">SKU</TableHead>
-            <TableHead className="w-[140px]">Category</TableHead>
-            <TableHead className="w-[120px]">Brand</TableHead>
-            <TableHead className="w-[100px]">Price</TableHead>
-            <TableHead className="w-[120px] min-w-[120px]">Status</TableHead>
-            <TableHead className="w-[60px] text-right">Actions</TableHead>
+            <TableHead className="w-[280px] min-w-[180px] text-xs sm:text-sm">Product</TableHead>
+            <TableHead className="w-[120px] hidden sm:table-cell text-xs sm:text-sm">SKU</TableHead>
+            <TableHead className="w-[140px] hidden md:table-cell text-xs sm:text-sm">Category</TableHead>
+            <TableHead className="w-[120px] hidden lg:table-cell text-xs sm:text-sm">Brand</TableHead>
+            <TableHead className="w-[100px] text-xs sm:text-sm">Price</TableHead>
+            <TableHead className="w-[120px] min-w-[120px] text-xs sm:text-sm">Status</TableHead>
+            <TableHead className="w-[60px] text-right text-xs sm:text-sm">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -234,9 +235,9 @@ export function ProductsTable({
                     <Skeleton className="h-4 w-32" />
                   </div>
                 </TableCell>
-                <TableCell><Skeleton className="h-4 w-16" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-16" /></TableCell>
+                <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
+                <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
                 <TableCell><Skeleton className="h-4 w-16" /></TableCell>
                 <TableCell><Skeleton className="h-5 w-20 rounded-full" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
@@ -260,7 +261,7 @@ export function ProductsTable({
                   />
                 </TableCell>
                 {/* Product name + image */}
-                <TableCell className="max-w-[200px]">
+                <TableCell className="max-w-[200px] text-xs sm:text-sm">
                   <a href={`/dashboard/products/${product.id}`} className="flex items-center gap-3 min-w-0 hover:underline">
                     {product.image ? (
                       <div className="relative h-9 w-9 overflow-hidden rounded-md border flex-shrink-0">
@@ -276,35 +277,35 @@ export function ProductsTable({
                 </TableCell>
 
                 {/* SKU */}
-                <TableCell className="max-w-[120px]">
+                <TableCell className="max-w-[120px] hidden sm:table-cell text-xs sm:text-sm">
                   <span className="text-muted-foreground truncate block" title={product.sku}>{product.sku}</span>
                 </TableCell>
 
                 {/* Category */}
-                <TableCell className="max-w-[140px]">
+                <TableCell className="max-w-[140px] hidden md:table-cell text-xs sm:text-sm">
                   <span className="truncate block" title={getCategoryName(product.category) || product.category}>
                     {getCategoryName(product.category) || product.category}
                   </span>
                 </TableCell>
 
                 {/* Brand */}
-                <TableCell className="max-w-[120px]">
+                <TableCell className="max-w-[120px] hidden lg:table-cell text-xs sm:text-sm">
                   <span className="truncate block text-muted-foreground" title={product.brand ? (getBrandName(product.brand) || product.brand) : '—'}>
                     {product.brand ? (getBrandName(product.brand) || product.brand) : '—'}
                   </span>
                 </TableCell>
 
                 {/* Price */}
-                <TableCell className="w-[100px] font-medium">৳{product.price.toFixed(2)}</TableCell>
+                <TableCell className="w-[100px] font-medium text-xs sm:text-sm">৳{product.price.toFixed(2)}</TableCell>
 
                 {/* Stock status */}
                 <TableCell className="w-[120px] min-w-[120px]">
                   {product.status === 'In Stock' ? (
-                    <Badge className="w-[100px] inline-flex items-center justify-center text-center bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 whitespace-nowrap shrink-0" variant="outline">
+                    <Badge className="w-[80px] sm:w-[100px] inline-flex items-center justify-center text-center bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 whitespace-nowrap shrink-0 text-[10px] sm:text-xs" variant="outline">
                       In Stock
                     </Badge>
                   ) : (
-                    <Badge variant="destructive" className="w-[100px] inline-flex items-center justify-center text-center bg-destructive/10 text-destructive border-destructive/20 whitespace-nowrap shrink-0">
+                    <Badge variant="destructive" className="w-[80px] sm:w-[100px] inline-flex items-center justify-center text-center bg-destructive/10 text-destructive border-destructive/20 whitespace-nowrap shrink-0 text-[10px] sm:text-xs">
                       Out of Stock
                     </Badge>
                   )}
@@ -314,7 +315,7 @@ export function ProductsTable({
                 <TableCell className="text-right w-[60px]">
                   <DropdownMenu>
                     <DropdownMenuTrigger render={
-                      <Button variant="ghost" className="h-8 w-8 p-0">
+                      <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                         <span className="sr-only">Open menu</span>
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
@@ -364,6 +365,7 @@ export function ProductsTable({
           )}
         </TableBody>
       </Table>
+      </div>
 
       <Dialog open={!!stockTarget} onOpenChange={(open) => !open && setStockTarget(null)}>
         <DialogContent className={stockTarget?.type === 'variant' && targetVariants.length > 0 ? "sm:max-w-[520px]" : "sm:max-w-[420px]"}>

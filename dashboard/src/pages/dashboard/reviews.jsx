@@ -73,7 +73,7 @@ const ReviewsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Reviews Management</h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -93,7 +93,7 @@ const ReviewsPage = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           {selectedIds.length > 0 && (
             <>
               <DropdownMenu>

@@ -220,7 +220,7 @@ const ActivityLogsPage = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto ml-auto justify-end flex-wrap">
           <Select
             value={readFilter}
             onValueChange={(val) => {
@@ -229,7 +229,7 @@ const ActivityLogsPage = () => {
               setSelectedIds([]);
             }}
           >
-            <SelectTrigger className="w-[130px] h-9 text-xs">
+            <SelectTrigger className="w-full sm:w-[130px] h-9 text-xs">
               <SelectValue placeholder="Read Status" />
             </SelectTrigger>
             <SelectContent>
@@ -247,7 +247,7 @@ const ActivityLogsPage = () => {
               setSelectedIds([]);
             }}
           >
-            <SelectTrigger className="w-[140px] h-9 text-xs">
+            <SelectTrigger className="w-full sm:w-[140px] h-9 text-xs">
               <SelectValue placeholder="Event Type" />
             </SelectTrigger>
             <SelectContent>
@@ -262,18 +262,18 @@ const ActivityLogsPage = () => {
       </div>
 
       {selectedIds.length > 0 && (
-        <div className="flex items-center justify-between bg-primary/10 border border-primary/20 rounded-xl px-4 py-2.5 animate-in fade-in">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-primary/10 border border-primary/20 rounded-xl px-4 py-3 animate-in fade-in">
           <span className="text-xs font-semibold text-primary">
             {selectedIds.length} item{selectedIds.length > 1 ? 's' : ''} selected
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
             <Button
               size="sm"
               variant="outline"
               onClick={handleBulkMarkRead}
               disabled={isDemoClient || isProcessing}
               title={isDemoClient ? "Action disabled for demo accounts" : "Mark selected as read"}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-8 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               <MailCheck className="h-3.5 w-3.5 text-primary" />
               Mark as Read
@@ -284,7 +284,7 @@ const ActivityLogsPage = () => {
               onClick={handleBulkMarkUnread}
               disabled={isDemoClient || isProcessing}
               title={isDemoClient ? "Action disabled for demo accounts" : "Mark selected as unread"}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-8 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               <Mail className="h-3.5 w-3.5 text-muted-foreground" />
               Mark as Unread
@@ -295,7 +295,7 @@ const ActivityLogsPage = () => {
               onClick={() => !isDemoClient && setBulkDeleteOpen(true)}
               disabled={isDemoClient || isProcessing}
               title={isDemoClient ? "Action disabled for demo accounts" : "Delete selected logs"}
-              className="h-8 text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-8 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Delete Selected
@@ -304,7 +304,7 @@ const ActivityLogsPage = () => {
         </div>
       )}
 
-      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-border bg-card shadow-sm overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/30">
@@ -318,7 +318,7 @@ const ActivityLogsPage = () => {
                 />
               </TableHead>
               <TableHead>Log Description</TableHead>
-              <TableHead className="w-52">Time</TableHead>
+              <TableHead className="w-52 hidden sm:table-cell">Time</TableHead>
               <TableHead className="w-24 text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -328,7 +328,7 @@ const ActivityLogsPage = () => {
                 <TableRow key={idx}>
                   <TableCell><Skeleton className="h-4 w-4 mx-auto" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-72" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                  <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
                 </TableRow>
               ))
@@ -424,7 +424,7 @@ const ActivityLogsPage = () => {
                       </div>
                     </TableCell>
 
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
                         <Clock className="h-3 w-3 shrink-0 text-muted-foreground/60" />
                         <span>

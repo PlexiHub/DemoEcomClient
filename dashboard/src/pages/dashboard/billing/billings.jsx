@@ -89,12 +89,12 @@ const BillingsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Bills & Invoices</h1>
           <p className="text-sm text-muted-foreground mt-1">View and manage all customer invoices</p>
         </div>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="w-full sm:w-auto">
           <Download className="h-4 w-4 mr-2" />
           Export
         </Button>
@@ -102,7 +102,7 @@ const BillingsPage = () => {
 
       <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
         <div className="flex flex-col sm:flex-row gap-3 p-4 border-b bg-muted/30">
-          <div className="relative flex-1">
+          <div className="relative flex-1 w-full max-w-sm">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search by customer name or invoice ID..."
@@ -111,13 +111,13 @@ const BillingsPage = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
-          <div className="flex gap-2 items-center w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full sm:w-auto">
             {selectedIds.length > 0 && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleBulkExport}
-                className="flex items-center gap-1.5"
+                className="flex items-center justify-center gap-1.5 w-full sm:w-auto"
               >
                 <Download className="h-4 w-4" />
                 Export Selected ({selectedIds.length})
@@ -158,26 +158,26 @@ const BillingsPage = () => {
                     }}
                   />
                 </TableHead>
-                <TableHead>Invoice ID</TableHead>
+                <TableHead className="hidden sm:table-cell">Invoice ID</TableHead>
                 <TableHead>Customer</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Due Date</TableHead>
+                <TableHead className="hidden md:table-cell">Date</TableHead>
+                <TableHead className="hidden md:table-cell">Due Date</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="text-sm">
               {isLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
                     <TableCell className="w-[50px] px-4">
                       <span className="h-4 w-4 block bg-muted animate-pulse rounded" />
                     </TableCell>
-                    <TableCell><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
+                    <TableCell className="hidden sm:table-cell"><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-4 w-28 block bg-muted animate-pulse rounded" /></TableCell>
-                    <TableCell><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
-                    <TableCell><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
+                    <TableCell className="hidden md:table-cell"><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
+                    <TableCell className="hidden md:table-cell"><span className="h-4 w-20 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-4 w-16 block bg-muted animate-pulse rounded" /></TableCell>
                     <TableCell><span className="h-5 w-16 block bg-muted animate-pulse rounded-full" /></TableCell>
                     <TableCell className="text-right"><span className="h-8 w-8 ml-auto block bg-muted animate-pulse rounded" /></TableCell>
@@ -206,14 +206,14 @@ const BillingsPage = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell className="font-semibold flex items-center gap-2">
-                      <FileText className="h-4 w-4 text-muted-foreground" />
-                      {inv.invoiceId}
+                    <TableCell className="font-semibold flex items-center gap-2 hidden sm:table-cell">
+                      <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="truncate">{inv.invoiceId}</span>
                     </TableCell>
-                    <TableCell>{inv.customerName}</TableCell>
-                    <TableCell>{inv.date}</TableCell>
-                    <TableCell>{inv.dueDate}</TableCell>
-                    <TableCell className="font-medium">৳{inv.amount.toLocaleString()}</TableCell>
+                    <TableCell className="truncate max-w-[150px]">{inv.customerName}</TableCell>
+                    <TableCell className="hidden md:table-cell whitespace-nowrap">{inv.date}</TableCell>
+                    <TableCell className="hidden md:table-cell whitespace-nowrap">{inv.dueDate}</TableCell>
+                    <TableCell className="font-medium whitespace-nowrap">৳{inv.amount.toLocaleString()}</TableCell>
                     <TableCell>{getStatusBadge(inv.status)}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="sm">

@@ -172,7 +172,7 @@ export function ReviewsTable({
   return (
     <div className="rounded-md border bg-card overflow-hidden">
       <div className="overflow-x-auto">
-        <Table>
+        <Table className="min-w-[800px]">
           <TableHeader>
             <TableRow className="bg-muted/40">
               <TableHead className="w-[45px] px-4">
@@ -191,13 +191,13 @@ export function ReviewsTable({
                   aria-label="Select all"
                 />
               </TableHead>
-              <TableHead className="min-w-[180px]">Product</TableHead>
-              <TableHead className="min-w-[170px]">Customer</TableHead>
-              <TableHead className="min-w-[120px]">Rating</TableHead>
-              <TableHead className="min-w-[220px]">Review Content</TableHead>
-              <TableHead className="w-[140px]">Status</TableHead>
-              <TableHead className="w-[120px]">Date</TableHead>
-              <TableHead className="w-[80px] text-right">Actions</TableHead>
+              <TableHead className="min-w-[180px] text-xs sm:text-sm">Product</TableHead>
+              <TableHead className="min-w-[170px] text-xs sm:text-sm hidden sm:table-cell">Customer</TableHead>
+              <TableHead className="min-w-[120px] text-xs sm:text-sm">Rating</TableHead>
+              <TableHead className="min-w-[220px] text-xs sm:text-sm hidden md:table-cell">Review Content</TableHead>
+              <TableHead className="w-[140px] text-xs sm:text-sm">Status</TableHead>
+              <TableHead className="w-[120px] text-xs sm:text-sm hidden lg:table-cell">Date</TableHead>
+              <TableHead className="w-[80px] text-right text-xs sm:text-sm">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -247,7 +247,7 @@ export function ReviewsTable({
                     </TableCell>
 
                     {/* Customer */}
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       <div className="flex items-center gap-2.5">
                         <Avatar className="h-7 w-7 border border-border shrink-0">
                           <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
@@ -255,10 +255,10 @@ export function ReviewsTable({
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col min-w-0">
-                          <span className="font-medium text-xs text-foreground truncate">
+                          <span className="font-medium text-xs sm:text-sm text-foreground truncate">
                             {review.memberId?.name || 'Customer'}
                           </span>
-                          <span className="text-[11px] text-muted-foreground truncate">
+                          <span className="text-[10px] sm:text-[11px] text-muted-foreground truncate">
                             {review.memberId?.email || review.memberDid}
                           </span>
                         </div>
@@ -266,12 +266,12 @@ export function ReviewsTable({
                     </TableCell>
 
                     {/* Rating */}
-                    <TableCell>{renderStars(review.rating)}</TableCell>
+                    <TableCell className="text-xs sm:text-sm">{renderStars(review.rating)}</TableCell>
 
                     {/* Description */}
-                    <TableCell>
+                    <TableCell className="hidden md:table-cell">
                       <p
-                        className="text-xs text-foreground/85 line-clamp-2 max-w-[280px] cursor-pointer hover:text-foreground transition-colors"
+                        className="text-xs sm:text-sm text-foreground/85 line-clamp-2 max-w-[280px] cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => setViewReview(review)}
                         title="Click to view full review"
                       >
@@ -285,17 +285,17 @@ export function ReviewsTable({
                         {isApproved ? (
                           <Badge
                             variant="outline"
-                            className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 shrink-0"
+                            className="bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 shrink-0 text-[10px] sm:text-xs"
                           >
-                            <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                            <CheckCircle2 className="h-3 w-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
                             <span>Approved</span>
                           </Badge>
                         ) : (
                           <Badge
                             variant="outline"
-                            className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 shrink-0"
+                            className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 shrink-0 text-[10px] sm:text-xs"
                           >
-                            <XCircle className="h-3 w-3 text-amber-600 dark:text-amber-400" />
+                            <XCircle className="h-3 w-3 text-amber-600 dark:text-amber-400 shrink-0" />
                             <span>Not Approved</span>
                           </Badge>
                         )}
@@ -312,7 +312,7 @@ export function ReviewsTable({
                     </TableCell>
 
                     {/* Date */}
-                    <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                    <TableCell className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap hidden lg:table-cell">
                       {review.createdAt
                         ? new Date(review.createdAt).toLocaleDateString('en-GB', {
                             day: 'numeric',

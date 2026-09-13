@@ -179,24 +179,24 @@ const CategoriesPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between border-b pb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b pb-4">
         <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
-          <p className="text-sm text-muted-foreground">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Categories</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Manage your product categories and hierarchy settings.
           </p>
         </div>
-        <Button onClick={openAddDialog}>
+        <Button onClick={openAddDialog} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" /> Add Category
         </Button>
       </div>
 
-      <div className="relative max-w-sm">
+      <div className="relative w-full sm:max-w-sm">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
           placeholder="Search categories..."
-          className="pl-8"
+          className="pl-8 w-full"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -208,13 +208,14 @@ const CategoriesPage = () => {
         <div className="text-center py-12 text-muted-foreground">No categories found.</div>
       ) : (
         <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          <Table>
+          <div className="overflow-x-auto">
+          <Table className="min-w-[600px]">
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Slug</TableHead>
-                <TableHead>Parent Category</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-xs sm:text-sm">Name</TableHead>
+                <TableHead className="text-xs sm:text-sm">Slug</TableHead>
+                <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Parent Category</TableHead>
+                <TableHead className="text-right text-xs sm:text-sm">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -222,12 +223,12 @@ const CategoriesPage = () => {
                 const parentName = getParentCategoryName(cat);
                 return (
                   <TableRow key={cat.did}>
-                    <TableCell className="font-medium flex items-center gap-2">
-                      <FolderTree className="h-4 w-4 text-muted-foreground" />
-                      {cat.name}
+                    <TableCell className="font-medium flex items-center gap-2 text-xs sm:text-sm">
+                      <FolderTree className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <span className="truncate">{cat.name}</span>
                     </TableCell>
                     <TableCell className="font-mono text-xs">{cat.slug}</TableCell>
-                    <TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       {parentName ? (
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground border border-border/50">
                           {parentName}
@@ -259,6 +260,7 @@ const CategoriesPage = () => {
               })}
             </TableBody>
           </Table>
+          </div>
         </div>
       )}
 

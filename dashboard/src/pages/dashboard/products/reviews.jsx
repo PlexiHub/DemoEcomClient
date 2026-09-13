@@ -71,16 +71,16 @@ const ReviewsPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Product Reviews</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Product Reviews</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
             Manage customer reviews, approve, or delete them.
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
         <div className="flex flex-1 items-center space-x-2 w-full sm:max-w-sm relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -91,12 +91,12 @@ const ReviewsPage = () => {
           />
         </div>
         
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           {selectedIds.length > 0 && (
-            <>
+            <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="shadow-sm">
+                  <Button variant="outline" className="shadow-sm flex-1 sm:flex-none">
                     Bulk Action ({selectedIds.length})
                     <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
@@ -114,13 +114,13 @@ const ReviewsPage = () => {
               </DropdownMenu>
               <Button
                 variant="destructive"
-                className="shadow-sm"
+                className="shadow-sm flex-1 sm:flex-none"
                 onClick={() => setBulkDeleteOpen(true)}
               >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete
               </Button>
-            </>
+            </div>
           )}
 
           <Select value={statusFilter} onValueChange={handleStatusFilter}>

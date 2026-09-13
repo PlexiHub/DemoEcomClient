@@ -165,7 +165,7 @@ export const MembersTable = ({
   const isAllPageSelected = members.length > 0 && members.every(m => selectedIds.includes(m.id));
 
   return (
-    <div className="rounded-md border overflow-hidden">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -187,15 +187,15 @@ export const MembersTable = ({
               />
             </TableHead>
             <TableHead className="w-[200px] min-w-[160px]">Customer</TableHead>
-            <TableHead className="w-[200px]">Email</TableHead>
-            <TableHead className="w-[130px]">Phone</TableHead>
-            <TableHead className="w-[100px] text-right">Total Orders</TableHead>
+            <TableHead className="w-[200px] hidden md:table-cell">Email</TableHead>
+            <TableHead className="w-[130px] hidden sm:table-cell">Phone</TableHead>
+            <TableHead className="w-[100px] text-right hidden lg:table-cell">Total Orders</TableHead>
             <TableHead className="w-[130px] text-right">Lifetime Spent</TableHead>
-            <TableHead className="w-[110px]">Joined Date</TableHead>
+            <TableHead className="w-[110px] hidden xl:table-cell">Joined Date</TableHead>
             <TableHead className="w-[60px] text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-sm sm:text-base">
           {isLoading ? (
             Array.from({ length: 15 }).map((_, i) => (
               <TableRow key={i}>
@@ -208,11 +208,11 @@ export const MembersTable = ({
                     <Skeleton className="h-4 w-32" />
                   </div>
                 </TableCell>
-                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                <TableCell className="text-right"><Skeleton className="h-4 w-8 ml-auto" /></TableCell>
+                <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="text-right hidden lg:table-cell"><Skeleton className="h-4 w-8 ml-auto" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-4 w-16 ml-auto" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                <TableCell className="hidden xl:table-cell"><Skeleton className="h-4 w-24" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
               </TableRow>
             ))
@@ -234,21 +234,21 @@ export const MembersTable = ({
                   />
                 </TableCell>
                 <TableCell className="max-w-[200px]">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <Avatar className="h-9 w-9 flex-shrink-0">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9 flex-shrink-0">
                       <AvatarImage src={member.avatar} alt={member.name} />
                       <AvatarFallback>{member.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <span className="font-medium truncate" title={member.name}>{member.name}</span>
+                    <span className="font-medium truncate text-xs sm:text-sm" title={member.name}>{member.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="max-w-[200px]">
+                <TableCell className="max-w-[200px] hidden md:table-cell text-xs sm:text-sm">
                   <span className="truncate block text-muted-foreground" title={member.email}>{member.email}</span>
                 </TableCell>
-                <TableCell className="w-[130px] text-muted-foreground whitespace-nowrap">{member.phone}</TableCell>
-                <TableCell className="text-right w-[100px]">{member.totalOrders}</TableCell>
-                <TableCell className="text-right w-[130px] font-medium whitespace-nowrap">৳{member.lifetimeSpent.toFixed(2)}</TableCell>
-                <TableCell className="w-[110px] whitespace-nowrap">{new Date(member.joinedDate).toLocaleDateString()}</TableCell>
+                <TableCell className="w-[130px] text-muted-foreground whitespace-nowrap hidden sm:table-cell text-xs sm:text-sm">{member.phone}</TableCell>
+                <TableCell className="text-right w-[100px] hidden lg:table-cell text-xs sm:text-sm">{member.totalOrders}</TableCell>
+                <TableCell className="text-right w-[130px] font-medium whitespace-nowrap text-xs sm:text-sm">৳{member.lifetimeSpent.toFixed(2)}</TableCell>
+                <TableCell className="w-[110px] whitespace-nowrap hidden xl:table-cell text-xs sm:text-sm">{new Date(member.joinedDate).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right w-[60px]">
                   <DropdownMenu>
                     <DropdownMenuTrigger render={

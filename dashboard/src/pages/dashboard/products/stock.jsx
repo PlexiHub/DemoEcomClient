@@ -70,71 +70,71 @@ const StockManagementPage = () => {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Stock Management</h2>
-        <p className="text-muted-foreground text-sm mt-1">Monitor inventory levels across all products and variations</p>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Stock Management</h2>
+        <p className="text-muted-foreground text-xs sm:text-sm mt-1">Monitor inventory levels across all products and variations</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <button
           type="button"
           onClick={() => setStockFilter('all')}
-          className={`rounded-xl border p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'all' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card'}`}
+          className={`rounded-xl border p-3 sm:p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'all' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'bg-card'}`}
         >
-          <div className="flex items-center gap-2 text-muted-foreground text-xs font-medium mb-1">
-            <Package className="h-3.5 w-3.5" />
-            Total Products
+          <div className="flex items-center gap-2 text-muted-foreground text-[10px] sm:text-xs font-medium mb-1">
+            <Package className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Total Products</span>
           </div>
-          <p className="text-2xl font-bold">{isLoading ? '—' : totalProducts}</p>
+          <p className="text-lg sm:text-2xl font-bold">{isLoading ? '—' : totalProducts}</p>
         </button>
         <button
           type="button"
           onClick={() => setStockFilter('in')}
-          className={`rounded-xl border p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'in' ? 'border-emerald-500 bg-emerald-500/5 ring-1 ring-emerald-500/20' : 'bg-card'}`}
+          className={`rounded-xl border p-3 sm:p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'in' ? 'border-emerald-500 bg-emerald-500/5 ring-1 ring-emerald-500/20' : 'bg-card'}`}
         >
-          <div className="flex items-center gap-2 text-emerald-600 text-xs font-medium mb-1">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            In Stock
+          <div className="flex items-center gap-2 text-emerald-600 text-[10px] sm:text-xs font-medium mb-1">
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">In Stock</span>
           </div>
-          <p className="text-2xl font-bold text-emerald-600">{isLoading ? '—' : inStockCount}</p>
+          <p className="text-lg sm:text-2xl font-bold text-emerald-600">{isLoading ? '—' : inStockCount}</p>
         </button>
         <button
           type="button"
           onClick={() => setStockFilter('low')}
-          className={`rounded-xl border p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'low' ? 'border-amber-500 bg-amber-500/5 ring-1 ring-amber-500/20' : 'bg-card'}`}
+          className={`rounded-xl border p-3 sm:p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'low' ? 'border-amber-500 bg-amber-500/5 ring-1 ring-amber-500/20' : 'bg-card'}`}
         >
-          <div className="flex items-center gap-2 text-amber-600 text-xs font-medium mb-1">
-            <TrendingDown className="h-3.5 w-3.5" />
-            Low Stock
+          <div className="flex items-center gap-2 text-amber-600 text-[10px] sm:text-xs font-medium mb-1">
+            <TrendingDown className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Low Stock</span>
           </div>
-          <p className="text-2xl font-bold text-amber-600">{isLoading ? '—' : lowStockCount}</p>
+          <p className="text-lg sm:text-2xl font-bold text-amber-600">{isLoading ? '—' : lowStockCount}</p>
         </button>
         <button
           type="button"
           onClick={() => setStockFilter('out')}
-          className={`rounded-xl border p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'out' ? 'border-destructive bg-destructive/5 ring-1 ring-destructive/20' : 'bg-card'}`}
+          className={`rounded-xl border p-3 sm:p-4 text-left transition-all hover:shadow-sm ${stockFilter === 'out' ? 'border-destructive bg-destructive/5 ring-1 ring-destructive/20' : 'bg-card'}`}
         >
-          <div className="flex items-center gap-2 text-destructive text-xs font-medium mb-1">
-            <XCircle className="h-3.5 w-3.5" />
-            Out of Stock
+          <div className="flex items-center gap-2 text-destructive text-[10px] sm:text-xs font-medium mb-1">
+            <XCircle className="h-3.5 w-3.5 shrink-0" />
+            <span className="truncate">Out of Stock</span>
           </div>
-          <p className="text-2xl font-bold text-destructive">{isLoading ? '—' : outOfStockCount}</p>
+          <p className="text-lg sm:text-2xl font-bold text-destructive">{isLoading ? '—' : outOfStockCount}</p>
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <div className="relative flex-1 w-full max-w-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search products..."
-            className="pl-8"
+            className="pl-8 w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 w-full sm:w-auto flex-col sm:flex-row">
           <Select value={categoryFilter} onValueChange={(value) => setCategoryFilter(value ?? 'All')}>
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-full sm:w-[160px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -146,7 +146,7 @@ const StockManagementPage = () => {
           </Select>
 
           <Select value={brandFilter} onValueChange={(value) => setBrandFilter(value ?? 'All')}>
-            <SelectTrigger className="w-[160px]">
+            <SelectTrigger className="w-full sm:w-[160px]">
               <SelectValue placeholder="Brand" />
             </SelectTrigger>
             <SelectContent>
@@ -160,17 +160,18 @@ const StockManagementPage = () => {
       </div>
 
       <div className="bg-card text-card-foreground shadow-sm border rounded-lg">
-        <div className="p-6">
-          <div className="rounded-md border">
-            <Table>
+        <div className="p-3 sm:p-6">
+          <div className="rounded-md border overflow-hidden">
+            <div className="overflow-x-auto">
+            <Table className="min-w-[700px]">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Product</TableHead>
-                  <TableHead>SKU</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-center">Stock Qty</TableHead>
-                  <TableHead className="text-center">Status</TableHead>
-                  <TableHead>Variant Breakdown</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Product</TableHead>
+                  <TableHead className="text-xs sm:text-sm hidden sm:table-cell">SKU</TableHead>
+                  <TableHead className="text-xs sm:text-sm hidden md:table-cell">Type</TableHead>
+                  <TableHead className="text-center text-xs sm:text-sm">Stock Qty</TableHead>
+                  <TableHead className="text-center text-xs sm:text-sm">Status</TableHead>
+                  <TableHead className="text-xs sm:text-sm">Variant Breakdown</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -178,8 +179,8 @@ const StockManagementPage = () => {
                   Array.from({ length: 6 }).map((_, i) => (
                     <TableRow key={i}>
                       <TableCell><div className="flex items-center gap-3"><Skeleton className="h-10 w-10 rounded-md" /><Skeleton className="h-4 w-32" /></div></TableCell>
-                      <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                      <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                      <TableCell className="hidden sm:table-cell"><Skeleton className="h-4 w-20" /></TableCell>
+                      <TableCell className="hidden md:table-cell"><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
                       <TableCell className="text-center"><Skeleton className="h-4 w-10 mx-auto" /></TableCell>
                       <TableCell className="text-center"><Skeleton className="h-5 w-20 mx-auto rounded-full" /></TableCell>
                       <TableCell><Skeleton className="h-4 w-40" /></TableCell>
@@ -200,19 +201,19 @@ const StockManagementPage = () => {
                             </div>
                           )}
                           <div className="min-w-0">
-                            <p className="font-medium truncate">{product.name}</p>
-                            <p className="text-xs text-muted-foreground">{product.category}</p>
+                            <p className="font-medium text-xs sm:text-sm truncate">{product.name}</p>
+                            <p className="text-[10px] sm:text-xs text-muted-foreground">{product.category}</p>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground text-sm font-mono">{product.sku}</TableCell>
-                      <TableCell>
+                      <TableCell className="text-muted-foreground text-xs sm:text-sm font-mono hidden sm:table-cell">{product.sku}</TableCell>
+                      <TableCell className="hidden md:table-cell">
                         <Badge variant="secondary" className="text-[10px]">
                           {product.type === 'variant' ? 'Variable' : 'Simple'}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className={`font-semibold text-sm ${(product.stock ?? 0) === 0 ? 'text-destructive' : (product.stock ?? 0) < 10 ? 'text-amber-600' : ''}`}>
+                        <span className={`font-semibold text-xs sm:text-sm ${(product.stock ?? 0) === 0 ? 'text-destructive' : (product.stock ?? 0) < 10 ? 'text-amber-600' : ''}`}>
                           {getTotalVariantStock(product)}
                         </span>
                       </TableCell>
@@ -247,13 +248,14 @@ const StockManagementPage = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center">
+                    <TableCell colSpan={6} className="h-24 text-center text-xs sm:text-sm">
                       No products found matching the selected filters.
                     </TableCell>
                   </TableRow>
                 )}
               </TableBody>
             </Table>
+            </div>
           </div>
         </div>
       </div>

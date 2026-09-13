@@ -120,7 +120,7 @@ export function SystemUsersTable({
   const isAllPageSelected = users.length > 0 && users.every(u => selectedIds.includes(u.id));
 
   return (
-    <div className="rounded-md border overflow-hidden">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -142,14 +142,14 @@ export function SystemUsersTable({
               />
             </TableHead>
             <TableHead>User</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Assigned Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Last Login</TableHead>
+            <TableHead className="hidden md:table-cell">Email</TableHead>
+            <TableHead className="hidden sm:table-cell">Assigned Role</TableHead>
+            <TableHead className="hidden sm:table-cell">Status</TableHead>
+            <TableHead className="hidden lg:table-cell">Last Login</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-sm sm:text-base">
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <TableRow key={i}>
@@ -162,10 +162,10 @@ export function SystemUsersTable({
                     <Skeleton className="h-4 w-32" />
                   </div>
                 </TableCell>
-                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
-                <TableCell><Skeleton className="h-5 w-10 rounded-full" /></TableCell>
-                <TableCell><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell className="hidden md:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
+                <TableCell className="hidden sm:table-cell"><Skeleton className="h-5 w-10 rounded-full" /></TableCell>
+                <TableCell className="hidden lg:table-cell"><Skeleton className="h-4 w-32" /></TableCell>
                 <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto rounded-md" /></TableCell>
               </TableRow>
             ))
@@ -187,17 +187,17 @@ export function SystemUsersTable({
                   />
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Avatar className="h-8 w-8 sm:h-9 sm:w-9">
                       <AvatarImage src={user.avatar} alt={user.name} />
                       <AvatarFallback>{user.name.substring(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <span className="font-medium">{user.name}</span>
+                    <span className="font-medium text-xs sm:text-sm">{user.name}</span>
                   </div>
                 </TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{getRoleBadge(user.role)}</TableCell>
-                <TableCell>
+                <TableCell className="hidden md:table-cell text-xs sm:text-sm">{user.email}</TableCell>
+                <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{getRoleBadge(user.role)}</TableCell>
+                <TableCell className="hidden sm:table-cell">
                   <div className="flex items-center space-x-2">
                     <Switch 
                       id={`status-${user.id}`} 
@@ -207,13 +207,13 @@ export function SystemUsersTable({
                     />
                     <label 
                       htmlFor={`status-${user.id}`} 
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-xs sm:text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {user.status}
                     </label>
                   </div>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="hidden lg:table-cell text-xs sm:text-sm text-muted-foreground">
                   {new Date(user.lastLogin).toLocaleString()}
                 </TableCell>
                 <TableCell className="text-right">

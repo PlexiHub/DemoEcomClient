@@ -765,9 +765,9 @@ const MetaCatalogGenerator = () => {
 
   return (
     <div className="flex-1 space-y-5 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5">
             <h2 className="text-3xl font-bold tracking-tight">Meta Catalog Feed</h2>
             <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
               Selected in Feed: {stagedMap.size} Items
@@ -778,7 +778,7 @@ const MetaCatalogGenerator = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
@@ -831,8 +831,8 @@ const MetaCatalogGenerator = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-between border-b pb-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b pb-2 gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant={activeTab === 'browse' ? 'default' : 'ghost'}
             size="sm"
@@ -1215,7 +1215,7 @@ const MetaCatalogGenerator = () => {
 
       {activeTab === 'staged' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <span className="text-xs text-muted-foreground">
               These {stagedMap.size} products ({catalogRows.length} total rows with variants) will be in your exported Meta CSV.
             </span>
@@ -1330,7 +1330,7 @@ const MetaCatalogGenerator = () => {
 
       {activeTab === 'preview' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <span className="text-xs text-muted-foreground">
               Exact preview of rows exported to Meta Commerce Catalog CSV.
             </span>

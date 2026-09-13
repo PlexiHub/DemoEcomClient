@@ -95,7 +95,7 @@ export default function AllMediaPage() {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Header & Search Bar */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
             <ImageIcon className="h-5 w-5" />
@@ -293,7 +293,7 @@ export default function AllMediaPage() {
                 <label className="text-xs font-semibold text-foreground block">
                   Media Direct URL
                 </label>
-                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full">
                   <Input
                     readOnly
                     value={resolveImageUrl(selectedMedia.url)}

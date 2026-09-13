@@ -11,7 +11,8 @@ const STATUS_CONFIG = {
   cancelled: { label: 'Cancelled', color: '#ef4444' },
 };
 
-export function OrderStatusPie({ range = '30days' }) {
+// OrderStatusPie component
+export const OrderStatusPie = ({ range = '30days' }) => {
   const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { data: statusCounts = {}, isLoading } = useOrderStatusDistribution(range);
@@ -41,22 +42,22 @@ export function OrderStatusPie({ range = '30days' }) {
 
   return (
     <Card className="col-span-1 lg:col-span-3 flex flex-col">
-      <CardHeader className="pb-2">
-        <CardTitle>Order Status</CardTitle>
-        <CardDescription>Distribution of order statuses (last 30 days).</CardDescription>
+      <CardHeader className="p-4 sm:p-6 pb-2">
+        <CardTitle className="text-lg sm:text-xl">Order Status</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Distribution of order statuses (last 30 days).</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center items-center pb-4">
+      <CardContent className="flex-1 flex flex-col justify-center items-center p-4 sm:p-6 pt-0 pb-4">
         {!mounted || isLoading ? (
-          <div className="h-[220px] w-full flex items-center justify-center text-muted-foreground text-sm">
+          <div className="h-[200px] sm:h-[220px] w-full flex items-center justify-center text-muted-foreground text-sm">
             Loading chart...
           </div>
         ) : total === 0 ? (
-          <div className="h-[220px] w-full flex items-center justify-center text-muted-foreground text-sm">
+          <div className="h-[200px] sm:h-[220px] w-full flex items-center justify-center text-muted-foreground text-sm">
             No order status data available.
           </div>
         ) : (
           <div className="w-full flex flex-col items-center">
-            <div className="h-[200px] w-full relative">
+            <div className="h-[180px] sm:h-[200px] w-full relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie

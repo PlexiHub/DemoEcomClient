@@ -325,37 +325,35 @@ const AttributesPage = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+          <div className="h-10 w-10 rounded-lg bg-primary/10 flex flex-shrink-0 items-center justify-center text-primary">
             <Sliders className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
               Product Attributes
             </h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               Manage variation attributes and per-value images (e.g. Size, Volume, Color).
             </p>
           </div>
         </div>
-        <Button onClick={openAddDialog} className="cursor-pointer gap-2 font-semibold">
+        <Button onClick={openAddDialog} className="w-full sm:w-auto cursor-pointer gap-2 font-semibold">
           <Plus className="h-4 w-4" />
           Add Attribute
         </Button>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search attributes..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      <div className="relative w-full sm:max-w-sm">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search attributes..."
+          className="pl-8 w-full"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       {/* Grid Layout: 3 Cards Per Row on Large Screens */}

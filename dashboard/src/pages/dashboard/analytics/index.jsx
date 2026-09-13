@@ -167,7 +167,7 @@ const AnalyticsPage = () => {
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {/* Date Range Selector */}
           <Select value={range} onValueChange={setRange}>
             <SelectTrigger className="w-[140px] h-9 text-xs">

@@ -132,30 +132,32 @@ const OrdersPage = () => {
   };
  
   return (
-    <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 w-full">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Orders Management</h2>
-        <div className="flex items-center gap-2">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">Orders Management</h2>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           {clientConfig?.features?.inStoreOrder !== false && (
-            <Button variant="outline" nativeButton={false} render={<Link to="/dashboard/orders/new" />}>
+            <Button variant="outline" className="flex-1 sm:flex-none" nativeButton={false} render={<Link to="/dashboard/orders/new" />}>
               <PlusCircle className="mr-2 h-4 w-4" />
-              New In-Store Order
+              <span className="hidden sm:inline">New In-Store Order</span>
+              <span className="sm:hidden">New</span>
             </Button>
           )}
-          <Button variant="outline">
+          <Button variant="outline" className="flex-1 sm:flex-none">
             <Download className="mr-2 h-4 w-4" />
-            Export Orders
+            <span className="hidden sm:inline">Export Orders</span>
+            <span className="sm:hidden">Export</span>
           </Button>
         </div>
       </div>
       
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
-        <div className="relative flex-1 w-full max-w-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-4">
+        <div className="relative w-full sm:max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Search by customer name, phone or order ID..."
-            className="pl-8 pr-8 h-9 text-xs"
+            className="pl-8 pr-8 h-9 text-xs w-full"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />
@@ -169,11 +171,11 @@ const OrdersPage = () => {
             </button>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-start sm:justify-end">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           {selectedIds.length === 0 && (
-            <div className="flex gap-2 items-center w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center w-full sm:w-auto">
               <Select value={statusFilter} onValueChange={handleStatus}>
-                <SelectTrigger className="w-[180px] h-9 cursor-pointer text-xs">
+                <SelectTrigger className="w-full sm:w-[180px] h-9 cursor-pointer text-xs">
                   <span>{statusFilter === 'All' ? 'Order Status: All' : `Order Status: ${statusFilter}`}</span>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border shadow-md" side="bottom">
@@ -186,7 +188,7 @@ const OrdersPage = () => {
               </Select>
 
               <Select value={paymentFilter} onValueChange={handlePayment}>
-                <SelectTrigger className="w-[160px] h-9 cursor-pointer text-xs">
+                <SelectTrigger className="w-full sm:w-[160px] h-9 cursor-pointer text-xs">
                   <span>{paymentFilter === 'All' ? 'Payment: All' : `Payment: ${paymentFilter}`}</span>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border shadow-md" side="bottom">
@@ -200,12 +202,12 @@ const OrdersPage = () => {
           )}
 
           {selectedIds.length > 0 && (
-            <div className="flex gap-1.5 items-center ml-2">
-              <span className="text-xs text-muted-foreground whitespace-nowrap hidden md:inline">{selectedIds.length} selected:</span>
+            <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center w-full sm:w-auto">
+              <span className="text-xs text-muted-foreground whitespace-nowrap hidden sm:inline">{selectedIds.length} selected:</span>
 
               <Select value="" onValueChange={(val) => val && setBulkPaymentTarget(val)}>
-                <SelectTrigger className="w-[145px] h-9 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium cursor-pointer text-xs">
-                  <span>Payment Status</span>
+                <SelectTrigger className="flex-1 sm:flex-none sm:w-[145px] h-9 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-medium cursor-pointer text-xs">
+                  <span>Payment</span>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border shadow-md" side="bottom">
                   <SelectItem value="Paid" className="cursor-pointer text-xs">Paid</SelectItem>
@@ -216,8 +218,8 @@ const OrdersPage = () => {
               </Select>
 
               <Select value="" onValueChange={(val) => val && setBulkStatusTarget(val)}>
-                <SelectTrigger className="w-[135px] h-9 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer text-xs">
-                  <span>Order Status</span>
+                <SelectTrigger className="flex-1 sm:flex-none sm:w-[135px] h-9 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium cursor-pointer text-xs">
+                  <span>Status</span>
                 </SelectTrigger>
                 <SelectContent className="bg-popover border shadow-md" side="bottom">
                   <SelectItem value="Processing" className="cursor-pointer text-xs">Processing</SelectItem>

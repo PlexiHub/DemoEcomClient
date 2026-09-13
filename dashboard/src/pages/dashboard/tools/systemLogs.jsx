@@ -195,9 +195,9 @@ const SystemLogs = () => {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-3xl font-bold tracking-tight">System & API Logs</h2>
             <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 flex items-center gap-1">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -209,7 +209,7 @@ const SystemLogs = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
@@ -253,13 +253,13 @@ const SystemLogs = () => {
       </div>
 
       {isDemoClient && (
-        <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-lg text-xs">
+        <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 rounded-lg text-xs mt-4">
           <ShieldCheck className="h-4 w-4 shrink-0" />
           <span>Demo Account (View Only): Live system and API request streams are visible for inspection. Action buttons and database backups are disabled.</span>
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between mt-6 mb-4">
         <div className="flex flex-1 items-center space-x-2 w-full sm:max-w-md relative">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -270,8 +270,8 @@ const SystemLogs = () => {
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <div className="flex items-center rounded-lg border bg-card p-0.5 text-xs">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center rounded-lg border bg-card p-0.5 text-xs">
             {["ALL", "GET", "POST", "PUT", "DELETE"].map((m) => (
               <button
                 key={m}

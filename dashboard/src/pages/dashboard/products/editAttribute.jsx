@@ -257,13 +257,13 @@ export default function EditAttributePage() {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Header with Back Button */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3">
           <Button
             variant="outline"
             size="icon"
             onClick={() => navigate('/dashboard/products/attributes')}
-            className="h-9 w-9 cursor-pointer"
+            className="h-9 w-9 shrink-0 cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -280,7 +280,7 @@ export default function EditAttributePage() {
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="gap-2 px-5 cursor-pointer font-semibold"
+          className="gap-2 px-5 cursor-pointer font-semibold w-full sm:w-auto"
         >
           <Save className="h-4 w-4" />
           {isSubmitting ? 'Saving...' : 'Update Attribute'}
@@ -333,7 +333,7 @@ export default function EditAttributePage() {
         {/* Attribute Values & Images Manager */}
         <Card className="border shadow-xs w-full">
           <CardHeader className="pb-4 border-b bg-muted/20">
-            <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
               <CardTitle className="text-base font-bold text-foreground">
                 Attribute Values ({values.length})
               </CardTitle>
