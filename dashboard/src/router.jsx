@@ -5,6 +5,7 @@ import DashboardLayout from './layouts/dashboardLayout';
 
 // Auth & Onboarding
 import Login from './pages/auth/login';
+import RegisterPage from './pages/auth/register';
 import InvitePage from './pages/invite';
 
 // Dashboard
@@ -71,6 +72,11 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+    errorElement: <RouteErrorElement />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
     errorElement: <RouteErrorElement />,
   },
   {

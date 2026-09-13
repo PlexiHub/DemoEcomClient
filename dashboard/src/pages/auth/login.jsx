@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { LogIn, Mail, Lock, Eye, EyeOff, Shield, QrCode, ArrowLeft, Info } from 'lucide-react';
+import { LogIn, Mail, Lock, Eye, EyeOff, Shield, QrCode, ArrowLeft, Info, UserPlus, Store, Phone, User } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { handleGlobalError } from '@/lib/error-handler';
 import { toast } from 'sonner';
 import { BrandLogo } from '@/components/BrandLogo';
@@ -21,11 +22,39 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 2FA state variables
-  const [step, setStep] = useState(1); // 1: Credentials, 2: 2FA Screen
+  const [step, setStep] = useState(1);
   const [otpCode, setOtpCode] = useState('');
   const [is2faVerifying, setIs2faVerifying] = useState(false);
   const [isRequestingQr, setIsRequestingQr] = useState(false);
+
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [regName, setRegName] = useState('');
+  const [regStoreName, setRegStoreName] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regPhone, setRegPhone] = useState('');
+  const [isRegSubmitting, setIsRegSubmitting] = useState(false);
+
+  // Handles submission of demo store registration request
+  const handleRegisterSubmit = async (e) => {
+    e.preventDefault();
+    if (!regEmail || !regStoreName) {
+      toast.error('Please enter store name and email address.');
+      return;
+    }
+    setIsRegSubmitting(true);
+    try {
+      toast.success('Registration request received! An administrator will contact you with access.');
+      setIsRegisterOpen(false);
+      setRegName('');
+      setRegStoreName('');
+      setRegEmail('');
+      setRegPhone('');
+    } catch (err) {
+      handleGlobalError(err);
+    } finally {
+      setIsRegSubmitting(false);
+    }
+  };
 
 
   useEffect(() => {
@@ -198,7 +227,7 @@ const LoginPage = () => {
                   </div>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
                   <Button
                     type="submit"
                     disabled={isSubmitting}
@@ -206,11 +235,22 @@ const LoginPage = () => {
                     className="w-full h-9 flex items-center justify-center font-semibold text-xs bg-primary hover:bg-primary/90 text-primary-foreground transition cursor-pointer shadow-md rounded-lg"
                   >
                     {isSubmitting ? (
-                      <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
+                      <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-1.5" />
                     ) : (
-                      <LogIn className="h-3.5 w-3.5 mr-1" />
+                      <LogIn className="h-3.5 w-3.5 mr-1.5" />
                     )}
                     {isSubmitting ? 'Signing In…' : 'Log In'}
+                  </Button>
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => navigate('/register')}
+                    className="w-full h-9 flex items-center justify-center font-semibold text-xs bg-secondary hover:bg-secondary/90 text-secondary-foreground transition cursor-pointer shadow-sm rounded-lg"
+                  >
+                    <UserPlus className="h-3.5 w-3.5 mr-1.5" />
+                    Register
                   </Button>
                 </div>
 
@@ -296,6 +336,119 @@ const LoginPage = () => {
           className="h-5 sm:h-6 w-auto max-w-[120px] sm:max-w-[140px] object-contain opacity-80 hover:opacity-100 transition-opacity"
         />
       </div>
+
+      <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+        <DialogContent className="border-border bg-card text-card-foreground p-5 sm:p-6 max-w-sm rounded-2xl shadow-2xl">
+          <DialogHeader className="space-y-1.5 text-center">
+            <DialogTitle className="text-base font-bold tracking-tight text-foreground flex items-center justify-center gap-1.5">
+              <Store className="h-4 w-4 text-primary" />
+              Store Registration Request
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              Provide your details to request instant access to your 2-day demo store.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleRegisterSubmit} className="space-y-3 pt-2">
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-muted-foreground">
+                Store / Brand Name
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">
+                  <Store className="h-3.5 w-3.5" />
+                </span>
+                <Input
+                  type="text"
+                  value={regStoreName}
+                  onChange={(e) => setRegStoreName(e.target.value)}
+                  className="pl-9 h-9 text-xs bg-background/60 border-border text-foreground focus:border-primary placeholder:text-muted-foreground/40 rounded-lg"
+                  placeholder="My Awesome Store"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-muted-foreground">
+                Full Name
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">
+                  <User className="h-3.5 w-3.5" />
+                </span>
+                <Input
+                  type="text"
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  className="pl-9 h-9 text-xs bg-background/60 border-border text-foreground focus:border-primary placeholder:text-muted-foreground/40 rounded-lg"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-muted-foreground">
+                Email Address
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">
+                  <Mail className="h-3.5 w-3.5" />
+                </span>
+                <Input
+                  type="email"
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  className="pl-9 h-9 text-xs bg-background/60 border-border text-foreground focus:border-primary placeholder:text-muted-foreground/40 rounded-lg"
+                  placeholder="owner@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="block text-[11px] font-semibold text-muted-foreground">
+                Phone Number (WhatsApp)
+              </label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground/60">
+                  <Phone className="h-3.5 w-3.5" />
+                </span>
+                <Input
+                  type="tel"
+                  value={regPhone}
+                  onChange={(e) => setRegPhone(e.target.value)}
+                  className="pl-9 h-9 text-xs bg-background/60 border-border text-foreground focus:border-primary placeholder:text-muted-foreground/40 rounded-lg"
+                  placeholder="+880 1XXXXXXXXX"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsRegisterOpen(false)}
+                className="flex-1 h-9 text-xs border-border bg-background/40 hover:bg-background/80 rounded-lg cursor-pointer"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="secondary"
+                size="sm"
+                disabled={isRegSubmitting}
+                className="flex-1 h-9 font-semibold text-xs bg-secondary hover:bg-secondary/90 text-secondary-foreground rounded-lg cursor-pointer"
+              >
+                {isRegSubmitting ? 'Submitting…' : 'Submit Request'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -27,6 +27,20 @@ const run = async () => {
     console.log("Creating new Owner users...");
     const users = await UserModel.insertMany([
       {
+        name: "Ikram",
+        email: "md.ikr4m@gmail.com",
+        passwordHash,
+        role: "Owner",
+        phone: "01823110885"
+      },
+      {
+        name: "Demo Owner",
+        email: "info@plexivia.online",
+        passwordHash,
+        role: "Owner",
+        phone: "01823110885"
+      },
+      {
         name: "Metalhead Dev",
         email: "ihkhan2027@gmail.com",
         passwordHash,

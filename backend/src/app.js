@@ -9,8 +9,8 @@ import coreRouter from "./routesIndex.js";
 import attributeRouter from "./dashboard/routes/attribute.route.js";
 import mediaAuditRouter from "./dashboard/routes/mediaAuditRoute.js";
 import developerRouter, { broadcastLogToClients } from "./routes/DeveloperRoute.js";
+import { tenantResolver } from "./middlewares/tenantResolver.js";
 import { env } from "./config/env.js";
-import { getDynamicCorsConfig } from "./config/index.js";
 
 export async function createApp() {
   const app = express();
@@ -18,24 +18,22 @@ export async function createApp() {
   app.set("wpTablePrefix", process.env.WP_TABLE_PREFIX || "wp_");
   app.set("trust proxy", true);
 
-  const { allowedOrigins, clientKeywords } = getDynamicCorsConfig(env.ALLOWED_ORIGINS);
-
   const corsOptions = {
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      const isAllowedExplicit = allowedOrigins.includes("*") || allowedOrigins.includes(origin);
-      if (isAllowedExplicit) {
+      const lowerOrigin = origin.toLowerCase();
+      const isAllowed =
+        lowerOrigin.includes("localhost") ||
+        lowerOrigin.includes("127.0.0.1") ||
+        lowerOrigin.includes("plexivia.online") ||
+        lowerOrigin.includes("plexivia.onlie");
+
+      if (isAllowed) {
         return callback(null, true);
       }
 
-      const isKnownClientDomain = clientKeywords.some((keyword) => origin.toLowerCase().includes(keyword));
-
-      if (isKnownClientDomain) {
-        return callback(null, true);
-      }
-
-      logger.warn(`CORS request from origin ${origin} - allowed as dynamic client origin`);
-      callback(null, true);
+      logger.warn(`Blocked by CORS: ${origin}`);
+      return callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: [
@@ -210,6 +208,7 @@ export async function createApp() {
     res.json({ "API is live": true });
   });
 
+  app.use("/api/v1", tenantResolver);
   app.use("/api/v1", coreRouter);
   app.use("/api/v1", attributeRouter);
   app.use("/api/v1/developer", developerRouter);

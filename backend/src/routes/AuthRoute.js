@@ -9,10 +9,12 @@ import {
   acceptInvite,
 } from "../controllers/AuthController.js";
 import { sendQrCodeEmail, verify2fa } from "../controllers/TwoFactorController.js";
+import { registerDemoClient } from "../controllers/TenantRegistrationController.js";
 
 const authRouter = Router();
 
 authRouter.post("/login", login);
+authRouter.post("/register-demo", registerDemoClient);
 authRouter.post("/google", googleAuth);
 authRouter.post("/refresh-token", refreshToken);
 authRouter.post("/logout", logout);

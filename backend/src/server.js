@@ -7,6 +7,7 @@ import { createShutdownHandler } from "./helper/sutdownHelper.js";
 import { initWebSocketServer } from "./websocket.js";
 import { initMediaSchedulers, stopMediaSchedulers } from "./schedulers/mediaScheduler.js";
 import { initHeartbeatScheduler, stopHeartbeatScheduler } from "./schedulers/heartbeat.scheduler.js";
+import { initTenantCleanupScheduler } from "./schedulers/tenantCleanup.scheduler.js";
 
 // Bootstraps backend server, database connections, and background schedulers
 const bootstrap = async () => {
@@ -28,6 +29,9 @@ const bootstrap = async () => {
 
   // Initialize Fleet Telemetry Heartbeat Scheduler
   initHeartbeatScheduler();
+
+  // Initialize 48-Hour Demo Sandbox Auto-Cleanup Scheduler
+  initTenantCleanupScheduler();
 
   // Initialize Real-time IMAP Webmail Synchronizer
   if (env.IMAP_SYNC_ENABLED) {
