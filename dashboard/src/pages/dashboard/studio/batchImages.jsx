@@ -504,7 +504,7 @@ export default function BatchImagesStudio() {
     items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Toast Feedback */}
       {toast && (
         <div

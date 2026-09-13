@@ -340,7 +340,7 @@ const MessagesManager = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Top Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-border/60">
         <div className="flex items-center gap-3">

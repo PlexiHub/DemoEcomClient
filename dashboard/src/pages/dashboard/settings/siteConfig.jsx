@@ -208,7 +208,7 @@ const SiteConfigPage = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-6xl pb-16">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full pb-16">
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/40 pb-5">
         <div>

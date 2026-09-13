@@ -255,7 +255,7 @@ export default function EditAttributePage() {
   }
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full max-w-7xl mx-auto">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 w-full">
       {/* Header with Back Button */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
