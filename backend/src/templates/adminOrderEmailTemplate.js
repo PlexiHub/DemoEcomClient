@@ -13,37 +13,20 @@ export const buildAdminOrderEmailHtml = ({
   const {
     orderId = "3870",
     createdAt = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
-    customerName = "Ikramul Hoque",
-    customerEmail = "metalhead.developer@gmail.com",
+    customerName = "Customer",
+    customerEmail = "",
     customerPhone = "+880 1712-345678",
-    billingAddress = {
-      street: "House 45, Road 11, Sector 4",
-      city: "Uttara",
-      state: "Dhaka",
-      zipCode: "1230"
-    },
+    billingAddress = {},
     shippingAddress = null,
-    items = [
-      {
-        productName: "Sauvage Elixir Eau De Parfum",
-        variantName: "10ml Decant",
-        quantity: 2,
-        price: 1850,
-        subtotal: 3700
-      },
-      {
-        productName: "Baccarat Rouge 540 Extrait",
-        variantName: "5ml Decant",
-        quantity: 1,
-        price: 2400,
-        subtotal: 2400
-      }
-    ],
-    subtotal = 6100,
-    shippingFee = 100,
-    totalAmount = 6200,
+    items = [],
     paymentMethod = "Cash on delivery",
   } = order;
+
+  const subtotal = Number(order.subtotal ?? order.totals?.subtotal ?? 0);
+  const shippingFee = Number(order.shippingFee ?? order.totals?.shippingFee ?? 0);
+  const discountAmount = Number(order.discountAmount ?? order.discountTotalAmount ?? order.totals?.discount ?? 0);
+  const totalAmount = Number(order.totalAmount ?? order.totals?.total ?? Math.max(0, subtotal + shippingFee - discountAmount));
+  const couponCode = (order.couponCode || order.promoCode || "").trim().toUpperCase();
 
   const finalShipping = shippingAddress || billingAddress;
 
@@ -312,6 +295,11 @@ export const buildAdminOrderEmailHtml = ({
             <td class="summary-label">Shipping: Flat rate</td>
             <td class="summary-val">৳ ${shippingFee.toFixed(2)}</td>
           </tr>
+          ${discountAmount > 0 ? `
+          <tr>
+            <td class="summary-label" style="color: #4ADE80;">${couponCode ? `Discount (Promo: ${couponCode})` : 'Discount'}:</td>
+            <td class="summary-val" style="color: #4ADE80;">-৳ ${discountAmount.toFixed(2)}</td>
+          </tr>` : ''}
           <tr class="total-row">
             <td class="summary-label">Total:</td>
             <td class="summary-val">৳ ${totalAmount.toFixed(2)}</td>
@@ -330,19 +318,19 @@ export const buildAdminOrderEmailHtml = ({
             <td width="48%" class="responsive-col" style="vertical-align: top;">
               <h3 class="address-title">Billing address</h3>
               <p class="address-text">
-                <strong style="color: #FFFFFF;">${billingAddress.name || customerName}</strong><br>
+                <strong style="color: #FFFFFF;">${(billingAddress && billingAddress.name) || customerName}</strong><br>
                 ${billingStr}<br>
-                ${billingAddress.phone || customerPhone}<br>
-                <a href="mailto:${billingAddress.email || customerEmail}" style="color: #C5A059; text-decoration: none;">${billingAddress.email || customerEmail}</a>
+                ${(billingAddress && billingAddress.phone) || customerPhone}<br>
+                ${(billingAddress && billingAddress.email) || customerEmail ? `<a href="mailto:${(billingAddress && billingAddress.email) || customerEmail}" style="color: #C5A059; text-decoration: none;">${(billingAddress && billingAddress.email) || customerEmail}</a>` : ''}
               </p>
             </td>
             <td width="4%" class="responsive-col"></td>
             <td width="48%" class="responsive-col" style="vertical-align: top;">
               <h3 class="address-title">Shipping address</h3>
               <p class="address-text">
-                <strong style="color: #FFFFFF;">${shippingAddress.name || billingAddress.name || customerName}</strong><br>
+                <strong style="color: #FFFFFF;">${(shippingAddress && shippingAddress.name) || (billingAddress && billingAddress.name) || customerName}</strong><br>
                 ${shippingStr}<br>
-                ${shippingAddress.phone || billingAddress.phone || customerPhone}
+                ${(shippingAddress && shippingAddress.phone) || (billingAddress && billingAddress.phone) || customerPhone}
               </p>
             </td>
           </tr>

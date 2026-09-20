@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { useProducts } from "@/hooks/use-products";
-import { apiClient } from "@/lib/api-client";
+import { apiClient, baseURL } from "@/lib/api-client";
 import { useAuth } from "@/lib/auth-context";
 import { useCategories, useBrands } from "@/lib/category-cache";
 import { toast } from "sonner";
@@ -515,7 +515,9 @@ const NewInStoreOrderPage = () => {
 
   const handleDownloadInvoice = () => {
     if (!completedOrder) return;
-    window.open(completedOrder.invoiceUrl, "_blank");
+    const apiBase = (baseURL || import.meta.env.VITE_API_BASE_URL || clientConfig?.apiBaseUrl || 'https://server.decantrebd.com').replace(/\/$/, '');
+    const orderIdentifier = completedOrder.orderNumber || completedOrder.order?.orderNumber || completedOrder.order?.id;
+    window.open(`${apiBase}/api/v1/orders/${orderIdentifier}/invoice`, "_blank", 'noopener,noreferrer');
   };
 
   const closeCompletedDialog = () => {

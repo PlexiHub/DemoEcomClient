@@ -29,12 +29,19 @@ export const buildDecantreOrderInvoiceHtml = ({
     billingAddress = {},
     shippingAddress = null,
     items = [],
-    subtotal = 0,
-    shippingFee = 0,
-    discountAmount = 0,
-    totalAmount = 0,
     paymentMethod = "Cash on Delivery (COD)",
   } = order;
+
+  const subtotal = Number(order.subtotal ?? order.totals?.subtotal ?? 0);
+  const shippingFee = Number(order.shippingFee ?? order.totals?.shippingFee ?? 0);
+  const discountAmount = Number(order.discountAmount ?? order.discountTotalAmount ?? order.totals?.discount ?? 0);
+  const totalAmount = Number(order.totalAmount ?? order.totals?.total ?? Math.max(0, subtotal + shippingFee - discountAmount));
+  const couponCode = (order.couponCode || order.promoCode || "").trim().toUpperCase();
+
+  const rawPaymentStatus = String(order.paymentStatus || "").toLowerCase();
+  const isFullyPaid = rawPaymentStatus === "paid" || (order.paymentStatus === "Paid");
+  const paidAmount = Number(order.paidAmount ?? order.paymentDetails?.paidAmount ?? (isFullyPaid ? totalAmount : 0));
+  const pendingAmount = Number(order.pendingAmount ?? Math.max(0, totalAmount - paidAmount));
 
   const finalShipping = shippingAddress || billingAddress;
 
@@ -54,26 +61,32 @@ export const buildDecantreOrderInvoiceHtml = ({
   const deliveryAddressStr = formatAddress(finalShipping);
   const billingAddressStr = formatAddress(billingAddress);
 
-  // Build item rows
+  // Build item rows with offer pricing support
   const itemRowsHtml = items.map((item, index) => {
     const isEven = index % 2 === 1;
     const itemName = item.productName || item.name || "Fragrance Decant";
     const variant = item.variantName || item.size || item.variant || "";
     const qty = Number(item.quantity || 1);
-    const unitPrice = Number(item.price || item.unitPrice || 0);
+    const unitPrice = Number(item.price ?? item.unitPrice ?? 0);
+    const originalPrice = Number(item.originalPrice || item.regularPrice || 0);
+    const hasOffer = Boolean(item.hasOffer || (originalPrice > unitPrice && originalPrice > 0));
     const itemTotal = Number(item.subtotal || (unitPrice * qty) || 0);
 
     return `
       <tr style="background-color: ${isEven ? "#F9FAFB" : "#FFFFFF"}; border-bottom: 1px solid #E5E7EB;">
         <td style="padding: 12px 14px; font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #111827; vertical-align: top;">
-          <strong style="color: #0F172A; font-weight: 600; font-size: 13.5px;">${itemName}</strong>
-          ${variant ? `<div style="font-size: 11.5px; color: #B89343; font-weight: 600; margin-top: 2px;">✦ Size: ${variant}</div>` : ""}
+          <div style="display: flex; items-center: center; gap: 6px; flex-wrap: wrap;">
+            <strong style="color: #0F172A; font-weight: 600; font-size: 13.5px;">${itemName}</strong>
+            ${hasOffer ? `<span style="background-color: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase;">Offer Price</span>` : ""}
+          </div>
+          ${variant ? `<div style="font-size: 11.5px; color: #B89343; font-weight: 600; margin-top: 3px;">✦ ${variant}</div>` : ""}
         </td>
         <td style="padding: 12px 14px; font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #374151; text-align: center; vertical-align: top;">
           ${qty}
         </td>
         <td style="padding: 12px 14px; font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #374151; text-align: right; vertical-align: top; white-space: nowrap;">
-          ৳${unitPrice.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          ${hasOffer ? `<div style="font-size: 11px; text-decoration: line-through; color: #94A3B8;">৳${originalPrice.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` : ""}
+          <span style="font-weight: 600; color: #0F172A;">৳${unitPrice.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         </td>
         <td style="padding: 12px 14px; font-family: 'Segoe UI', Roboto, sans-serif; font-size: 13px; color: #0F172A; font-weight: 700; text-align: right; vertical-align: top; white-space: nowrap;">
           ৳${itemTotal.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -89,7 +102,7 @@ export const buildDecantreOrderInvoiceHtml = ({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Decantre Invoice #${orderId}</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     
     * {
       box-sizing: border-box;
@@ -105,7 +118,7 @@ export const buildDecantreOrderInvoiceHtml = ({
       -webkit-font-smoothing: antialiased;
     }
     .invoice-wrapper {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
       background-color: #FFFFFF;
       border: 1px solid #E2E8F0;
@@ -169,6 +182,20 @@ export const buildDecantreOrderInvoiceHtml = ({
       line-height: 1.45;
       color: #1E293B;
     }
+    .promo-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background-color: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      color: #065F46;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: monospace;
+      margin-top: 4px;
+    }
     .items-container {
       padding: 24px 32px;
     }
@@ -198,7 +225,7 @@ export const buildDecantreOrderInvoiceHtml = ({
       justify-content: flex-end;
     }
     .totals-table {
-      width: 260px;
+      width: 320px;
       border-collapse: collapse;
     }
     .totals-table td {
@@ -211,6 +238,14 @@ export const buildDecantreOrderInvoiceHtml = ({
       font-weight: 600;
       color: #1E293B;
     }
+    .totals-table tr.discount-row td {
+      color: #15803D;
+      font-weight: 600;
+    }
+    .totals-table tr.discount-row td.amount {
+      color: #15803D;
+      font-weight: 700;
+    }
     .totals-table tr.grand-total td {
       padding-top: 10px;
       border-top: 1px solid #E2E8F0;
@@ -220,8 +255,13 @@ export const buildDecantreOrderInvoiceHtml = ({
     }
     .totals-table tr.grand-total td.amount {
       color: #B89343;
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
+    }
+    .totals-table tr.payment-info td {
+      padding-top: 6px;
+      font-size: 12px;
+      color: #64748B;
     }
     
     /* Decant Care Box */
@@ -277,7 +317,7 @@ export const buildDecantreOrderInvoiceHtml = ({
 
     /* Action Buttons (Hidden on Print) */
     .actions-bar {
-      max-width: 680px;
+      max-width: 720px;
       margin: 16px auto 0 auto;
       display: flex;
       justify-content: flex-end;
@@ -340,7 +380,7 @@ export const buildDecantreOrderInvoiceHtml = ({
             <div style="font-size: 20px; font-weight: 800; color: #0F172A; letter-spacing: -0.5px;">INVOICE</div>
             <div style="font-size: 13px; font-weight: 700; color: #B89343; margin-top: 2px;">#${orderId}</div>
             <div style="margin-top: 6px;">
-              <span class="invoice-status-badge">✓ Order Completed</span>
+              <span class="invoice-status-badge">✓ Order ${isFullyPaid ? "Completed" : "Confirmed"}</span>
             </div>
           </td>
         </tr>
@@ -361,7 +401,8 @@ export const buildDecantreOrderInvoiceHtml = ({
         <h4>Order Summary & Payment</h4>
         <p><strong>Order Date:</strong> ${createdAt}</p>
         <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-        <p><strong>Payment Status:</strong> <span style="color: #15803D; font-weight: 700;">Paid / Confirmed</span></p>
+        <p><strong>Payment Status:</strong> <span style="color: ${isFullyPaid ? "#15803D" : pendingAmount > 0 ? "#D97706" : "#15803D"}; font-weight: 700;">${isFullyPaid ? "Paid / Confirmed" : pendingAmount > 0 ? `Partial Paid (Due: ৳${pendingAmount.toFixed(2)})` : "Pending"}</span></p>
+        ${couponCode ? `<div class="promo-tag">🏷️ Coupon: ${couponCode}</div>` : ""}
         <p style="margin-top: 6px; font-size: 12.5px;"><strong>Store Helpline:</strong><br />01869151550 (WhatsApp Available)</p>
       </div>
     </div>
@@ -373,8 +414,8 @@ export const buildDecantreOrderInvoiceHtml = ({
           <tr>
             <th>Product & Decant Details</th>
             <th class="text-center" style="width: 60px;">Qty</th>
-            <th class="text-right" style="width: 100px;">Unit Price</th>
-            <th class="text-right" style="width: 100px;">Total</th>
+            <th class="text-right" style="width: 110px;">Unit Price</th>
+            <th class="text-right" style="width: 110px;">Total</th>
           </tr>
         </thead>
         <tbody>
@@ -394,14 +435,24 @@ export const buildDecantreOrderInvoiceHtml = ({
             <td class="amount">৳${shippingFee.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           </tr>
           ${discountAmount > 0 ? `
-          <tr>
-            <td style="color: #15803D;">Discount:</td>
-            <td class="amount" style="color: #15803D;">-৳${discountAmount.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          <tr class="discount-row">
+            <td>${couponCode ? `Discount (Promo: <strong>${couponCode}</strong>):` : "Special Offer Discount:"}</td>
+            <td class="amount">-৳${discountAmount.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           </tr>` : ""}
           <tr class="grand-total">
             <td>Grand Total:</td>
             <td class="amount">৳${totalAmount.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
           </tr>
+          ${paidAmount > 0 && pendingAmount > 0 ? `
+          <tr class="payment-info">
+            <td>Paid Amount:</td>
+            <td class="amount" style="color: #15803D;">৳${paidAmount.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          </tr>
+          <tr class="payment-info">
+            <td>Due Amount:</td>
+            <td class="amount" style="color: #DC2626; font-weight: 700;">৳${pendingAmount.toLocaleString("en-BD", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+          </tr>
+          ` : ""}
         </table>
       </div>
     </div>

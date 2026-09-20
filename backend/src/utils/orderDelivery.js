@@ -116,10 +116,12 @@ export const sendOrderEmailsAsynchronously = (order) => {
         };
       }) : [];
 
-      const subtotal = Number(order.totals?.subtotal || order.subtotal || 0);
-      const shippingFee = Number(order.totals?.shippingFee || order.shippingFee || order.totals?.shippingTotalAmount || 0);
-      const totalAmount = Number(order.totals?.total || order.totalAmount || (subtotal + shippingFee));
+      const subtotal = Number(order.totals?.subtotal ?? order.subtotal ?? 0);
+      const shippingFee = Number(order.totals?.shippingFee ?? order.shippingFee ?? order.totals?.shippingTotalAmount ?? 0);
+      const discountAmount = Number(order.discountTotalAmount ?? order.totals?.discount ?? order.discountAmount ?? 0);
+      const totalAmount = Number(order.totals?.total ?? order.totalAmount ?? Math.max(0, subtotal + shippingFee - discountAmount));
       const paymentMethod = order.paymentMethod || "Cash on Delivery (COD)";
+      const couponCode = order.couponCode ? String(order.couponCode).trim().toUpperCase() : "";
 
       const formattedOrderData = {
         orderId,
@@ -132,6 +134,8 @@ export const sendOrderEmailsAsynchronously = (order) => {
         items,
         subtotal,
         shippingFee,
+        discountAmount,
+        couponCode,
         totalAmount,
         paymentMethod
       };

@@ -18,12 +18,19 @@ export const buildDashboardInvoiceHtml = ({
     billingAddress = {},
     shippingAddress = null,
     items = [],
-    subtotal = 0,
-    shippingFee = 0,
-    discountAmount = 0,
-    totalAmount = 0,
     paymentMethod = "N/A",
   } = order;
+
+  const subtotal = Number(order.subtotal ?? order.totals?.subtotal ?? 0);
+  const shippingFee = Number(order.shippingFee ?? order.totals?.shippingFee ?? 0);
+  const discountAmount = Number(order.discountAmount ?? order.discountTotalAmount ?? order.totals?.discount ?? 0);
+  const totalAmount = Number(order.totalAmount ?? order.totals?.total ?? Math.max(0, subtotal + shippingFee - discountAmount));
+  const couponCode = (order.couponCode || order.promoCode || "").trim().toUpperCase();
+
+  const rawPaymentStatus = String(order.paymentStatus || "").toLowerCase();
+  const isFullyPaid = rawPaymentStatus === "paid" || (order.paymentStatus === "Paid");
+  const paidAmount = Number(order.paidAmount ?? order.paymentDetails?.paidAmount ?? (isFullyPaid ? totalAmount : 0));
+  const pendingAmount = Number(order.pendingAmount ?? Math.max(0, totalAmount - paidAmount));
 
   const finalShipping = shippingAddress || billingAddress;
 
@@ -45,24 +52,35 @@ export const buildDashboardInvoiceHtml = ({
 
   const isInStore = paymentMethod.toLowerCase().includes('instore') || paymentMethod.toLowerCase().includes('office');
 
-  // Build item rows with alternate shading
-  const itemRows = items.map((item, idx) => `
+  // Build item rows with alternate shading and offer price support
+  const itemRows = items.map((item, idx) => {
+    const unitPrice = Number(item.price ?? item.unitPrice ?? 0);
+    const originalPrice = Number(item.originalPrice || item.regularPrice || 0);
+    const hasOffer = Boolean(item.hasOffer || (originalPrice > unitPrice && originalPrice > 0));
+    const itemTotal = Number(item.subtotal || (unitPrice * (item.quantity || 1)) || 0);
+
+    return `
     <tr style="${idx % 2 === 1 ? 'background-color: #F9FAFB;' : ''}">
       <td style="padding: 10px 14px; font-size: 13px; color: #1F2937; border-bottom: 1px solid #E5E7EB; vertical-align: middle;">
-        <strong>${item.productName}</strong>
-        ${item.variantName ? `<br><span style="font-size: 11px; color: #6B7280;">Variant: ${item.variantName}</span>` : ''}
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <strong>${item.productName || item.name || 'Product'}</strong>
+          ${hasOffer ? `<span style="background-color: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; text-transform: uppercase;">Offer</span>` : ''}
+        </div>
+        ${item.variantName ? `<span style="font-size: 11px; color: #6B7280; display: block; margin-top: 2px;">Variant: ${item.variantName}</span>` : ''}
       </td>
       <td style="padding: 10px 14px; font-size: 13px; color: #374151; text-align: center; border-bottom: 1px solid #E5E7EB; vertical-align: middle;">
-        ${item.quantity}
+        ${item.quantity || 1}
       </td>
-      <td style="padding: 10px 14px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle;">
-        ৳${(item.price || 0).toFixed(2)}
+      <td style="padding: 10px 14px; font-size: 13px; color: #374151; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap;">
+        ${hasOffer ? `<div style="font-size: 11px; text-decoration: line-through; color: #9CA3AF;">৳${originalPrice.toFixed(2)}</div>` : ''}
+        <span>৳${unitPrice.toFixed(2)}</span>
       </td>
-      <td style="padding: 10px 14px; font-size: 13px; color: #111827; font-weight: 600; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle;">
-        ৳${(item.subtotal || (item.price * item.quantity) || 0).toFixed(2)}
+      <td style="padding: 10px 14px; font-size: 13px; color: #111827; font-weight: 600; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap;">
+        ৳${itemTotal.toFixed(2)}
       </td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 
   return `
 <!DOCTYPE html>
@@ -294,6 +312,7 @@ export const buildDashboardInvoiceHtml = ({
         <div class="meta-block">
           <div class="meta-label">Invoice Number</div>
           <div class="meta-value highlight">#${orderId}</div>
+          ${couponCode ? `<div style="margin-top: 4px;"><span style="display: inline-block; background-color: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-family: monospace;">🏷️ Promo: ${couponCode}</span></div>` : ''}
         </div>
         <div class="meta-block" style="text-align: center;">
           <div class="meta-label">Date</div>
@@ -302,6 +321,9 @@ export const buildDashboardInvoiceHtml = ({
         <div class="meta-block right">
           <div class="meta-label">Payment Method</div>
           <div class="meta-value">${paymentMethod}</div>
+          <div style="font-size: 11px; margin-top: 2px; font-weight: 600; color: ${isFullyPaid ? '#059669' : pendingAmount > 0 ? '#D97706' : '#059669'};">
+            ${isFullyPaid ? '● Paid' : pendingAmount > 0 ? `● Partial (Due: ৳${pendingAmount.toFixed(2)})` : '● Pending'}
+          </div>
         </div>
       </div>
 
@@ -357,13 +379,23 @@ export const buildDashboardInvoiceHtml = ({
           </tr>
           ${discountAmount > 0 ? `
           <tr>
-            <td class="label">Discount</td>
-            <td class="value" style="color: #DC2626;">-৳${discountAmount.toFixed(2)}</td>
+            <td class="label" style="color: #059669;">${couponCode ? `Discount (Promo: ${couponCode})` : 'Discount'}</td>
+            <td class="value" style="color: #059669; font-weight: 600;">-৳${discountAmount.toFixed(2)}</td>
           </tr>` : ''}
           <tr class="total-row">
             <td class="label">Total</td>
             <td class="value">৳${totalAmount.toFixed(2)}</td>
           </tr>
+          ${paidAmount > 0 && pendingAmount > 0 ? `
+          <tr>
+            <td class="label" style="font-size: 11px; padding-top: 4px;">Paid Amount</td>
+            <td class="value" style="font-size: 11px; color: #059669; padding-top: 4px;">৳${paidAmount.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td class="label" style="font-size: 11px; color: #DC2626; font-weight: 600;">Due Amount</td>
+            <td class="value" style="font-size: 11px; color: #DC2626; font-weight: 600;">৳${pendingAmount.toFixed(2)}</td>
+          </tr>
+          ` : ''}
         </table>
       </div>
 

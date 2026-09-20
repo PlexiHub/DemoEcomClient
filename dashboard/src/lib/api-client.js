@@ -120,7 +120,9 @@ apiClient.interceptors.response.use(
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
-          window.location.replace('/login');
+          if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
+            window.location.replace('/login');
+          }
         }
         return Promise.reject(refreshError);
       } finally {

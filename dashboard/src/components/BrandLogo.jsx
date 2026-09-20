@@ -11,7 +11,7 @@ export const BrandLogo = ({
   iconOnly: _iconOnly = false,
   centered = false,
 }) => {
-  const { clientKey: _clientKey = 'demo', brandName = 'Plexivia', logoUrl } = clientConfig || {};
+  const { clientKey = 'demo', brandName = 'Plexivia', logoUrl } = clientConfig || {};
 
   const [logoVersion, setLogoVersion] = useState(() => {
     try {
@@ -21,7 +21,8 @@ export const BrandLogo = ({
     }
   });
 
-  const defaultLogo = '/uploads/assets/logo.webp';
+  const isDemoClient = clientKey === 'demo';
+  const defaultLogo = isDemoClient ? plexiviaLogo : '/uploads/assets/logo.webp';
   const rawUrl = src || (logoUrl && !logoUrl.includes('demo_logo') ? logoUrl : defaultLogo) || defaultLogo;
 
   // Resolves image paths and appends version query string for real-time asset invalidation

@@ -295,6 +295,10 @@ export const buildAllowedOrderUpdates = async (payload, existingOrder) => {
   if (payload.shippingTotalAmount !== undefined) {
     allowedUpdates.shippingTotalAmount = Number(payload.shippingTotalAmount || 0);
   }
+  if (payload.couponCode !== undefined) {
+    const code = normalizeText(payload.couponCode);
+    allowedUpdates.couponCode = code ? code.toUpperCase() : null;
+  }
 
   const customerInfo = payload.billingInfo || payload.customer;
   if (customerInfo) {

@@ -606,6 +606,17 @@ export const getOrderInvoiceView = async (req, res, next) => {
       return res.status(404).send("<h1 style='font-family:sans-serif;text-align:center;padding:50px;'>Order Invoice Not Found</h1>");
     }
 
+    const payment = await PaymentModel.findOne({ orderId: order._id }).lean();
+    const fallbackPaid = ['completed', 'shipped'].includes(order.status);
+    const effectivePaymentStatus = payment?.status || (fallbackPaid ? 'paid' : 'pending');
+
+    const subtotal = Number(order.totals?.subtotal ?? order.subtotal ?? 0);
+    const shippingFee = Number(order.totals?.shippingFee ?? order.shippingFee ?? order.shippingTotalAmount ?? 0);
+    const discountAmount = Number(order.discountTotalAmount ?? order.totals?.discount ?? order.discountAmount ?? 0);
+    const totalAmount = Number(order.totals?.total ?? order.totalAmount ?? Math.max(0, subtotal + shippingFee - discountAmount));
+    const paidAmount = payment?.paidAmount !== undefined ? Number(payment.paidAmount) : (effectivePaymentStatus === 'paid' ? totalAmount : 0);
+    const pendingAmount = Math.max(0, totalAmount - paidAmount);
+
     const formattedOrderData = {
       orderId: order.orderNumber || order.did || order._id?.toString()?.slice(-6),
       createdAt: order.createdAt ? new Date(order.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
@@ -613,18 +624,33 @@ export const getOrderInvoiceView = async (req, res, next) => {
       customerEmail: order.billingInfo?.email || "",
       customerPhone: order.billingInfo?.phone || "",
       billingAddress: order.billingInfo || {},
-      shippingAddress: order.shippingInfo || {},
-      items: Array.isArray(order.items) ? order.items.map(item => ({
-        productName: item.name || "Product",
-        variantName: item.size || item.variant || "",
-        quantity: item.quantity || 1,
-        price: item.unitPrice || item.price || 0,
-        subtotal: (item.unitPrice || item.price || 0) * (item.quantity || 1)
-      })) : [],
-      subtotal: order.totals?.subtotal || order.subtotal || 0,
-      shippingFee: order.totals?.shippingFee || order.shippingFee || 0,
-      totalAmount: order.totals?.total || order.totalAmount || 0,
-      paymentMethod: order.paymentMethod || "Cash on Delivery"
+      shippingAddress: order.shippingInfo || order.billingInfo || {},
+      items: Array.isArray(order.items) ? order.items.map(item => {
+        const qty = Number(item.quantity || 1);
+        const unitPrice = Number(item.unitPrice ?? item.price ?? 0);
+        const originalPrice = Number(item.originalPrice || item.regularPrice || unitPrice);
+        const hasOffer = originalPrice > unitPrice;
+        const variantName = [item.size, item.concentration, item.variant, item.variantName].filter(Boolean).join(' • ');
+
+        return {
+          productName: item.name || item.productName || "Product",
+          variantName: variantName || item.size || item.variant || "",
+          quantity: qty,
+          price: unitPrice,
+          originalPrice: hasOffer ? originalPrice : null,
+          hasOffer,
+          subtotal: unitPrice * qty,
+        };
+      }) : [],
+      subtotal,
+      shippingFee,
+      discountAmount,
+      couponCode: order.couponCode ? String(order.couponCode).trim().toUpperCase() : "",
+      totalAmount,
+      paidAmount,
+      pendingAmount,
+      paymentStatus: effectivePaymentStatus,
+      paymentMethod: order.paymentMethod || "Cash on Delivery (COD)"
     };
 
     const invoiceHtml = getClientInvoiceHtml({
