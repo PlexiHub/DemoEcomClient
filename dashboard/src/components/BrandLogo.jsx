@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { clientConfig } from '@/clientConfig';
-import { apiClient, resolveImageUrl } from '@/lib/api-client';
+import { baseURL, resolveImageUrl } from '@/lib/api-client';
 import plexiviaLogo from '@/assets/plexivia.png';
+
 // Renders the tenant branding logo with fixed proportional width and dynamic height
 export const BrandLogo = ({
   src,
@@ -21,13 +23,16 @@ export const BrandLogo = ({
     }
   });
 
-  const isDemoClient = clientKey === 'demo';
-  const defaultLogo = isDemoClient ? plexiviaLogo : '/uploads/assets/logo.webp';
-  const rawUrl = src || (logoUrl && !logoUrl.includes('demo_logo') ? logoUrl : defaultLogo) || defaultLogo;
+  const isDemoClient = !clientKey || clientKey === 'demo';
+  const isDefaultAssetLogo = !logoUrl || logoUrl === '/uploads/assets/logo.webp' || logoUrl.includes('demo_logo');
+  const rawUrl = src || (!isDefaultAssetLogo ? logoUrl : (isDemoClient ? plexiviaLogo : '/uploads/assets/logo.webp'));
 
   // Resolves image paths and appends version query string for real-time asset invalidation
   const resolveLogoUrl = (url, version) => {
     if (!url) return null;
+    if (url === plexiviaLogo || url.startsWith('data:') || url.startsWith('blob:') || url.startsWith('/src/assets/')) {
+      return url;
+    }
     let finalUrl = resolveImageUrl(url);
     if (version && !finalUrl.startsWith('data:') && !finalUrl.startsWith('blob:')) {
       finalUrl += `${finalUrl.includes('?') ? '&' : '?'}v=${version}`;
@@ -40,14 +45,16 @@ export const BrandLogo = ({
   const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
-    apiClient.get('/api/v1/assets/logo-info').then((res) => {
-      if (res?.data?.data?.version) {
-        setLogoVersion(res.data.data.version);
-        try {
-          localStorage.setItem('brand_logo_version', String(res.data.data.version));
-        } catch {}
-      }
-    }).catch(() => {});
+    if (!isDemoClient && baseURL) {
+      axios.get(`${baseURL}/api/v1/assets/logo-info`, { timeout: 3000 }).then((res) => {
+        if (res?.data?.data?.version) {
+          setLogoVersion(res.data.data.version);
+          try {
+            localStorage.setItem('brand_logo_version', String(res.data.data.version));
+          } catch {}
+        }
+      }).catch(() => {});
+    }
 
     const handleLogoUpdated = (e) => {
       const newVersion = e?.detail?.timestamp || Date.now();
@@ -61,7 +68,7 @@ export const BrandLogo = ({
     return () => {
       window.removeEventListener('brand-logo-updated', handleLogoUpdated);
     };
-  }, []);
+  }, [isDemoClient]);
 
   useEffect(() => {
     setCurrentSrc(primaryUrl);

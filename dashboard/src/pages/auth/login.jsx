@@ -59,8 +59,9 @@ const LoginPage = () => {
 
 
   useEffect(() => {
-    if (!isAuthLoading && user) {
-      navigate('/dashboard');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    if (!isAuthLoading && user && token) {
+      navigate('/dashboard', { replace: true });
     }
   }, [user, isAuthLoading, navigate]);
 

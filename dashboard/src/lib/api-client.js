@@ -120,7 +120,8 @@ apiClient.interceptors.response.use(
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
           localStorage.removeItem('user');
-          if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
+          window.dispatchEvent(new CustomEvent('auth-session-expired'));
+          if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register') && !window.location.pathname.startsWith('/invite')) {
             window.location.replace('/login');
           }
         }
@@ -149,7 +150,8 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (typeof window !== 'undefined' && !isAuthRequest) {
+    const isAuthPath = typeof window !== 'undefined' && (window.location.pathname.startsWith('/login') || window.location.pathname.startsWith('/register') || window.location.pathname.startsWith('/invite'));
+    if (typeof window !== 'undefined' && !isAuthRequest && (!isAuthPath || error.response?.status !== 401)) {
       handleGlobalError(error);
     }
     return Promise.reject(error);

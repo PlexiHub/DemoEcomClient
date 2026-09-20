@@ -7,7 +7,8 @@ export function AuthGuard({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !user && typeof window !== 'undefined') {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+    if (!isLoading && (!user || !token) && typeof window !== 'undefined') {
       navigate('/login', { replace: true });
     }
   }, [user, isLoading, navigate]);
@@ -21,7 +22,8 @@ export function AuthGuard({ children }) {
     );
   }
 
-  if (!user) {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+  if (!user || !token) {
     return null;
   }
 
